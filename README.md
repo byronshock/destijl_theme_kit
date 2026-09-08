@@ -36,3 +36,31 @@ python3 build/wallpaper.py 3840x2160 150
 Each run writes `worksafe/mondrian_1922_<W>x<H>_s<scale>.png` plus a JSON
 sidecar with the layout numbers. Both are ignored by git. Copy the PNG to
 the path named by `Wallpaper=` in `worksafe/destijl.theme`.
+
+## License
+
+Two licenses, split by what the file is:
+
+- **Code** (`build/`, `elevated/`, `worksafe/`): GNU General Public License
+  v3.0 or later. See `LICENSE`.
+- **Design and assets** (`DESTIJL_STYLE.md`, `palette.json`, `samples/`,
+  `wallpaper/`, `issues/`, this README): Creative Commons
+  Attribution-ShareAlike 4.0 International. See `LICENSE-CC-BY-SA`.
+
+Both are copyleft: derivatives must be shared under the same terms. Color
+values themselves are not copyrightable; the license covers the documents,
+images, and code that express them.
+
+Provenance of the source images, which are not ours to relicense:
+
+- Mondrian, *Composition with Blue, Red, Yellow, and Black* (1922) is in
+  the public domain.
+- `wallpaper/mia_4001106_800.jpg` is the Minneapolis Institute of Art
+  reference photograph (object 4001106), used here for its color
+  measurements.
+- `wallpaper/rawpixel_3219952.jpg` is the rawpixel scan (image 3219952)
+  that supplies the pixels for the matched master.
+
+Those two files remain under the terms of their respective publishers.
+`NEXTY_STYLE.orig.md` is the unmodified upstream file this kit was forked
+from and keeps whatever license it carried.
