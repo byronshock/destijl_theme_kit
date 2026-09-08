@@ -1,0 +1,31 @@
+Windows Registry Editor Version 5.00
+
+; DeStijl — DWM keys a .theme file cannot set. HKCU only, no elevation.
+; Pair with destijl.theme. Implements DESTIJL_STYLE.md §1 and §7 Windows.
+; AccentColor* are ABGR (0xAABBGGRR); Colorization* are ARGB (0xAARRGGBB).
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\DWM]
+; §7: accent on title bars and window borders
+"ColorPrevalence"=dword:00000001
+; key titlebar + border Mondrian blue #1B3A6D (§1 hue in chrome); WHITE text
+"AccentColor"=dword:ff6d3a1b
+"ColorizationColor"=dword:c41b3a6d
+"ColorizationAfterglow"=dword:c41b3a6d
+; non-key titlebar LIGHT #9C9EA0 (§1: LIGHT = non-key titlebars)
+"AccentColorInactive"=dword:ffa09e9c
+
+[HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize]
+; accent stays OFF the Start menu and taskbar: they are not titlebars
+"ColorPrevalence"=dword:00000000
+; §7: light mode
+"AppsUseLightTheme"=dword:00000001
+"SystemUsesLightTheme"=dword:00000001
+; EnableTransparency=0 lives in declutter.reg (issue 001), not here.
+
+[HKEY_CURRENT_USER\Software\Microsoft\Accessibility\CursorIndicator]
+; text cursor indicator Mondrian red #D64D24 (§1 hue in chrome).
+; Mirrors Settings > Accessibility > Text cursor. COLORREF 0x00BBGGRR.
+; VERIFY value names on 24H2 before shipping; the Settings toggle is the
+; fallback and is what the README describes.
+"IndicatorColor"=dword:00244dd6
+"IndicatorType"=dword:00000001

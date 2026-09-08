@@ -1,0 +1,58 @@
+{
+ "method": "per-pixel offset: pixel + sum_i w_i*(MIA_i - rawpixel_i), w = softmax(-d_i^2/(2*25^2)) over the five field anchors; input rawpixel Adobe RGB converted to sRGB relative colorimetric first; output sRGB-tagged",
+ "anchors_src": [
+  [
+   241.0,
+   241.0,
+   241.0
+  ],
+  [
+   7.0,
+   8.0,
+   8.0
+  ],
+  [
+   19.0,
+   57.0,
+   124.0
+  ],
+  [
+   234.0,
+   82.0,
+   34.0
+  ],
+  [
+   228.0,
+   211.0,
+   142.0
+  ]
+ ],
+ "anchors_dst": [
+  [
+   229.0,
+   230.0,
+   232.0
+  ],
+  [
+   10.0,
+   15.0,
+   16.0
+  ],
+  [
+   27.0,
+   58.0,
+   109.0
+  ],
+  [
+   214.0,
+   77.0,
+   36.0
+  ],
+  [
+   223.0,
+   204.0,
+   130.0
+  ]
+ ],
+ "sigma": 25.0
+}

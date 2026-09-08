@@ -1,0 +1,130 @@
+/* ==UserStyle==
+@name           DeStijl
+@namespace      byronshock
+@version        0.1.0
+@description    DeStijl for the web: Mondrian's 1922 pigments, Nimbus Sans and Hack, no curves, no thin lines. Tier: elevated (Stylus is an all-sites extension); the worksafe bookmarklet is generated from this file.
+@author         Byron Shock, Ph.D.
+@preprocessor   default
+==/UserStyle== */
+
+/* Generated from palette.json — DESTIJL_STYLE.md §1 (lines), §1b (semantic), §2 (type),
+   §3 (rules, residue). Lessons carried forward from the earlier kits are marked (L1–L5). */
+
+:root {
+  --ds-white:  #E5E6E8;   /* fields, documents */
+  --ds-light:  #9C9EA0;   /* surfaces, buttons, wells */
+  --ds-dark:   #535758;    /* disabled, scrollbar thumb */
+  --ds-black:  #0A0F10;   /* rules, text */
+  --ds-blue:   #1B3A6D;   /* links, the platform accent */
+  --ds-yellow: #DFCC82; /* selection, BLACK on it */
+  --ds-red:    #D64D24;    /* caret */
+  --ds-destructive: #AF1E2D;  /* FHWA red; legend #FFFFFF (§1b) */
+  --ds-rule: 28px;             /* §3: one rule, no thinner */
+  --ds-ui:   "Nimbus Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ds-mono: Hack, "DejaVu Sans Mono", monospace;
+}
+
+/* ---------- geometry: curves deprecated, no thin lines ---------- */
+*, *::before, *::after {
+  border-radius: 0 !important;          /* §3 curves */
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+/* Field edges are tone changes, not lines (§3). Borders off; tone below. */
+input, textarea, select, button, fieldset, table, td, th, tr, blockquote,
+nav, header, footer, aside, section, article, details, summary, dialog {
+  border-color: transparent !important;
+  border-width: 0 !important;
+}
+/* The one line: hr is a rule. */
+hr {
+  border: 0 !important;
+  height: var(--ds-rule) !important;
+  background: var(--ds-black) !important;
+  margin: var(--ds-rule) 0 !important;
+}
+
+/* ---------- color: the six pigments ---------- */
+html, body {
+  background: var(--ds-white) !important;
+  color: var(--ds-black) !important;
+  -webkit-text-fill-color: currentcolor !important;   /* L2: pin fill, it overrides color */
+}
+/* L3: a descendant rule paints every child; every background rule below recolors its text. */
+*:not(img):not(video):not(canvas):not(svg):not(iframe):not(picture):not(source) {
+  background-image: none !important;    /* L4: cleared on inline and interactive too, not just blocks */
+  color: var(--ds-black);
+  -webkit-text-fill-color: currentcolor;
+}
+body *:not(img):not(video):not(canvas):not(svg):not(iframe):not(picture):not(source) {
+  background-color: transparent;
+}
+/* surfaces */
+nav, header, footer, aside, [role="navigation"], [role="banner"], [role="contentinfo"],
+[role="toolbar"], [role="menu"], [role="menubar"], [role="tablist"], [role="dialog"], dialog,
+th, thead, summary, code, kbd, samp, pre {
+  background-color: var(--ds-light) !important;
+  color: var(--ds-black) !important;
+}
+/* wells and buttons: LIGHT, BLACK on them; no border, tone does the work */
+input, textarea, select, button, [role="button"], [role="textbox"], [role="combobox"],
+[role="searchbox"], [type="submit"], [type="button"] {
+  background-color: var(--ds-light) !important;
+  color: var(--ds-black) !important;
+  -webkit-text-fill-color: var(--ds-black) !important;
+  font-family: var(--ds-ui) !important;
+}
+/* L1: stretched transparent click targets stay transparent, or card overlays break */
+button.absolute.inset-0, a.absolute.inset-0, [role="button"].absolute.inset-0 {
+  background-color: transparent !important;
+}
+button:hover, [role="button"]:hover { background-color: var(--ds-white) !important; }
+button:active, [role="button"]:active, [aria-pressed="true"] {
+  background-color: var(--ds-dark) !important;
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+button:active *, [aria-pressed="true"] * { color: var(--ds-white) !important; -webkit-text-fill-color: var(--ds-white) !important; }
+:disabled, [aria-disabled="true"] { color: var(--ds-dark) !important; -webkit-text-fill-color: var(--ds-dark) !important; }
+
+/* links: the blue line */
+a, a *, [role="link"] {
+  color: var(--ds-blue) !important;
+  -webkit-text-fill-color: var(--ds-blue) !important;
+  text-decoration-color: var(--ds-blue) !important;
+}
+/* selection: yellow, BLACK on it (12:1) — recolor descendants (L3) */
+::selection { background: var(--ds-yellow) !important; color: var(--ds-black) !important; -webkit-text-fill-color: var(--ds-black) !important; }
+mark, [aria-selected="true"], [aria-current], option:checked, li[aria-selected="true"] * , [aria-selected="true"] * {
+  background-color: var(--ds-yellow) !important;
+  color: var(--ds-black) !important;
+  -webkit-text-fill-color: var(--ds-black) !important;
+}
+/* caret: red */
+input, textarea, [contenteditable="true"] { caret-color: var(--ds-red) !important; }
+/* focus: a 3 px BLACK outline. The one deliberate line thinner than the rule —
+   an accessibility exception to §3; the user needs it. */
+:focus-visible { outline: 3px solid var(--ds-black) !important; outline-offset: 0 !important; }
+/* semantic: only where the meaning is present. FHWA red, pure-white legend (§1b). */
+[aria-invalid="true"], [role="alert"][data-severity="error"] {
+  background-color: var(--ds-destructive) !important;
+  color: #FFFFFF !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+}
+
+/* ---------- scrollbars: square, tone only ---------- */
+* { scrollbar-color: var(--ds-dark) var(--ds-light); scrollbar-width: auto; }
+::-webkit-scrollbar { width: 14px; height: 14px; background: var(--ds-light); }
+::-webkit-scrollbar-thumb { background: var(--ds-dark); border: 0; }
+::-webkit-scrollbar-corner { background: var(--ds-light); }
+
+/* ---------- type: two fonts ---------- */
+html, body, body *:not(code):not(pre):not(kbd):not(samp):not(tt)
+  :not(i):not([class*="icon"]):not([class*="fa-"]):not([class*="material"]):not([class*="glyph"]):not(svg):not(svg *) {
+  font-family: var(--ds-ui) !important;
+}
+code, pre, kbd, samp, tt, code *, pre *, .monospace, [class*="mono"], textarea[wrap="off"] {
+  font-family: var(--ds-mono) !important;
+}
+/* images are content: untouched */
+img, video, canvas, picture { filter: none !important; opacity: 1 !important; }

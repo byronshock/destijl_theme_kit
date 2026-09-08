@@ -1,0 +1,63 @@
+{
+ "source": "Piet Mondrian, Composition with Blue, Red, Yellow, and Black, 1922. Minneapolis Institute of Art, mia_4001106_800.jpg (sRGB IEC61966-2.1 embedded).",
+ "method": "black rules located by column/row dark-fraction; each field sampled >=8 px inside its rules; value = per-channel median of the interior (n = 4,900-251,370 px). k-means (k=5) over the canvas agrees within JPEG/edge noise.",
+ "measured": {
+  "WHITE": {
+   "hex": "#E5E6E8",
+   "rgb": [
+    229,
+    230,
+    232
+   ],
+   "sd": 2.8,
+   "field": "main white, 251k px"
+  },
+  "BLACK": {
+   "hex": "#0A0F10",
+   "rgb": [
+    10,
+    15,
+    16
+   ],
+   "sd": 4.5,
+   "field": "horizontal rule interior"
+  },
+  "BLUE": {
+   "hex": "#1B3A6D",
+   "rgb": [
+    27,
+    58,
+    109
+   ],
+   "sd": 5.3,
+   "field": "top band"
+  },
+  "RED": {
+   "hex": "#D64D24",
+   "rgb": [
+    214,
+    77,
+    36
+   ],
+   "sd": 3.9,
+   "field": "bottom right"
+  },
+  "YELLOW": {
+   "hex": "#DFCC82",
+   "rgb": [
+    223,
+    204,
+    130
+   ],
+   "sd": 3.4,
+   "field": "bottom left, main"
+  }
+ },
+ "area_share": {
+  "white": 75.2,
+  "black": 9.4,
+  "yellow": 8.6,
+  "blue": 4.5,
+  "red": 2.4
+ }
+}

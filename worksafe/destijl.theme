@@ -1,0 +1,81 @@
+; DeStijl — Windows 11 (24H2), worksafe, non-contrast.
+; Implements DESTIJL_STYLE.md §1 (four grays), §5 (default desktop), §7 Windows.
+; Per-user: double-click, or Settings > Personalization > Themes.
+; Companions: theme.reg (DWM keys a .theme cannot set), declutter.reg (issue 001).
+; Not here, by design: semantic colors (§1b) and fonts (§2) have no slot in a
+; non-contrast Windows theme; they live in per-app themes. Cursors (issue 002)
+; and desktop icons (issue 003) are added when the kit has drawn them.
+
+[Theme]
+DisplayName=DeStijl
+ThemeId={0141E3D4-69ED-4931-AAF0-8913C8C62CC4}
+
+[Control Panel\Desktop]
+; §5: default desktop is Mondrian, Composition with Blue, Red, Yellow,
+; and Black (1922), Minneapolis Institute of Art, public domain / CC0.
+; Pre-composited (§5): painting flush top-right, no crop, no stretch;
+; DARK wall on the left for the icons; DARK band at the bottom two
+; taskbar heights tall (48 logical px, scaled), taskbar in its lower
+; half. One file per (size, scale); build/wallpaper.py makes any of them.
+; Shipped: 1920x1080 at 100/125%, 3840x2160 at 150/200%.
+; Copy the one matching the machine to the fixed name below (issue 004:
+; install.ps1 does this). Wrong scale = a sliver of art under the bar.
+Wallpaper=%LocalAppData%\Microsoft\Windows\Themes\DeStijl\mondrian_1922.png
+Pattern=
+TileWallpaper=0
+WallpaperStyle=6
+PicturePosition=3
+MultimonBackgrounds=0
+
+[Control Panel\Colors]
+; §1, the four grays, as "R G B". Modern (WinUI) surfaces ignore this table
+; and paint their own grays — tolerated residue, §3. Legacy Win32 honours it.
+; WHITE 229 230 232 · LIGHT 156 158 160 · DARK 83 87 88 · BLACK 10 15 16
+Background=83 87 88
+AppWorkspace=83 87 88
+Window=229 230 232
+WindowText=10 15 16
+WindowFrame=10 15 16
+; key titlebar Mondrian blue (§1 hue in chrome); WHITE text, 9.0:1
+ActiveTitle=27 58 109
+GradientActiveTitle=27 58 109
+TitleText=229 230 232
+InactiveTitle=156 158 160
+GradientInactiveTitle=156 158 160
+InactiveTitleText=10 15 16
+ActiveBorder=156 158 160
+InactiveBorder=156 158 160
+ButtonFace=156 158 160
+ButtonAlternateFace=156 158 160
+ButtonLight=156 158 160
+ButtonText=10 15 16
+ButtonHilight=229 230 232
+ButtonShadow=83 87 88
+ButtonDkShadow=10 15 16
+GrayText=83 87 88
+; selection Mondrian yellow, BLACK on it (12.0:1)
+Hilight=223 204 130
+HilightText=10 15 16
+MenuBar=156 158 160
+Menu=156 158 160
+MenuText=10 15 16
+MenuHilight=223 204 130
+Scrollbar=156 158 160
+InfoWindow=229 230 232
+InfoText=10 15 16
+; hyperlinks Mondrian blue (§1 hue in chrome)
+HotTrackingColor=27 58 109
+
+[VisualStyles]
+Path=%SystemRoot%\resources\Themes\Aero\Aero.msstyles
+ColorStyle=NormalColor
+Size=NormalSize
+AutoColorization=0
+; accent Mondrian blue #1B3A6D, ARGB. theme.reg sets the DWM keys as well.
+ColorizationColor=0XFF1B3A6D
+; §7: light mode — the system's polarity is BLACK on WHITE
+SystemMode=Light
+AppMode=Light
+
+[MasterThemeSelector]
+MTSM=DABJDKT

@@ -1,0 +1,91 @@
+{
+  "name": "DeStijl",
+  "source": "Piet Mondrian, Composition with Blue, Red, Yellow, and Black, 1922. Minneapolis Institute of Art reproduction; per-channel median of field interiors (see wallpaper/mondrian_1922_palette.json).",
+  "lines": {
+    "gray": {
+      "end": "#E5E6E8"
+    },
+    "red": {
+      "end": "#D64D24"
+    },
+    "blue": {
+      "end": "#1B3A6D"
+    },
+    "yellow": {
+      "end": "#DFCC82"
+    }
+  },
+  "black": "#0A0F10",
+  "steps": [
+    0.0,
+    0.3333333,
+    0.6666667,
+    1.0
+  ],
+  "grays": {
+    "WHITE": "#E5E6E8",
+    "LIGHT": "#9C9EA0",
+    "DARK": "#535758",
+    "BLACK": "#0A0F10"
+  },
+  "semantic": {
+    "SUCCESS": {
+      "hex": "#006B54",
+      "legend": "#FFFFFF",
+      "source": "FHWA Green, Pantone 342",
+      "exempt": true
+    },
+    "WARNING": {
+      "hex": "#FCD116",
+      "legend": "#000000",
+      "source": "FHWA Yellow, Pantone 116",
+      "exempt": true
+    },
+    "DESTRUCTIVE": {
+      "hex": "#AF1E2D",
+      "legend": "#FFFFFF",
+      "source": "FHWA Red, Pantone 187",
+      "exempt": true
+    }
+  },
+  "cosmic_overlays": {
+    "hover_selected": "#646869",
+    "pressed": "#757979"
+  },
+  "tolerance": 1.0,
+  "legend_note": "Legend colors are pure white/black as on a highway sign; admitted only as text or glyphs on a semantic field. Off the lines anywhere else.",
+  "chrome_hues": {
+    "blue": {
+      "hex": "#1B3A6D",
+      "chrome": [
+        "key titlebar",
+        "window border",
+        "platform accent (toggles, nav indicator, quick settings)",
+        "hyperlinks",
+        "browser frame"
+      ]
+    },
+    "yellow": {
+      "hex": "#DFCC82",
+      "chrome": [
+        "selection (rows, text)"
+      ],
+      "text_on": "#0A0F10"
+    },
+    "red": {
+      "hex": "#D64D24",
+      "chrome": [
+        "text cursor indicator",
+        "terminal cursor (deferred)"
+      ]
+    }
+  },
+  "geometry": {
+    "rule_fraction": 0.0246,
+    "rule_of": "displayed painting width",
+    "rule_reference_pt": 28,
+    "rule_color": "BLACK",
+    "carries_state": false,
+    "source": "Mondrian 1922 rules: mean 130 px of 5286 px canvas width"
+  }
+}
