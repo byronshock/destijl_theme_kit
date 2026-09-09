@@ -18,6 +18,8 @@ worksafe/                 per-user, no elevation: destijl.theme, theme.reg,
                           here on demand (see below) and are not committed
 worksafe/cosmic/          COSMIC (Pop!_OS): destijl.ron theme, destijl-term.ron,
                           toolkit config, install.sh; see README_COSMIC.md
+worksafe/firefox/         Firefox: user.js, chrome/userChrome.css, userContent.css,
+                          install.sh; see README_FIREFOX.md
 elevated/                 all-sites: destijl.user.css (Stylus)
 issues/                   001 declutter.reg, 005 per-monitor install,
                           006 Mondrian-space icon tinting
@@ -27,6 +29,7 @@ Windows install: see the comments at the top of `worksafe/destijl.theme`.
 COSMIC install: `sh worksafe/cosmic/install.sh` (per-user, no sudo). The
 background is BLACK so the tiling gaps are rules; `--mondrian` puts the
 painting there instead.
+Firefox install: close Firefox, `sh worksafe/firefox/install.sh`, start it.
 
 ## Wallpapers: generate on demand
 

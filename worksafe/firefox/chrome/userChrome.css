@@ -1,0 +1,284 @@
+/* DeStijl — Firefox chrome. worksafe/firefox/chrome/userChrome.css (worksafe tier: per profile, no elevation).
+   Implements DESTIJL_STYLE.md §1 (four grays, hue in chrome), §2 (Nimbus Sans), §3 (no curves, no thin rules),
+   §7 Firefox. Needs toolkit.legacyUserProfileCustomizations.stylesheets = true (user.js sets it).
+
+   The tab strip is the titlebar: blue when the window is key, LIGHT when it is not (§1). The toolbars are the
+   window field, yellow, as on COSMIC (§7). Text fields are WHITE. Selection is yellow with BLACK on it. Every
+   corner is square. There is no thinner rule: where Firefox drew a hairline, the tone changes instead. */
+
+:root {
+  --ds-white: #E5E6E8; --ds-light: #9C9EA0; --ds-dark: #535758; --ds-black: #0A0F10;
+  --ds-blue: #1B3A6D; --ds-blue-2: #152C4E;
+  --ds-yellow: #DFCC82; --ds-yellow-2: #988D5C; --ds-yellow-1: #514E36;
+  --ds-red: #D64D24;
+
+  font-family: "Nimbus Sans", Helvetica, sans-serif !important;
+
+  /* tab strip / titlebar */
+  --lwt-accent-color: var(--ds-blue) !important;
+  --lwt-text-color: var(--ds-white) !important;
+  --toolbox-textcolor: var(--ds-white) !important;
+  --tab-selected-bgcolor: var(--ds-yellow) !important;
+  --tab-selected-textcolor: var(--ds-black) !important;
+  --tab-hover-background-color: var(--ds-blue-2) !important;
+  --tab-border-radius: 0 !important;
+  --tab-block-margin: 0 !important;
+  --tabs-border-color: transparent !important;
+  --tabstrip-inner-border: none !important;
+
+  /* toolbars: the field */
+  --toolbar-bgcolor: var(--ds-yellow) !important;
+  --toolbar-color: var(--ds-black) !important;
+  --toolbar-bgimage: none !important;
+  --toolbarbutton-hover-background: var(--ds-yellow-2) !important;
+  --toolbarbutton-active-background: var(--ds-yellow-1) !important;
+  --toolbarbutton-border-radius: 0 !important;
+  --toolbarseparator-color: var(--ds-yellow-2) !important;
+  --chrome-content-separator-color: transparent !important;
+
+  /* text fields */
+  --toolbar-field-background-color: var(--ds-white) !important;
+  --toolbar-field-color: var(--ds-black) !important;
+  --toolbar-field-focus-background-color: var(--ds-white) !important;
+  --toolbar-field-focus-color: var(--ds-black) !important;
+  --toolbar-field-border-color: transparent !important;
+  --toolbar-field-focus-border-color: var(--ds-black) !important;
+  --urlbar-box-bgcolor: var(--ds-white) !important;
+  --urlbar-box-hover-bgcolor: var(--ds-yellow) !important;
+  --urlbar-box-active-bgcolor: var(--ds-yellow) !important;
+  --urlbar-box-text-color: var(--ds-black) !important;
+  --urlbarView-highlight-background: var(--ds-yellow) !important;
+  --urlbarView-highlight-color: var(--ds-black) !important;
+  --urlbarView-hover-background: var(--ds-yellow) !important;
+  --urlbarView-hover-color: var(--ds-black) !important;
+  --autocomplete-popup-background: var(--ds-white) !important;
+  --autocomplete-popup-color: var(--ds-black) !important;
+  --autocomplete-popup-highlight-background: var(--ds-yellow) !important;
+  --autocomplete-popup-highlight-color: var(--ds-black) !important;
+
+  /* panels and menus: WHITE, BLACK text, yellow when hovered (selection) */
+  --arrowpanel-background: var(--ds-white) !important;
+  --arrowpanel-color: var(--ds-black) !important;
+  --arrowpanel-border-color: var(--ds-black) !important;
+  --arrowpanel-border-radius: 0 !important;
+  --panel-background: var(--ds-white) !important;
+  --panel-color: var(--ds-black) !important;
+  --panel-border-color: var(--ds-black) !important;
+  --panel-border-radius: 0 !important;
+  --panel-item-hover-bgcolor: var(--ds-yellow) !important;
+  --panel-item-active-bgcolor: var(--ds-yellow-2) !important;
+  --panel-separator-color: var(--ds-light) !important;
+  --menu-background-color: var(--ds-white) !important;
+  --menu-color: var(--ds-black) !important;
+  --menu-border-color: var(--ds-black) !important;
+  --menuitem-hover-background-color: var(--ds-yellow) !important;
+  --menuitem-hover-color: var(--ds-black) !important;
+  --menu-disabled-color: var(--ds-dark) !important;
+
+  /* sidebar: the blue field on the left of a window, as on COSMIC (§7) */
+  --sidebar-background-color: var(--ds-blue) !important;
+  --sidebar-text-color: var(--ds-white) !important;
+  --sidebar-border-color: transparent !important;
+
+  /* buttons, inputs, focus, links */
+  --button-bgcolor: var(--ds-white) !important;
+  --button-hover-bgcolor: var(--ds-light) !important;
+  --button-active-bgcolor: var(--ds-dark) !important;
+  --button-color: var(--ds-black) !important;
+  --button-border-radius: 0 !important;
+  --button-primary-bgcolor: var(--ds-blue) !important;
+  --button-primary-hover-bgcolor: var(--ds-blue-2) !important;
+  --button-primary-active-bgcolor: var(--ds-blue-2) !important;
+  --button-primary-color: var(--ds-white) !important;
+  --input-bgcolor: var(--ds-white) !important;
+  --input-color: var(--ds-black) !important;
+  --input-border-color: var(--ds-black) !important;
+  --focus-outline-color: var(--ds-black) !important;
+  --focus-outline-width: 2px !important;
+  --focus-outline-offset: 0 !important;
+  --link-color: var(--ds-blue) !important;
+  --link-color-hover: var(--ds-blue-2) !important;
+  --lwt-sidebar-background-color: var(--ds-blue) !important;
+  --lwt-sidebar-text-color: var(--ds-white) !important;
+
+  /* Firefox 154 token names (design-system and browser tokens); the older names above stay for older builds */
+  --toolbox-background-color: var(--ds-blue) !important;             /* the titlebar: blue when key ...          */
+  --toolbox-text-color: var(--ds-white) !important;
+  --toolbox-background-color-inactive: var(--ds-light) !important;   /* ... LIGHT when not (§1)                  */
+  --toolbox-text-color-inactive: var(--ds-black) !important;
+  --toolbar-background-color: var(--ds-yellow) !important;
+  --toolbar-text-color: var(--ds-black) !important;
+  --toolbar-field-background-color-focus: var(--ds-white) !important;
+  --toolbar-field-text-color: var(--ds-black) !important;
+  --toolbar-field-text-color-focus: var(--ds-black) !important;
+  --toolbar-field-border-color-focus: var(--ds-black) !important;
+  --urlbar-background-color: var(--ds-white) !important;
+  --urlbar-background-color-focus: var(--ds-white) !important;
+  --urlbar-border-radius: 0 !important;
+  --urlbar-inner-border-radius: 0 !important;
+  --urlbar-box-background-color: var(--ds-white) !important;
+  --urlbar-box-background-color-hover: var(--ds-yellow) !important;
+  --urlbar-box-background-color-active: var(--ds-yellow-2) !important;
+  --urlbar-box-background-color-focus: var(--ds-white) !important;
+  --urlbar-box-text-color: var(--ds-black) !important;
+  --urlbar-box-text-color-hover: var(--ds-black) !important;
+  --urlbarview-background-color-hover: var(--ds-yellow) !important;
+  --urlbarview-background-color-selected: var(--ds-yellow) !important;
+  --urlbarview-text-color-selected: var(--ds-black) !important;
+  --urlbarview-text-color-secondary: var(--ds-dark) !important;
+  --urlbarview-text-color-action: var(--ds-blue) !important;
+  --urlbarview-border-radius: 0 !important;
+  --urlbarview-separator-color: var(--ds-light) !important;
+  --urlbarview-action-button-background-color: var(--ds-white) !important;
+  --urlbarview-action-button-background-color-hover: var(--ds-yellow) !important;
+  --tab-background-color-hover: var(--ds-blue-2) !important;
+  --tab-background-color-selected: var(--ds-yellow) !important;
+  --tab-outline-color: transparent !important;
+  --tab-selected-outline-color: transparent !important;
+  --tab-hover-outline-color: transparent !important;
+  --tab-box-shadow-selected: none !important;
+  --tab-border-color-selected-leading: transparent !important;
+  --tab-border-color-selected-trailing: transparent !important;
+  --tab-margin-block: 0 !important;
+  --tabs-navbar-separator-style: none !important;
+  --tabs-navbar-separator-color: transparent !important;
+  --button-background-color: var(--ds-white) !important;
+  --button-background-color-hover: var(--ds-light) !important;
+  --button-background-color-active: var(--ds-dark) !important;
+  --button-text-color: var(--ds-black) !important;
+  --button-background-color-primary: var(--ds-blue) !important;
+  --button-background-color-primary-hover: var(--ds-blue-2) !important;
+  --button-background-color-primary-active: var(--ds-blue-2) !important;
+  --button-text-color-primary: var(--ds-white) !important;
+  --button-border-color: transparent !important;
+  --color-accent-primary: var(--ds-blue) !important;
+  --color-accent-primary-hover: var(--ds-blue-2) !important;
+  --color-accent-primary-active: var(--ds-blue-2) !important;
+  --input-background-color: var(--ds-white) !important;
+  --input-text-color: var(--ds-black) !important;
+  --input-border-color: var(--ds-black) !important;
+  --link-color-active: var(--ds-blue-2) !important;
+  --focus-outline: 2px solid var(--ds-black) !important;
+  --card-border-color: transparent !important;
+  --card-box-shadow: none !important;
+  --panel-item-hover-bgcolor: var(--ds-yellow) !important;
+  --lwt-toolbar-field-highlight: var(--ds-yellow) !important;
+  --lwt-toolbar-field-highlight-text: var(--ds-black) !important;
+}
+
+/* --- titlebar / tab strip -------------------------------------------------------------------- */
+#navigator-toolbox, #titlebar, #TabsToolbar, #TabsToolbar-customization-target {
+  background-color: var(--ds-blue) !important;
+  background-image: none !important;
+  color: var(--ds-white) !important;
+  border: 0 !important; box-shadow: none !important;
+}
+:root:-moz-window-inactive #navigator-toolbox,
+:root:-moz-window-inactive #titlebar,
+:root:-moz-window-inactive #TabsToolbar,
+:root:-moz-window-inactive #TabsToolbar-customization-target {
+  background-color: var(--ds-light) !important;          /* non-key titlebar LIGHT, BLACK text (§1) */
+  color: var(--ds-black) !important;
+}
+:root:-moz-window-inactive .tabbrowser-tab:not([selected]) .tab-label,
+:root:-moz-window-inactive .tabbrowser-tab:not([selected]) .tab-icon-image,
+:root:-moz-window-inactive .titlebar-button { color: var(--ds-black) !important; fill: var(--ds-black) !important; }
+:root:-moz-window-inactive .tabbrowser-tab:hover:not([selected]) .tab-background { background-color: var(--ds-dark) !important; }
+
+.tabbrowser-tab .tab-background {
+  border-radius: 0 !important; border: 0 !important; box-shadow: none !important; outline: none !important;
+  background-image: none !important;
+  margin: 0 !important;
+}
+.tabbrowser-tab:not([selected]) .tab-label, .tabbrowser-tab:not([selected]) .tab-icon-image { color: var(--ds-white) !important; }
+.tabbrowser-tab:hover:not([selected]) .tab-background { background-color: var(--ds-blue-2) !important; }
+.tabbrowser-tab[selected] .tab-background, .tabbrowser-tab[visuallyselected] .tab-background {
+  background-color: var(--ds-yellow) !important;         /* the current tab is part of the field below it */
+}
+.tabbrowser-tab[selected] .tab-label, .tabbrowser-tab[visuallyselected] .tab-label { color: var(--ds-black) !important; font-weight: bold; }
+.tabbrowser-tab[selected] .tab-icon-image { color: var(--ds-black) !important; }
+.tab-close-button, #tabs-newtab-button, #new-tab-button, #alltabs-button, .tabs-newtab-button { border-radius: 0 !important; }
+.tabbrowser-tab::after, .tabbrowser-tab::before { display: none !important; }   /* no hairline separators */
+#tabbrowser-tabs { --tab-min-height: 32px; }
+
+/* --- toolbars: the field ----------------------------------------------------------------------- */
+#nav-bar, #PersonalToolbar, #toolbar-menubar, .browser-toolbar:not(#TabsToolbar) {
+  background-color: var(--ds-yellow) !important;
+  background-image: none !important;
+  color: var(--ds-black) !important;
+  border: 0 !important; box-shadow: none !important;
+}
+#nav-bar { border-top: 0 !important; }
+.toolbarbutton-1, .toolbarbutton-1 > .toolbarbutton-icon, .toolbarbutton-1 > .toolbarbutton-badge-stack,
+.toolbarbutton-1 > .toolbarbutton-menubutton-button > .toolbarbutton-icon, .bookmark-item, #PlacesToolbarItems > .bookmark-item {
+  border-radius: 0 !important;
+}
+.toolbarbutton-1:not([disabled]):hover > .toolbarbutton-icon,
+.toolbarbutton-1:not([disabled]):hover > .toolbarbutton-badge-stack,
+.bookmark-item:hover { background-color: var(--ds-yellow-2) !important; }
+.toolbarbutton-1:not([disabled])[open] > .toolbarbutton-icon,
+.toolbarbutton-1:not([disabled]):active > .toolbarbutton-icon,
+.toolbarbutton-1[checked] > .toolbarbutton-icon { background-color: var(--ds-yellow-1) !important; color: var(--ds-white) !important; }
+toolbarseparator { border-color: var(--ds-yellow-2) !important; }
+
+/* --- text fields ------------------------------------------------------------------------------- */
+#urlbar-background, #searchbar, .searchbar-textbox, .findbar-textbox, #urlbar-input-container {
+  border-radius: 0 !important; border: 0 !important; box-shadow: none !important;
+}
+#urlbar-background { background-color: var(--ds-white) !important; outline: none !important; }
+#urlbar[focused] > #urlbar-background, #urlbar[breakout][breakout-extend] > #urlbar-background {
+  outline: 2px solid var(--ds-black) !important; outline-offset: -2px !important;
+}
+#urlbar-input, #urlbar-input::placeholder { color: var(--ds-black) !important; }
+#urlbar-input::placeholder, .searchbar-textbox::placeholder { color: var(--ds-dark) !important; opacity: 1 !important; }
+#urlbar-input::selection, .searchbar-textbox::selection, .findbar-textbox::selection {
+  background-color: var(--ds-yellow) !important; color: var(--ds-black) !important;
+}
+.urlbarView { border-radius: 0 !important; }
+.urlbarView-row, .urlbarView-row-inner, .urlbarView-button, .urlbarView-body-inner { border-radius: 0 !important; }
+.urlbarView-row[selected] > .urlbarView-row-inner, .urlbarView-row:hover > .urlbarView-row-inner,
+.urlbarView-row[selected], .urlbarView-row:hover { background-color: var(--ds-yellow) !important; color: var(--ds-black) !important; }
+
+/* --- panels and menus -------------------------------------------------------------------------- */
+panel, menupopup, .panel-arrowcontent, .panel-subview-body, panelview, .panel-subview-footer, .subviewbutton,
+.panel-arrowcontent > *, menu, menuitem, menucaption, .menu-iconic, .toolbaritem-combined-buttons > toolbarbutton,
+.PanelUI-subView, #appMenu-popup, #contentAreaContextMenu, .customization-panel, #customization-panel,
+#downloadsPanel, .downloadsPanelFooterButton, #identity-popup, #protections-popup, #notification-popup,
+.popup-notification-body-container, .popup-notification-button, .popup-notification-footer, #editBookmarkPanel {
+  border-radius: 0 !important;
+}
+menupopup, panel, .panel-arrowcontent { --panel-border-radius: 0 !important; --arrowpanel-border-radius: 0 !important; }
+.panel-arrowcontent, menupopup { background-color: var(--ds-white) !important; color: var(--ds-black) !important; border: 0 !important; }
+menupopup > menuitem:hover, menupopup > menu:hover, menupopup > menuitem[_moz-menuactive], menupopup > menu[_moz-menuactive],
+.subviewbutton:hover, .subviewbutton[open], .subviewbutton:focus-visible,
+toolbarbutton.subviewbutton:not([disabled]):hover { background-color: var(--ds-yellow) !important; color: var(--ds-black) !important; }
+menuseparator, .panel-separator, toolbarseparator.PanelUI-subView-separator { border-color: var(--ds-light) !important; }
+
+/* --- sidebar ----------------------------------------------------------------------------------- */
+#sidebar-box, #sidebar-header, #sidebar-splitter, #sidebar, .sidebar-placesTree, #sidebar-main, #sidebar-launcher {
+  background-color: var(--ds-blue) !important; color: var(--ds-white) !important; border: 0 !important;
+}
+#sidebar-splitter { width: 0 !important; }
+#sidebar-box treechildren, .sidebar-placesTree treechildren, #bookmarks-view, #historyTree, #tabs-view {
+  background-color: var(--ds-blue) !important; color: var(--ds-white) !important;
+}
+treechildren::-moz-tree-row(selected), treechildren::-moz-tree-row(hover) { background-color: var(--ds-blue-2) !important; border-radius: 0 !important; }
+treechildren::-moz-tree-cell-text(selected), treechildren::-moz-tree-cell-text { color: var(--ds-white) !important; }
+treechildren::-moz-tree-cell-text(selected, focus) { color: var(--ds-yellow) !important; }
+#sidebar-search-container, .sidebar-search-input, #search-box { background-color: var(--ds-white) !important; color: var(--ds-black) !important; border-radius: 0 !important; }
+
+/* --- findbar, notification bars, status ------------------------------------------------------- */
+findbar, .findbar-container { background-color: var(--ds-yellow) !important; color: var(--ds-black) !important; border: 0 !important; }
+.findbar-textbox { background-color: var(--ds-white) !important; color: var(--ds-black) !important; }
+notification-message, .notificationbox-stack, .infobar { border-radius: 0 !important; }
+#statuspanel-label { background-color: var(--ds-white) !important; color: var(--ds-black) !important; border: 0 !important; border-radius: 0 !important; }
+
+/* --- the window itself: no curve anywhere ----------------------------------------------------- */
+:root, #main-window, #navigator-toolbox, #browser, #tabbrowser-tabbox, .browserStack, #appcontent, #tabbrowser-tabpanels,
+.browserSidebarContainer, #sidebar-box { border-radius: 0 !important; }
+:root[customtitlebar] #navigator-toolbox, :root[tabsintitlebar] #navigator-toolbox { border-top-left-radius: 0 !important; border-top-right-radius: 0 !important; }
+:root[customtitlebar] #tabbrowser-tabpanels, :root[tabsintitlebar] #tabbrowser-tabpanels { border-radius: 0 !important; }
+.titlebar-buttonbox-container { -moz-box-align: center; }
+.titlebar-button { border-radius: 0 !important; }
+.titlebar-button:hover { background-color: var(--ds-blue-2) !important; }
+.titlebar-close:hover { background-color: var(--ds-red) !important; }

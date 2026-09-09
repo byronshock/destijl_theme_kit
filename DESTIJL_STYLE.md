@@ -382,6 +382,33 @@ Residue:
 - The two §1c derivations: the sidebar overlay and the row surface.
 - Client-side decorations (Electron, GTK) keep their own chrome.
 
+### Firefox
+
+The browser is a surface of its own: it draws its own chrome, and Firefox
+hands that chrome to a per-profile stylesheet. Build: `worksafe/firefox/`.
+
+Reached:
+
+- The tab strip is the titlebar and carries key state the way §1 asks:
+  blue with WHITE text when the window is key, LIGHT with BLACK text
+  when it is not. The only surface on COSMIC that can show it.
+- Toolbars and the current tab yellow, the window field (§7 COSMIC);
+  address and search fields WHITE with BLACK text and a BLACK focus
+  outline; selection yellow; menus and panels WHITE with a yellow
+  hovered row; sidebar blue with WHITE text. Every radius 0; no
+  hairline separators.
+- New tab, home and blank pages WHITE with BLACK text; page content
+  untouched.
+- Prefs: compact density, scrollbars always shown, reduced motion, light
+  theme, Nimbus Sans and Hack, and the §0 declutter: sponsored tiles,
+  suggestions, Pocket, trending, promotions and "what's new" off.
+
+Residue:
+
+- A running window's dock icon is the one the window supplies, not the
+  theme's pigment version.
+- GTK dialogs (file picker) are GTK's.
+
 ## 8. Principles
 
 1. Chrome is the pigment colors Mondrian actually used in this very

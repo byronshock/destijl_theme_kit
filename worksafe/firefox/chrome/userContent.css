@@ -1,0 +1,30 @@
+/* DeStijl — Firefox in-browser pages that are chrome, not content: the new tab, home, blank, private.
+   worksafe/firefox/chrome/userContent.css. Page content itself is left alone (§0: content may have color). */
+@-moz-document url(about:blank), url(about:home), url(about:newtab), url-prefix(about:privatebrowsing) {
+  :root {
+    --newtab-background-color: #E5E6E8 !important;
+    --newtab-background-color-secondary: #E5E6E8 !important;
+    --newtab-text-primary-color: #0A0F10 !important;
+    --newtab-text-secondary-color: #535758 !important;
+    --newtab-primary-action-background: #1B3A6D !important;
+    --newtab-primary-element-text-color: #E5E6E8 !important;
+    --newtab-element-hover-color: #DFCC82 !important;
+    --newtab-element-active-color: #988D5C !important;
+    --newtab-border-radius: 0 !important;
+    --newtab-button-static-background: #E5E6E8 !important;
+    --newtab-button-static-hover-background: #DFCC82 !important;
+    --newtab-button-static-active-background: #988D5C !important;
+    --newtab-button-text: #0A0F10 !important;
+    --newtab-button-focus-border: #0A0F10 !important;
+    --color-accent-primary: #1B3A6D !important;
+    --color-accent-primary-hover: #152C4E !important;
+    --color-accent-primary-active: #152C4E !important;
+    --button-background-color-primary: #1B3A6D !important;
+    --button-background-color-primary-hover: #152C4E !important;
+    --button-text-color-primary: #E5E6E8 !important;
+    --border-radius-small: 0 !important; --border-radius-medium: 0 !important; --border-radius-large: 0 !important;
+    font-family: "Nimbus Sans", Helvetica, sans-serif !important;
+  }
+  html, body { background-color: #E5E6E8 !important; color: #0A0F10 !important; }
+  * { border-radius: 0 !important; }
+}
