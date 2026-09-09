@@ -12,6 +12,7 @@ KIT=$(cd "$HERE/../.." && pwd)
 CFG="${XDG_CONFIG_HOME:-$HOME/.config}/cosmic"
 PICS="$HOME/Pictures/destijl"
 PANEL_PT=32            # COSMIC panel, size XS, logical px (measured on 4K @ 150%: 48 physical)
+PY="${DESTIJL_PYTHON:-python3}"   # a venv python with Pillow, numpy and cairosvg makes the wallpaper and the icons
 mkdir -p "$CFG" "$PICS"
 
 # --- 1. fonts (§2). Not bundled: both are packaged. --------------------------------------------
@@ -37,11 +38,11 @@ W=$1; H=$2; SCALE=$3
 echo "destijl: output ${W}x${H} @ ${SCALE}%"
 
 # --- 3. wallpaper (§5): painting flush right under a DARK band two panel heights tall; DARK wall left ---
-LAYOUT="python3 $KIT/build/wallpaper.py ${W}x${H} $SCALE --top 2 --bottom 0 --bar $PANEL_PT --tag cosmic"
-RULE_PT=$($LAYOUT --layout-only | python3 -c 'import json,sys; print(json.load(sys.stdin)["rule_pt"])')
+LAYOUT="$PY $KIT/build/wallpaper.py ${W}x${H} $SCALE --top 2 --bottom 0 --bar $PANEL_PT --tag cosmic"
+RULE_PT=$($LAYOUT --layout-only | "$PY" -c 'import json,sys; print(json.load(sys.stdin)["rule_pt"])')
 PNG="$PICS/mondrian_1922_cosmic_${W}x${H}_s${SCALE}.png"
 PRE="$KIT/worksafe/$(basename "$PNG")"       # a copy already generated in the kit (git-ignored)
-if python3 -c 'import PIL' 2>/dev/null; then
+if "$PY" -c 'import PIL' 2>/dev/null; then
   $LAYOUT --out "$PICS"
 elif [ -f "$PRE" ]; then
   cp "$PRE" "$PICS/"; [ -f "${PRE%.png}.json" ] && cp "${PRE%.png}.json" "$PICS/"
@@ -78,7 +79,11 @@ cp "$HERE"/cosmic-config/com.system76.CosmicTk/v1/* "$CFG/com.system76.CosmicTk/
 mkdir -p "$CFG/com.system76.CosmicPanel.Panel/v1"
 [ -f "$CFG/com.system76.CosmicPanel.Panel/v1/background" ] && [ ! -f "$PICS/panel-background.before-destijl.ron" ] && \
   cp "$CFG/com.system76.CosmicPanel.Panel/v1/background" "$PICS/panel-background.before-destijl.ron"
-cp "$HERE"/cosmic-config/com.system76.CosmicPanel.Panel/v1/background "$CFG/com.system76.CosmicPanel.Panel/v1/background"
+cp "$HERE"/cosmic-config/com.system76.CosmicPanel.Panel/v1/* "$CFG/com.system76.CosmicPanel.Panel/v1/"
+# --- 4c. dock: keep its style when a window is maximized. Otherwise COSMIC drops the dock's transparency and
+#     paints it with the theme background, and the yellow field appears as a bar down the left of the screen.
+mkdir -p "$CFG/com.system76.CosmicPanel.Dock/v1"
+cp "$HERE"/cosmic-config/com.system76.CosmicPanel.Dock/v1/* "$CFG/com.system76.CosmicPanel.Dock/v1/"
 
 # --- 5. light mode, always (§7): Mondrian's polarity is BLACK on WHITE. No dark builder is shipped. ---
 mkdir -p "$CFG/com.system76.CosmicTheme.Mode/v1"
@@ -97,7 +102,22 @@ else
 fi
 rm -f "$TMP"
 
-# --- 7. terminal: add the scheme to COSMIC Terminal's light schemes and select it ---------------------
+# --- 7. icons (§4b, issue 006): the user's own app icons in the five pigments, generated here, never shipped ---
+ICONS="${XDG_DATA_HOME:-$HOME/.local/share}/icons/destijl"
+if "$PY" -c 'import PIL, numpy, cairosvg' 2>/dev/null; then
+  INHERITS="Cosmic,Pop,Adwaita,hicolor"
+  [ -d "${ICONS%/destijl}/nexty" ] && INHERITS="nexty,$INHERITS"     # keep nexty's system icons if that kit is installed
+  rm -rf "$ICONS" && "$PY" "$KIT/build/icon_theme.py" --out "$ICONS" --inherits "$INHERITS" | head -1
+  command -v gtk-update-icon-cache >/dev/null 2>&1 && gtk-update-icon-cache -q -t "$ICONS" || true
+  TK="$CFG/com.system76.CosmicTk/v1/icon_theme"
+  [ -f "$TK" ] && [ ! -f "$PICS/icon_theme.before-destijl.ron" ] && cp "$TK" "$PICS/icon_theme.before-destijl.ron"
+  printf '"destijl"' > "$TK"
+  pgrep -x cosmic-panel >/dev/null 2>&1 && pkill -x cosmic-panel || true   # the panel reads the icon theme at startup; COSMIC respawns it
+else
+  echo "destijl: icon theme not generated — needs Pillow, numpy and cairosvg for $PY (set DESTIJL_PYTHON to a venv python)"
+fi
+
+# --- 8. terminal: add the scheme to COSMIC Terminal's light schemes and select it ---------------------
 TERM_CFG="$CFG/com.system76.CosmicTerm/v1"; mkdir -p "$TERM_CFG"
 python3 - "$HERE/destijl-term.ron" "$TERM_CFG" <<'PY'
 import re, sys, os
@@ -118,7 +138,8 @@ print(f'destijl: terminal scheme "{name}" installed and selected')
 PY
 
 [ -f "$PNG" ] && WP="Mondrian composed at $PNG" || WP="NO Mondrian composed (see above)"
+[ -d "$ICONS" ] && IC="icons ($ICONS)" || IC="NO icons (see above)"
 cat <<MSG
-destijl: light mode, theme (gaps $RULE_PT pt), toolkit fonts, background $BACKGROUND; $WP.
+destijl: light mode, theme (gaps $RULE_PT pt), toolkit fonts, $IC, background $BACKGROUND; $WP.
 Log out/in if the panel, wallpaper or terminal doesn't refresh.
 MSG

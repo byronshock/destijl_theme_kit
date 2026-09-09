@@ -97,6 +97,16 @@ kit "does not snap it to the four lines". Projection into Mondrian space
 is a third thing: the brand's hues re-expressed in the composition's
 pigments, identity kept. If this ships, §4b needs a sentence saying so.
 
+## Built (2026-09-08)
+
+`build/icon_theme.py` does item 1 below, with both C questions settled
+as recommended: low-chroma pixels go to the nearer of K and W, and a 3x3
+majority vote cleans the edges. `worksafe/cosmic/install.sh` runs it
+into `~/.local/share/icons/destijl` and selects the theme. Hidden entries with the
+desktop's own icon prefix (the applets) are included. First run on the
+author's machine: 99 icons, one name not found, six absolute paths.
+Open: items 3 to 5.
+
 ## Do
 
 1. **Generator.** Resolve each app's real icon through the theme chain the

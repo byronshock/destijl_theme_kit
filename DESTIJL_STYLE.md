@@ -364,6 +364,9 @@ Reached:
   DARK band goes there, two panel heights tall; the painting flush right
   under it; the DARK wall on the left carries the dock and the desktop
   icons.
+- Application icons (§4b) in the five pigments: `build/icon_theme.py`
+  resolves each app's own icon through the platform chain and projects
+  it to the nearest pigment, at install time, on the user's machine.
 - Nimbus Sans UI, Hack mono, compact header and density. Terminal BLACK
   on WHITE with the pigments in their ANSI slots: red, yellow and blue
   lines, SUCCESS green, gray-line magenta and cyan, red cursor.

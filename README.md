@@ -11,6 +11,7 @@ build/lines.py            line test:  python3 build/lines.py '#9C9EA0' '#FF0000'
 build/match_wallpaper.py  regenerates the matched full-res master from the two sources
 build/wallpaper.py        desktop compositor:  python3 build/wallpaper.py 1920x1080 100
 build/mondrian_space.py   projects sRGB into the space of the five pigments (issue 006)
+build/icon_theme.py       generates the destijl app-icon theme on the user's machine (§4b)
 wallpaper/                MIA source, measurements, transform, full-res matched PNG
 worksafe/                 per-user, no elevation: destijl.theme, theme.reg,
                           square_corners.ps1; composed wallpapers are generated

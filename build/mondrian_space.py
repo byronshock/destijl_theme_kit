@@ -13,6 +13,7 @@ pigments allow.
 
 Modes (--mode=pigment|hue|hull|lines):
   pigment  nearest of the five pigments, flat: the actual pigments, a poster. Chosen 2026-09-08 (issue 006).
+           Grays go to K or W, and a 3x3 majority vote cleans anti-aliased edges (project_image clean=True).
   hue      hue chooses the line, HSV value chooses the point on it (luminance for grays). Shading kept, no banding, no mixes.
   hull     warp to the anchors, clip to the hull. Admits mixes, so tints and mud. The first attempt.
   lines    warp, then nearest of the four §1 lines. Bands across a gradient.
@@ -123,11 +124,39 @@ def clip_lines(p):
 _LUMA = np.array([0.2126, 0.7152, 0.0722])
 
 
-def pigment(p):
+PIGMENTS = np.stack([K, W, R, Y, B])          # index order for pigment_index / majority
+
+
+def pigment_index(p, grays_to_kw=True, chroma_min=28.0):
+    """Index into PIGMENTS of the nearest pigment. With grays_to_kw (issue 006, accepted 2026-09-08), a
+    low-chroma pixel goes to the nearer of K and W, so gray shading does not turn yellow."""
+    p = np.atleast_2d(p).astype(float)
+    d = ((p[:, None, :] - PIGMENTS[None, :, :]) ** 2).sum(-1)
+    if grays_to_kw:
+        gray = (p.max(1) - p.min(1)) < chroma_min
+        d[gray, 2:] = np.inf
+    return d.argmin(1)
+
+
+def pigment(p, grays_to_kw=True):
     """Nearest of the five pigments, flat: a poster, no shading."""
-    p = np.atleast_2d(p).astype(float); A = np.stack(list(ANCHORS.values()))
-    d = ((p[:, None, :] - A[None, :, :]) ** 2).sum(-1)
-    return A[d.argmin(1)]
+    return PIGMENTS[pigment_index(p, grays_to_kw)]
+
+
+def majority(idx, alpha=None):
+    """3x3 majority vote over a 2-D index map (issue 006, accepted 2026-09-08): an anti-aliased edge pixel
+    joins the pigment most of its neighbours chose instead of a third one. Ties keep the pixel's own choice;
+    transparent neighbours do not vote."""
+    H, W_ = idx.shape; n = len(PIGMENTS)
+    votes = np.zeros((n, H, W_), int)
+    valid = np.ones((H, W_), bool) if alpha is None else alpha > 0
+    pad_i = np.pad(idx, 1, mode='edge'); pad_v = np.pad(valid, 1, mode='constant')
+    for dy in (-1, 0, 1):
+        for dx in (-1, 0, 1):
+            si = pad_i[1 + dy:1 + dy + H, 1 + dx:1 + dx + W_]; sv = pad_v[1 + dy:1 + dy + H, 1 + dx:1 + dx + W_]
+            for k in range(n): votes[k] += (si == k) & sv
+    best = votes.argmax(0); own = votes[idx, np.arange(H)[:, None], np.arange(W_)[None, :]]
+    return np.where(votes.max(0) > own, best, idx)
 
 
 def hue_lines(p, chroma_min=28.0):
@@ -166,10 +195,17 @@ def project(p, lines=False, mode=None):
     return np.clip(np.rint(MODES[mode](q)), 0, 255)
 
 
-def project_image(im, lines=False, mode=None):
+def project_image(im, lines=False, mode=None, clean=True):
+    """Project every pixel; alpha untouched. In pigment mode, clean=True applies the 3x3 majority filter."""
     from PIL import Image
-    im = im.convert('RGBA'); a = np.asarray(im); rgb = a[..., :3].reshape(-1, 3)
-    out = project(rgb, lines, mode).astype(np.uint8).reshape(a.shape[0], a.shape[1], 3)
+    im = im.convert('RGBA'); a = np.asarray(im); H, W_ = a.shape[:2]; rgb = a[..., :3].reshape(-1, 3)
+    mode = mode or ('lines' if lines else 'pigment')
+    if mode == 'pigment':
+        idx = pigment_index(rgb).reshape(H, W_)
+        if clean: idx = majority(idx, a[..., 3])
+        out = PIGMENTS[idx].astype(np.uint8)
+    else:
+        out = project(rgb, mode=mode).astype(np.uint8).reshape(H, W_, 3)
     return Image.fromarray(np.concatenate([out, a[..., 3:]], -1), 'RGBA')
 
 

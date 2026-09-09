@@ -7,8 +7,10 @@ Implements `DESTIJL_STYLE.md` §7 COSMIC; measured on COSMIC (Pop!_OS 24.04), 38
 |---|---|---|
 | `destijl.ron` | `cosmic-settings appearance import destijl.ron` (install.sh does it, after setting the gaps) or Settings › Desktop › Appearance › Import | ThemeBuilder v2, Light palette. Yellow `#DFCC82` window fields and title bars, blue `#1B3A6D` nav sidebars, BLACK text, WHITE `#E5E6E8` accent (selection, links, outlines, toggles), FHWA semantic colors, every corner radius 0, no frosting, no window hint, tiling gaps = the rule. Every accent-picker swatch is a point on a DeStijl line. |
 | `destijl-term.ron` | install.sh adds it to COSMIC Terminal's light schemes and selects it (or Terminal › View › Color schemes › Import) | BLACK on WHITE; Mondrian's red, yellow and blue lines in their ANSI slots (normal = dark third, bright = endpoint), SUCCESS green, gray-line magenta and cyan, Mondrian red cursor. |
-| `cosmic-config/com.system76.CosmicPanel.Panel/v1/background` | copied by install.sh | the panel Mondrian red `#D64D24`, a flat `Color` on the panel's own key. The theme would paint it with the window WHITE. BLACK text on it, 4.4:1. |
-| `cosmic-config/com.system76.CosmicTk/v1/` | copied by install.sh | Nimbus Sans UI, Hack mono, Compact header and density. The icon theme key is not shipped (§4, issue 006). |
+| `cosmic-config/com.system76.CosmicPanel.Panel/v1/` | copied by install.sh | `background`: the panel Mondrian red `#D64D24`, a flat `Color` on the panel's own key; the theme would paint it with the window field. BLACK text on it, 4.4:1. `keep_style_on_maximize`: true. |
+| `cosmic-config/com.system76.CosmicPanel.Dock/v1/keep_style_on_maximize` | copied by install.sh | true. COSMIC otherwise drops the dock's transparency behind a maximized window and paints it with the theme background, which put a yellow bar down the left of the screen. The dock's layout keys are not shipped; the floating dock stays as COSMIC has it. |
+| `cosmic-config/com.system76.CosmicTk/v1/` | copied by install.sh | Nimbus Sans UI, Hack mono, Compact header and density. |
+| `../../build/icon_theme.py` | run by install.sh into `~/.local/share/icons/destijl`; needs Pillow, numpy, cairosvg (`DESTIJL_PYTHON=/path/to/venv/bin/python` if the system python lacks them) | §4b, issue 006: every visible application's icon, resolved through the platform's theme chain, projected pixel by pixel to the nearest of the five pigments, at eight sizes. Ships only the Applications context and inherits the platform's theme (and nexty's system icons if that kit is installed). Not committed: the output is the user's brands in the user's paint. install.sh then sets the toolkit icon theme to `destijl`. An `Icon=` that is an absolute path (Zed, NVIDIA tools) is outside any theme and is listed at the end of the run. |
 | `install.sh` | `sh install.sh` (or `sh install.sh --mondrian`) | reads the output's size and scale from `cosmic-randr`, composes the Mondrian wallpaper into `~/Pictures/destijl` (or copies a pre-generated one from `../`), sets the background to BLACK so the gaps are rules — or to the Mondrian with `--mondrian` —, copies the toolkit config, sets light mode, writes the rule into the theme's gaps and imports it, and installs the terminal scheme. Backs up the previous background config to `~/Pictures/destijl/`. |
 
 Fonts are not bundled: `fonts-urw-base35` (Nimbus Sans) and `fonts-hack` are
@@ -76,6 +78,18 @@ rule that appears with focus is carrying state (§3).
 Earlier prediction of a 10% pure-white overlay (`#324E7C`) was wrong by
 measurement; the overlay libcosmic applies is smaller. `palette.json`
 records the measured value.
+
+## Icons
+
+The pigment projection is a poster: five colors, no shading, gray to
+black or white, a 3x3 majority vote on the edges. On the BLACK dock a
+brand that is mostly black or dark blue (Inkscape, Steam) sits low in
+contrast, which is the pigments' answer rather than a defect; §4b's test
+applies if one becomes hard to find. Hidden desktop entries are skipped unless their icon carries the
+desktop's own prefix, so the panel and dock applets are included. First
+run on this machine 2026-09-08: 99 icons made, one name not found, six
+absolute paths. The panel reads the icon theme at startup; install.sh
+restarts it.
 
 ## WHITE on yellow
 
