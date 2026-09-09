@@ -19,9 +19,12 @@ packages, and install.sh says so if either is missing.
 ## The screen as composition (§5, §3)
 
 On a tiled workspace the screen is windows and rules, and the rule is
-BLACK: the default install sets the output's background to BLACK
-`#0A0F10` (a `Color(Single(...))` source for `cosmic-bg`) so every gap
-is a rule and nothing else. The Mondrian is composed alongside for a
+BLACK: the default install sets the output's background to a solid
+BLACK `#0A0F10` PNG at the output's size, written by install.sh with
+no dependencies, so every gap is a rule and nothing else. A file rather
+than a `Color` source because the lock screen is drawn by
+cosmic-greeter's own image loader from the same background key, and a
+color source left it on the greeter's default. The Mondrian is composed alongside for a
 second output, or for a machine that floats its windows
 (`install.sh --mondrian`). §7 describes the two-output arrangement; on
 one output, this is the choice, and it was made for the rule.

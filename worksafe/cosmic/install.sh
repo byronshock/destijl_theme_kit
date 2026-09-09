@@ -56,7 +56,18 @@ BG="$CFG/com.system76.CosmicBackground/v1"; mkdir -p "$BG"
 if [ "$BACKGROUND" = mondrian ] && [ -f "$PNG" ]; then
   SOURCE="Path(\"$PNG\")"
 else
-  SOURCE="Color(Single((0.039216, 0.058824, 0.062745)))"    # BLACK #0A0F10: the gaps are rules. RON wants a tuple here, not [ ]
+  # BLACK #0A0F10 as a file, not a Color source: the lock screen is drawn by cosmic-greeter's own image loader
+  # from this same key, and it does not take a Color. A solid PNG at the output's size needs no Pillow.
+  BLACK="$PICS/black_${W}x${H}.png"
+  python3 - "$BLACK" "$W" "$H" <<'PY'
+import struct, sys, zlib
+out, w, h = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
+def chunk(t, d): return struct.pack('>I', len(d)) + t + d + struct.pack('>I', zlib.crc32(t + d) & 0xffffffff)
+row = b'\x00' + bytes([10, 15, 16]) * w
+png = b'\x89PNG\r\n\x1a\n' + chunk(b'IHDR', struct.pack('>IIBBBBB', w, h, 8, 2, 0, 0, 0)) + chunk(b'IDAT', zlib.compress(row * h, 9)) + chunk(b'IEND', b'')
+open(out, 'wb').write(png)
+PY
+  SOURCE="Path(\"$BLACK\")"
   BACKGROUND=black
 fi
 cat > "$BG/all" <<RON
