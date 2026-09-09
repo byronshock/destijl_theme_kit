@@ -1,7 +1,12 @@
 #!/bin/sh
 # DeStijl for COSMIC (Pop!_OS) — user-level install. No sudo, nothing outside $HOME. (worksafe tier)
 # Implements DESTIJL_STYLE.md §7 COSMIC. Re-runnable.
+# Usage: sh install.sh [--mondrian]
+#   default    the output's background is BLACK, so the tiling gaps are rules (§3, §7). The composed
+#              Mondrian is still written to ~/Pictures/destijl for a second output or a floating desktop.
+#   --mondrian the composed Mondrian as the background; on a one-output machine the gaps show it.
 set -e
+BACKGROUND=black; [ "$1" = "--mondrian" ] && BACKGROUND=mondrian
 HERE=$(cd "$(dirname "$0")" && pwd)
 KIT=$(cd "$HERE/../.." && pwd)
 CFG="${XDG_CONFIG_HOME:-$HOME/.config}/cosmic"
@@ -45,13 +50,18 @@ else
   echo "destijl: Pillow not installed (python3-pil) — wallpaper not generated; run later, then re-run install.sh:"
   echo "         $LAYOUT --out $PICS"
 fi
-if [ -f "$PNG" ]; then
-  BG="$CFG/com.system76.CosmicBackground/v1"; mkdir -p "$BG"
-  [ -f "$BG/all" ] && cp "$BG/all" "$PICS/cosmic-background-all.before-destijl.ron"
-  cat > "$BG/all" <<RON
+BG="$CFG/com.system76.CosmicBackground/v1"; mkdir -p "$BG"
+[ -f "$BG/all" ] && [ ! -f "$PICS/cosmic-background-all.before-destijl.ron" ] && cp "$BG/all" "$PICS/cosmic-background-all.before-destijl.ron"
+if [ "$BACKGROUND" = mondrian ] && [ -f "$PNG" ]; then
+  SOURCE="Path(\"$PNG\")"
+else
+  SOURCE="Color(Single((0.039216, 0.058824, 0.062745)))"    # BLACK #0A0F10: the gaps are rules. RON wants a tuple here, not [ ]
+  BACKGROUND=black
+fi
+cat > "$BG/all" <<RON
 (
     output: "all",
-    source: Path("$PNG"),
+    source: $SOURCE,
     filter_by_theme: true,
     rotation_frequency: 300,
     filter_method: Lanczos,
@@ -59,8 +69,7 @@ if [ -f "$PNG" ]; then
     sampling_method: Alphanumeric,
 )
 RON
-  printf 'true' > "$BG/same-on-all"
-fi
+printf 'true' > "$BG/same-on-all"
 
 # --- 4. toolkit: Nimbus Sans UI, Hack mono, compact header and density. Icon theme is left alone (§4). ---
 mkdir -p "$CFG/com.system76.CosmicTk/v1"
@@ -103,8 +112,8 @@ open(os.path.join(cfg, 'syntax_theme_light'), 'w').write(f'"{name}"')
 print(f'destijl: terminal scheme "{name}" installed and selected')
 PY
 
-[ -f "$PNG" ] && WP="wallpaper ($PNG)" || WP="NO wallpaper (see above)"
+[ -f "$PNG" ] && WP="Mondrian composed at $PNG" || WP="NO Mondrian composed (see above)"
 cat <<MSG
-destijl: light mode, theme (gaps $RULE_PT pt), toolkit fonts, $WP.
+destijl: light mode, theme (gaps $RULE_PT pt), toolkit fonts, background $BACKGROUND; $WP.
 Log out/in if the panel, wallpaper or terminal doesn't refresh.
 MSG

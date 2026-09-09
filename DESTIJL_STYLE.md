@@ -78,8 +78,8 @@ the steps are NeXT's, the endpoints are Mondrian's.
 
 | Role  | Hex       | Step  | Use |
 |-------|-----------|-------|-----|
-| WHITE | `#E5E6E8` | 1.000 | text fields, lists, bevel highlights, titlebar text on key windows |
-| LIGHT | `#9C9EA0` | .667  | window and panel surfaces, buttons, non-key titlebars |
+| WHITE | `#E5E6E8` | 1.000 | window backgrounds, text fields, lists, bevel highlights, titlebar text on key windows |
+| LIGHT | `#9C9EA0` | .667  | panels, buttons, non-key titlebars |
 | DARK  | `#535758` | .333  | desktop, bevel shadows, dock tiles, disabled text |
 | BLACK | `#0A0F10` | 0.000 | rules (§3), text, badges |
 
@@ -337,8 +337,7 @@ Reached:
 
 - Light mode, always, auto-switch off; no dark builder exists. Mondrian
   is light mode: the system's polarity is BLACK on WHITE.
-- Window surfaces and panel LIGHT, content wells WHITE, text BLACK,
-  nav sidebars blue — the painting's blue band is the field on the left
+- Window backgrounds WHITE, text BLACK, nav sidebars blue — the painting's blue band is the field on the left
   of a window. Every corner radius 0; no frosting.
 - Accent yellow: selection, selected-row text, links, selection outlines.
   COSMIC has one accent and selection is what it paints most.
@@ -350,25 +349,26 @@ Reached:
   28 pt on 1080p).
 - `active_hint` 0. COSMIC draws its hint on the focused window only,
   which would make the rule carry state.
-- Desktop (§5): the panel is at the top, so the DARK band goes there, two
-  panel heights tall; the painting flush right under it; the DARK wall
-  on the left carries the dock and the desktop icons.
+- Background BLACK on a tiled output, so every gap is a rule and nothing
+  else: COSMIC sets wallpaper per output, not per workspace, and on one
+  output the rule wins. The Mondrian (§5) is composed alongside for a
+  second output or a floating desktop: the panel is at the top, so the
+  DARK band goes there, two panel heights tall; the painting flush right
+  under it; the DARK wall on the left carries the dock and the desktop
+  icons.
 - Nimbus Sans UI, Hack mono, compact header and density. Terminal BLACK
   on WHITE with the pigments in their ANSI slots: red, yellow and blue
   lines, SUCCESS green, gray-line magenta and cyan, red cursor.
 
 Residue:
 
-- Header bars: this libcosmic paints them with the window background,
-  not the primary container, so they are LIGHT and cannot be blue. Every
-  window reads as non-key; focus is shown by nothing.
+- Header bars and the panel: this libcosmic paints both with the window
+  background, so they are WHITE. A header bar cannot be blue, every
+  window reads as non-key, and the panel cannot be LIGHT.
 - Toggles, nav indicators, check marks and focus rings follow the one
   accent and are yellow, where §1 has blue for the platform accent and
   BLACK for focus.
 - The §1c overlay on the blue sidebar.
-- Gaps show the wallpaper on a one-output machine. COSMIC sets wallpaper
-  per output, not per workspace; the BLACK tiled workspace with the
-  Mondrian elsewhere needs a second output.
 - Client-side decorations (Electron, GTK) keep their own chrome.
 
 ## 8. Principles

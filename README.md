@@ -24,7 +24,9 @@ issues/                   001 declutter.reg, 005 per-monitor install,
 ```
 
 Windows install: see the comments at the top of `worksafe/destijl.theme`.
-COSMIC install: `sh worksafe/cosmic/install.sh` (per-user, no sudo).
+COSMIC install: `sh worksafe/cosmic/install.sh` (per-user, no sudo). The
+background is BLACK so the tiling gaps are rules; `--mondrian` puts the
+painting there instead.
 
 ## Wallpapers: generate on demand
 

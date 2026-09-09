@@ -55,13 +55,13 @@
         radius_xl: (0.0, 0.0, 0.0, 0.0),
     ),
     neutral_tint:           Some("#9C9EA0FF"),  // derived neutrals take the gray line's own cast, no other hue
-    bg_color:               Some("#9C9EA0FF"),  // LIGHT: window and panel surfaces (§1)
+    bg_color:               Some("#E5E6E8FF"),  // WHITE: window and panel surfaces
     primary_container_bg:   Some("#1B3A6DFF"),  // blue: nav sidebars, the blue field on the left of a window (§7).
                                                 //   Header bars take bg_color in this libcosmic, not this container.
                                                 //   The selected-row overlay on it is the §1c exception, measured
                                                 //   #2E4670 (README_COSMIC.md)
     secondary_container_bg: Some("#E5E6E8FF"),  // WHITE: lists, cards, content wells
-    text_tint:              Some("#0A0F10FF"),  // BLACK text
+    text_tint:              Some("#0A0F10FF"),  // BLACK text. This slot tints a near-black; it cannot set a hue (README_COSMIC.md)
     accent:      Some("#DFCC82FF"),  // yellow: selection (§1). COSMIC has one accent and selection is what it
                                      //   paints most, so toggles and nav indicators follow it — residue against
                                      //   §1's "platform accent blue"; on the blue container blue text would vanish
