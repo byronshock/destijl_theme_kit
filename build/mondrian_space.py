@@ -1,0 +1,139 @@
+"""Mondrian space: project sRGB into the color space Mondrian's five pigments define (DESTIJL_STYLE.md §1, issue 006).
+
+Five anchors — K, W, R, Y, B, measured from the 1922 composition (palette.json) — define the space as their
+convex hull in sRGB. Pure sRGB red, yellow and blue map to R, Y, B; black and white map to K and W. Any
+other color goes to the nearest point of the hull: colors already inside are kept, colors outside are
+clipped to the hull's surface. Greens, cyans, magentas and tints toward white have no place in the
+composition and land on the nearest face, keeping their lightness and as much of their chroma as the
+pigments allow.
+
+    project(rgb) -> rgb            one color, 0-255 floats or a hex string
+    project_image(PIL.Image)       every pixel; alpha untouched
+    python3 build/mondrian_space.py in.png out.png [--lines]
+
+--lines projects to the four lines of §1 instead of the hull: the kit's own rule for chrome.
+"""
+import json, os, sys
+import numpy as np
+
+_here = os.path.dirname(os.path.abspath(__file__))
+PAL = json.load(open(os.path.join(_here, '..', 'palette.json')))
+
+
+def _rgb(h):
+    if isinstance(h, str):
+        h = h.lstrip('#'); return np.array([int(h[i:i + 2], 16) for i in (0, 2, 4)], float)
+    return np.asarray(h, float)
+
+
+K = _rgb(PAL['black']); W = _rgb(PAL['lines']['gray']['end'])
+R = _rgb(PAL['lines']['red']['end']); Y = _rgb(PAL['lines']['yellow']['end']); B = _rgb(PAL['lines']['blue']['end'])
+ANCHORS = {'K': K, 'W': W, 'R': R, 'Y': Y, 'B': B}
+SRGB = {'K': _rgb('#000000'), 'W': _rgb('#FFFFFF'), 'R': _rgb('#FF0000'), 'Y': _rgb('#FFFF00'), 'B': _rgb('#0000FF')}
+
+# --- the warp: sRGB anchors -> Mondrian anchors, exact at the anchors, smooth between (match_wallpaper.py's method)
+_SRC = np.stack([SRGB[k] for k in 'KWRYB']); _DST = np.stack([ANCHORS[k] for k in 'KWRYB'])
+_SIGMA = 60.0     # width of each anchor's pull, sRGB code values: exact at the anchors (e^-9 leakage), smooth between
+
+
+def warp(p):
+    """Move p by the anchor offsets, weighted by proximity. Exact at the five anchors."""
+    p = np.atleast_2d(p).astype(float)
+    d2 = ((p[:, None, :] - _SRC[None, :, :]) ** 2).sum(-1)                # (n, 5)
+    w = np.exp(-d2 / (2 * _SIGMA ** 2)); w /= w.sum(-1, keepdims=True) + 1e-12
+    return p + (w[:, :, None] * (_DST - _SRC)[None, :, :]).sum(1)
+
+
+# --- the hull of the five anchors, as triangles; nearest point on each, take the closest
+def _hull_faces(pts):
+    n = len(pts); faces = []
+    from itertools import combinations
+    for i, j, k in combinations(range(n), 3):
+        a, b, c = pts[i], pts[j], pts[k]; nrm = np.cross(b - a, c - a)
+        if np.linalg.norm(nrm) < 1e-9: continue
+        s = np.sign([np.dot(nrm, pts[m] - a) for m in range(n) if m not in (i, j, k)])
+        if np.all(s >= 0) or np.all(s <= 0): faces.append((a, b, c))
+    return faces
+
+
+FACES = _hull_faces(np.stack(list(ANCHORS.values())))
+
+
+def _closest_on_triangle(p, a, b, c):
+    """Ericson, Real-Time Collision Detection 5.1.5, vectorised over p (n,3)."""
+    ab, ac, ap = b - a, c - a, p - a
+    d1, d2 = ap @ ab, ap @ ac
+    bp = p - b; d3, d4 = bp @ ab, bp @ ac
+    cp = p - c; d5, d6 = cp @ ab, cp @ ac
+    out = np.empty_like(p); done = np.zeros(len(p), bool)
+    def put(mask, val):
+        m = mask & ~done; out[m] = val[m] if val.ndim == 2 else val; done[m] = True
+    put((d1 <= 0) & (d2 <= 0), np.broadcast_to(a, p.shape))
+    put((d3 >= 0) & (d4 <= d3), np.broadcast_to(b, p.shape))
+    vc = d1 * d4 - d3 * d2
+    v = np.where(d1 - d3 != 0, d1 / np.where(d1 - d3 != 0, d1 - d3, 1), 0)
+    put((vc <= 0) & (d1 >= 0) & (d3 <= 0), a + v[:, None] * ab)
+    put((d6 >= 0) & (d5 <= d6), np.broadcast_to(c, p.shape))
+    vb = d5 * d2 - d1 * d6
+    w = np.where(d2 - d6 != 0, d2 / np.where(d2 - d6 != 0, d2 - d6, 1), 0)
+    put((vb <= 0) & (d2 >= 0) & (d6 <= 0), a + w[:, None] * ac)
+    va = d3 * d6 - d5 * d4
+    den = (d4 - d3) + (d5 - d6); w2 = np.where(den != 0, (d4 - d3) / np.where(den != 0, den, 1), 0)
+    put((va <= 0) & (d4 - d3 >= 0) & (d5 - d6 >= 0), b + w2[:, None] * (c - b))
+    denom = 1.0 / np.where(va + vb + vc != 0, va + vb + vc, 1)
+    v2, w3 = vb * denom, vc * denom
+    put(~done, a + ab * v2[:, None] + ac * w3[:, None])
+    return out
+
+
+def clip_hull(p):
+    """Nearest point of the Mondrian hull. Inside points are returned unchanged."""
+    p = np.atleast_2d(p).astype(float)
+    best, bestd = None, None
+    for a, b, c in FACES:
+        q = _closest_on_triangle(p, a, b, c); d = ((q - p) ** 2).sum(-1)
+        if best is None: best, bestd = q, d
+        else:
+            m = d < bestd; best[m] = q[m]; bestd[m] = d[m]
+    # a point is inside iff it is on the inner side of every face: keep it then
+    inside = np.ones(len(p), bool)
+    centroid = np.stack(list(ANCHORS.values())).mean(0)
+    for a, b, c in FACES:
+        nrm = np.cross(b - a, c - a); nrm *= np.sign(np.dot(nrm, centroid - a))
+        inside &= ((p - a) @ nrm) >= -1e-9
+    return np.where(inside[:, None], p, best)
+
+
+def clip_lines(p):
+    """Nearest point on the four lines of §1 — the chrome rule, for when the hull is too generous."""
+    p = np.atleast_2d(p).astype(float); best, bestd = None, None
+    for end in (W, R, Y, B):
+        ab = end - K; t = np.clip(((p - K) @ ab) / (ab @ ab), 0, 1); q = K + t[:, None] * ab
+        d = ((q - p) ** 2).sum(-1)
+        if best is None: best, bestd = q, d
+        else:
+            m = d < bestd; best[m] = q[m]; bestd[m] = d[m]
+    return best
+
+
+def project(p, lines=False):
+    q = warp(_rgb(p) if isinstance(p, str) else p)
+    q = clip_lines(q) if lines else clip_hull(q)
+    return np.clip(np.rint(q), 0, 255)
+
+
+def project_image(im, lines=False):
+    from PIL import Image
+    im = im.convert('RGBA'); a = np.asarray(im); rgb = a[..., :3].reshape(-1, 3)
+    out = project(rgb, lines).astype(np.uint8).reshape(a.shape[0], a.shape[1], 3)
+    return Image.fromarray(np.concatenate([out, a[..., 3:]], -1), 'RGBA')
+
+
+if __name__ == '__main__':
+    if len(sys.argv) < 3:
+        for h in ('#FF0000', '#FFFF00', '#0000FF', '#000000', '#FFFFFF', '#00FF00', '#00FFFF', '#FF00FF', '#808080', '#FF8000'):
+            q = project(h)[0]; ql = project(h, lines=True)[0]
+            print(f"{h} -> hull #{int(q[0]):02X}{int(q[1]):02X}{int(q[2]):02X}   lines #{int(ql[0]):02X}{int(ql[1]):02X}{int(ql[2]):02X}")
+        sys.exit()
+    from PIL import Image
+    project_image(Image.open(sys.argv[1]), lines='--lines' in sys.argv).save(sys.argv[2]); print(sys.argv[2])

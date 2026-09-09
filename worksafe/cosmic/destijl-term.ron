@@ -1,0 +1,44 @@
+// DeStijl — COSMIC Terminal color scheme. Import: COSMIC Terminal > View > Color schemes > Import.
+// BLACK on WHITE (§5 terminal polarity). Mondrian's pigments in the ANSI slots that have one: red is the
+// red line, yellow the yellow line, blue the blue line; the cursor is Mondrian's red (§1). Green carries
+// SUCCESS (§1b) so diffs and "ok" keep their meaning; magenta and cyan are not pigments and are gray-line
+// points. Normal red and yellow are the lines' dark thirds because the endpoints do not read as text on
+// WHITE (red 3.5:1, yellow 1.3:1); the endpoints are the bright slots. Every value passes build/lines.py.
+(
+    name: "DeStijl",
+    foreground: "#0A0F10",
+    background: "#E5E6E8",
+    cursor: "#D64D24",
+    bright_foreground: "#0A0F10",
+    dim_foreground: "#535758",
+    normal: (
+        black: "#0A0F10",
+        red: "#92381D",
+        green: "#006B54",
+        yellow: "#514E36",
+        blue: "#1B3A6D",
+        magenta: "#787A7C",
+        cyan: "#535758",
+        white: "#9C9EA0",
+    ),
+    bright: (
+        black: "#535758",
+        red: "#D64D24",
+        green: "#006B54",
+        yellow: "#988D5C",
+        blue: "#1B3A6D",
+        magenta: "#C0C2C4",
+        cyan: "#9C9EA0",
+        white: "#E5E6E8",
+    ),
+    dim: (
+        black: "#0A0F10",
+        red: "#4E2417",
+        green: "#006B54",
+        yellow: "#514E36",
+        blue: "#101D2F",
+        magenta: "#4C5051",
+        cyan: "#363A3B",
+        white: "#787A7C",
+    ),
+)

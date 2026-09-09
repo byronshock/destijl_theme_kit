@@ -10,16 +10,21 @@ palette.json              lines, grays, semantic (FHWA), chrome hues, rule geome
 build/lines.py            line test:  python3 build/lines.py '#9C9EA0' '#FF0000'
 build/match_wallpaper.py  regenerates the matched full-res master from the two sources
 build/wallpaper.py        desktop compositor:  python3 build/wallpaper.py 1920x1080 100
+build/mondrian_space.py   projects sRGB into the space of the five pigments (issue 006)
 wallpaper/                MIA source, measurements, transform, full-res matched PNG
 worksafe/                 per-user, no elevation: destijl.theme, theme.reg,
                           square_corners.ps1; composed wallpapers are generated
                           here on demand (see below) and are not committed
+worksafe/cosmic/          COSMIC (Pop!_OS): destijl.ron theme, destijl-term.ron,
+                          toolkit config, install.sh; see README_COSMIC.md
 elevated/                 all-sites: destijl.user.css (Stylus)
 samples/                  frame-size sample cards (28 px chosen)
-issues/                   001 declutter.reg, 005 per-monitor install
+issues/                   001 declutter.reg, 005 per-monitor install,
+                          006 Mondrian-space icon tinting
 ```
 
 Windows install: see the comments at the top of `worksafe/destijl.theme`.
+COSMIC install: `sh worksafe/cosmic/install.sh` (per-user, no sudo).
 
 ## Wallpapers: generate on demand
 
@@ -35,6 +40,17 @@ python3 build/wallpaper.py 3840x2160 150
 Each run writes `worksafe/mondrian_1922_<W>x<H>_s<scale>.png` plus a JSON
 sidecar with the layout numbers. Both are ignored by git. Copy the PNG to
 the path named by `Wallpaper=` in `worksafe/destijl.theme`.
+
+COSMIC puts its panel at the top, so the band moves there and the dock
+takes the left wall; `install.sh` reads the output's size and scale from
+`cosmic-randr` and runs the equivalent of
+
+```
+python3 build/wallpaper.py 3840x2160 150 --top 2 --bottom 0 --bar 32 --tag cosmic
+```
+
+The sidecar's `rule_pt` is the §3 rule at that painting's scale, and the
+install script writes it into the theme as the tiling gap.
 
 ## License
 

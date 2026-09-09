@@ -93,7 +93,7 @@ state (§8.4):
 |--------|-----------|--------|
 | blue   | `#1B3A6D` | key titlebars and window borders — the painting's blue band is a titlebar; toggles, nav indicators and whatever else the platform paints with its one accent; hyperlinks; browser frame |
 | yellow | `#DFCC82` | selection — selected rows and selected text, BLACK on it (12.0:1); appears only when the user acts |
-| red    | `#D64D24` | the text cursor indicator; the terminal cursor when terminal colors return |
+| red    | `#D64D24` | the text cursor indicator; the terminal cursor |
 
 WHITE on the blue titlebar is 9.0:1. Focus rings stay BLACK.
 
@@ -125,16 +125,16 @@ destructive is a defect. Accent and selection are composition hues
 
 ### 1c. Exception: toolkit state overlays (COSMIC only)
 
-COSMIC derives hover, selected and pressed states as a 10% / 20% pure-white
-or pure-black overlay on the container, and no theme value can prevent it.
-On a DARK `#535758` container this yields `#646869` (hover, selected) and
-`#757979` (pressed) — 0.5 and 1.1 off the gray line, because the
-overlay is pure white, not Mondrian's. These two values are admitted, in COSMIC chrome only,
-as an exception to §1. Where a toolkit imposes an overlay, container
-and accent are chosen so the result lands as close to the gray line as
-possible; the container itself stays canon, and the accent becomes
-WHITE so selected text remains legible on the overlay. Nothing else may
-use them.
+COSMIC derives the hovered and selected states of a container's rows by
+overlaying the container, and no theme value can prevent it. On the LIGHT
+and WHITE containers the result stays within tolerance of the gray line.
+On the blue `#1B3A6D` nav sidebar it does not: the selected row measures
+`#2E4670`, 22.7 off the blue line, because the overlay is not Mondrian's.
+That one value is admitted, in COSMIC chrome only, as an exception to §1,
+and `palette.json` records it. The container itself stays canon; the
+accent is yellow so the selected row's text stays legible on the overlay.
+Nothing else may use it. (`worksafe/cosmic/README_COSMIC.md` has the
+measurements.)
 
 ## 2. Typography
 
@@ -327,21 +327,49 @@ Residue:
 Elevated adds: HKLM `FontSubstitutes` (Nimbus in chrome), shell32
 icons, all-sites extensions.
 
-### COSMIC (Pop!_OS) — decisions recorded, build pending
+### COSMIC (Pop!_OS)
 
-The surface where the kit is exact: the theme takes radius 0, the four
-grays at their values, and a border width. With tiling, the screen is
-the composition.
+The surface where the kit is nearest to exact: the theme takes radius 0,
+the four grays at their values, and the gaps. With tiling, the screen is
+the composition. Build: `worksafe/cosmic/`, measured values in its README.
 
-- Tiling gaps are the rule (§3): width 2.46% of the painting's displayed
-  width on that output, and BLACK — the tiled workspace's background is
-  BLACK `#0A0F10`, so the gaps are rules and never show wallpaper. The
-  Mondrian lives on a floating workspace or the other monitor.
+Reached:
+
+- Light mode, always, auto-switch off; no dark builder exists. Mondrian
+  is light mode: the system's polarity is BLACK on WHITE.
+- Window surfaces and panel LIGHT, content wells WHITE, text BLACK,
+  nav sidebars blue — the painting's blue band is the field on the left
+  of a window. Every corner radius 0; no frosting.
+- Accent yellow: selection, selected-row text, links, selection outlines.
+  COSMIC has one accent and selection is what it paints most.
+- Semantic colors (§1b) in the theme's success, warning and destructive
+  slots.
+- Tiling gaps are the rule (§3): 2.46% of the painting's displayed width
+  on that output, outer and inner alike; `install.sh` computes it from
+  the wallpaper layout and writes it into the theme (39 pt on 4K @ 150%,
+  28 pt on 1080p).
 - `active_hint` 0. COSMIC draws its hint on the focused window only,
-  which would make the rule carry state; the headerbar carries focus
-  instead (blue key, LIGHT non-key).
-- Headerbars blue; selection yellow; caret red; §1c overlays land as
-  close to gray as the container allows; 8-digit hex in the RON.
+  which would make the rule carry state.
+- Desktop (§5): the panel is at the top, so the DARK band goes there, two
+  panel heights tall; the painting flush right under it; the DARK wall
+  on the left carries the dock and the desktop icons.
+- Nimbus Sans UI, Hack mono, compact header and density. Terminal BLACK
+  on WHITE with the pigments in their ANSI slots: red, yellow and blue
+  lines, SUCCESS green, gray-line magenta and cyan, red cursor.
+
+Residue:
+
+- Header bars: this libcosmic paints them with the window background,
+  not the primary container, so they are LIGHT and cannot be blue. Every
+  window reads as non-key; focus is shown by nothing.
+- Toggles, nav indicators, check marks and focus rings follow the one
+  accent and are yellow, where §1 has blue for the platform accent and
+  BLACK for focus.
+- The §1c overlay on the blue sidebar.
+- Gaps show the wallpaper on a one-output machine. COSMIC sets wallpaper
+  per output, not per workspace; the BLACK tiled workspace with the
+  Mondrian elsewhere needs a second output.
+- Client-side decorations (Electron, GTK) keep their own chrome.
 
 ## 8. Principles
 
@@ -349,8 +377,8 @@ the composition.
    composition (§1, §5). Chrome may be black, white, gray, red, blue,
    or yellow.
 2. Any other value is a defect, platform residue (§3) excepted.
-3. Overlay values (§1c) are exceptions, and land as close to gray as
-   possible.
+3. Overlay values (§1c) are exceptions, measured and recorded, and land
+   as close to the lines as the container allows.
 4. State is carried by tone and geometry, or by the three semantic hues
    (§1b) when the meaning is present. Mondrian's red, blue and yellow in
    chrome are composition, never state.

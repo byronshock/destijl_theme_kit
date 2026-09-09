@@ -1,0 +1,83 @@
+// DeStijl — COSMIC theme. Import: cosmic-settings appearance import destijl.ron (install.sh does it).
+// Schema: libcosmic cosmic-theme ThemeBuilder v2. Implements DESTIJL_STYLE.md §1, §1b, §1c, §3, §7 COSMIC.
+// Every 6-digit value here lies on one of the four lines (§1) or is a §1b semantic value; build/lines.py checks.
+// Grays: WHITE #E5E6E8  LIGHT #9C9EA0  DARK #535758  BLACK #0A0F10. Hues: blue #1B3A6D  yellow #DFCC82  red #D64D24.
+(
+    palette: Light((
+        name: "DeStijl",
+        bright_red:    "#AF1E2DFF",   // DESTRUCTIVE, FHWA red (§1b)
+        bright_green:  "#006B54FF",   // SUCCESS, FHWA green (§1b)
+        bright_orange: "#FCD116FF",   // WARNING, FHWA yellow (§1b)
+        gray_1: "#9C9EA0FF",          // LIGHT
+        gray_2: "#9C9EA0FF",          // LIGHT
+        // eleven neutrals at tenths along the gray line, BLACK to WHITE
+        neutral_0:  "#0A0F10FF",
+        neutral_1:  "#202426FF",
+        neutral_2:  "#363A3BFF",
+        neutral_3:  "#4C5051FF",
+        neutral_4:  "#626566FF",
+        neutral_5:  "#787A7CFF",
+        neutral_6:  "#8D9092FF",
+        neutral_7:  "#A3A6A7FF",
+        neutral_8:  "#B9BBBDFF",
+        neutral_9:  "#CFD0D2FF",
+        neutral_10: "#E5E6E8FF",
+        // the accent picker offers nine swatches; every one is a point on a DeStijl line (§1)
+        accent_blue:      "#1B3A6DFF",   // blue 1
+        accent_indigo:    "#152C4EFF",   // blue 2/3
+        accent_purple:    "#101D2FFF",   // blue 1/3
+        accent_pink:      "#92381DFF",   // red 2/3
+        accent_red:       "#D64D24FF",   // red 1
+        accent_orange:    "#4E2417FF",   // red 1/3
+        accent_yellow:    "#DFCC82FF",   // yellow 1 — the kit's choice (selection, §1)
+        accent_green:     "#988D5CFF",   // yellow 2/3
+        accent_warm_grey: "#514E36FF",   // yellow 1/3
+        ext_warm_grey: "#535758FF",      // DARK
+        ext_orange:    "#92381DFF",
+        ext_yellow:    "#DFCC82FF",
+        ext_blue:      "#1B3A6DFF",
+        ext_purple:    "#152C4EFF",
+        ext_pink:      "#D64D24FF",
+        ext_indigo:    "#101D2FFF",
+    )),
+    // denser than COSMIC's default (4/8/12/16/24/32/48/64/128); carried over from the NeXT-derived kits
+    spacing: (
+        space_none: 0, space_xxxs: 2, space_xxs: 4, space_xs: 8, space_s: 12,
+        space_m: 16, space_l: 24, space_xl: 32, space_xxl: 48, space_xxxl: 96,
+    ),
+    // §3: curves are deprecated. every slot, every corner.
+    corner_radii: (
+        radius_0:  (0.0, 0.0, 0.0, 0.0),
+        radius_xs: (0.0, 0.0, 0.0, 0.0),
+        radius_s:  (0.0, 0.0, 0.0, 0.0),
+        radius_m:  (0.0, 0.0, 0.0, 0.0),
+        radius_l:  (0.0, 0.0, 0.0, 0.0),
+        radius_xl: (0.0, 0.0, 0.0, 0.0),
+    ),
+    neutral_tint:           Some("#9C9EA0FF"),  // derived neutrals take the gray line's own cast, no other hue
+    bg_color:               Some("#9C9EA0FF"),  // LIGHT: window and panel surfaces (§1)
+    primary_container_bg:   Some("#1B3A6DFF"),  // blue: nav sidebars, the blue field on the left of a window (§7).
+                                                //   Header bars take bg_color in this libcosmic, not this container.
+                                                //   The selected-row overlay on it is the §1c exception, measured
+                                                //   #2E4670 (README_COSMIC.md)
+    secondary_container_bg: Some("#E5E6E8FF"),  // WHITE: lists, cards, content wells
+    text_tint:              Some("#0A0F10FF"),  // BLACK text
+    accent:      Some("#DFCC82FF"),  // yellow: selection (§1). COSMIC has one accent and selection is what it
+                                     //   paints most, so toggles and nav indicators follow it — residue against
+                                     //   §1's "platform accent blue"; on the blue container blue text would vanish
+    success:     Some("#006B54FF"),  // §1b, white legend
+    warning:     Some("#FCD116FF"),  // §1b, black legend
+    destructive: Some("#AF1E2DFF"),  // §1b, white legend
+    frosted: ExtremelyLow,
+    frosted_windows: false,
+    frosted_system_interface: false,
+    frosted_panel: false,
+    frosted_applets: false,
+    frosted_maximized_apps: false,
+    // §3, §7: the tiling gaps are the rule — 2.46% of the painting's displayed width on this output, outer and
+    // inner alike. install.sh rewrites this pair from the wallpaper sidecar (rule_pt); 39 is 3840x2160 at 150%.
+    gaps: (39, 39),
+    // §7: no hint. COSMIC draws it on the focused window only, which would make the rule carry state.
+    active_hint: 0,
+    window_hint: Some("#0A0F10FF"),
+)

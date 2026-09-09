@@ -1,0 +1,110 @@
+#!/bin/sh
+# DeStijl for COSMIC (Pop!_OS) — user-level install. No sudo, nothing outside $HOME. (worksafe tier)
+# Implements DESTIJL_STYLE.md §7 COSMIC. Re-runnable.
+set -e
+HERE=$(cd "$(dirname "$0")" && pwd)
+KIT=$(cd "$HERE/../.." && pwd)
+CFG="${XDG_CONFIG_HOME:-$HOME/.config}/cosmic"
+PICS="$HOME/Pictures/destijl"
+PANEL_PT=32            # COSMIC panel, size XS, logical px (measured on 4K @ 150%: 48 physical)
+mkdir -p "$CFG" "$PICS"
+
+# --- 1. fonts (§2). Not bundled: both are packaged. --------------------------------------------
+for f in "Nimbus Sans:fonts-urw-base35" "Hack:fonts-hack"; do
+  name=${f%%:*}; pkg=${f##*:}
+  fc-list 2>/dev/null | grep -qi ":$name:\|: $name:" || \
+    echo "destijl: font '$name' not installed — sudo apt install $pkg (or drop the files in ~/.local/share/fonts)"
+done
+
+# --- 2. the output: size and scale, from cosmic-randr -------------------------------------------
+GEOM=$(cosmic-randr list 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | python3 -c '
+import re, sys
+txt = sys.stdin.read()
+blocks = re.split(r"\n(?=\S)", txt)
+for b in blocks:
+    if "(enabled)" not in b: continue
+    scale = re.search(r"Scale:\s*(\d+)%", b); mode = re.search(r"(\d+)x(\d+)\s*@[^\n]*\(current\)", b)
+    if scale and mode: print(mode.group(1), mode.group(2), scale.group(1)); break
+')
+set -- $GEOM
+if [ -z "$3" ]; then echo "destijl: could not read the output from cosmic-randr; assuming 1920x1080 @ 100%"; set -- 1920 1080 100; fi
+W=$1; H=$2; SCALE=$3
+echo "destijl: output ${W}x${H} @ ${SCALE}%"
+
+# --- 3. wallpaper (§5): painting flush right under a DARK band two panel heights tall; DARK wall left ---
+LAYOUT="python3 $KIT/build/wallpaper.py ${W}x${H} $SCALE --top 2 --bottom 0 --bar $PANEL_PT --tag cosmic"
+RULE_PT=$($LAYOUT --layout-only | python3 -c 'import json,sys; print(json.load(sys.stdin)["rule_pt"])')
+PNG="$PICS/mondrian_1922_cosmic_${W}x${H}_s${SCALE}.png"
+PRE="$KIT/worksafe/$(basename "$PNG")"       # a copy already generated in the kit (git-ignored)
+if python3 -c 'import PIL' 2>/dev/null; then
+  $LAYOUT --out "$PICS"
+elif [ -f "$PRE" ]; then
+  cp "$PRE" "$PICS/"; [ -f "${PRE%.png}.json" ] && cp "${PRE%.png}.json" "$PICS/"
+  echo "destijl: Pillow not installed; using the pre-generated $PRE"
+else
+  echo "destijl: Pillow not installed (python3-pil) — wallpaper not generated; run later, then re-run install.sh:"
+  echo "         $LAYOUT --out $PICS"
+fi
+if [ -f "$PNG" ]; then
+  BG="$CFG/com.system76.CosmicBackground/v1"; mkdir -p "$BG"
+  [ -f "$BG/all" ] && cp "$BG/all" "$PICS/cosmic-background-all.before-destijl.ron"
+  cat > "$BG/all" <<RON
+(
+    output: "all",
+    source: Path("$PNG"),
+    filter_by_theme: true,
+    rotation_frequency: 300,
+    filter_method: Lanczos,
+    scaling_mode: Zoom,
+    sampling_method: Alphanumeric,
+)
+RON
+  printf 'true' > "$BG/same-on-all"
+fi
+
+# --- 4. toolkit: Nimbus Sans UI, Hack mono, compact header and density. Icon theme is left alone (§4). ---
+mkdir -p "$CFG/com.system76.CosmicTk/v1"
+cp "$HERE"/cosmic-config/com.system76.CosmicTk/v1/* "$CFG/com.system76.CosmicTk/v1/"
+
+# --- 5. light mode, always (§7): Mondrian's polarity is BLACK on WHITE. No dark builder is shipped. ---
+mkdir -p "$CFG/com.system76.CosmicTheme.Mode/v1"
+printf 'false' > "$CFG/com.system76.CosmicTheme.Mode/v1/is_dark"
+printf 'false' > "$CFG/com.system76.CosmicTheme.Mode/v1/auto_switch"
+
+# --- 6. theme (§1, §1c, §3, §7): gaps are the rule at this output's painting scale ----------------
+TMP=$(mktemp --suffix=.ron)
+sed "s/^\(\s*gaps:\s*\)([0-9]*, [0-9]*),/\1($RULE_PT, $RULE_PT),/" "$HERE/destijl.ron" > "$TMP"
+grep -q "gaps: ($RULE_PT, $RULE_PT)," "$TMP" || { echo "destijl: failed to set gaps"; exit 1; }
+if command -v cosmic-settings >/dev/null 2>&1; then
+  cosmic-settings appearance import "$TMP"
+else
+  cp "$TMP" "$PICS/destijl.ron"
+  echo "cosmic-settings not on PATH — import $PICS/destijl.ron from Settings > Desktop > Appearance > Import"
+fi
+rm -f "$TMP"
+
+# --- 7. terminal: add the scheme to COSMIC Terminal's light schemes and select it ---------------------
+TERM_CFG="$CFG/com.system76.CosmicTerm/v1"; mkdir -p "$TERM_CFG"
+python3 - "$HERE/destijl-term.ron" "$TERM_CFG" <<'PY'
+import re, sys, os
+src, cfg = sys.argv[1], sys.argv[2]
+scheme = re.sub(r'^\s*//.*\n', '', open(src).read(), flags=re.M).strip()
+name = re.search(r'name:\s*"([^"]+)"', scheme).group(1)
+path = os.path.join(cfg, 'color_schemes_light')
+cur = open(path).read() if os.path.exists(path) else '{\n}'
+if f'name: "{name}"' not in cur:
+    entries = re.findall(r'^\s*(\d+):', cur, flags=re.M)
+    nxt = max(map(int, entries)) + 1 if entries else 0
+    body = cur.rstrip().rstrip('}').rstrip()
+    if body.endswith('{'): new = body + f'\n    {nxt}: {scheme},\n}}'
+    else: new = body.rstrip(',') + f',\n    {nxt}: {scheme},\n}}'
+    open(path, 'w').write(new)
+open(os.path.join(cfg, 'syntax_theme_light'), 'w').write(f'"{name}"')
+print(f'destijl: terminal scheme "{name}" installed and selected')
+PY
+
+[ -f "$PNG" ] && WP="wallpaper ($PNG)" || WP="NO wallpaper (see above)"
+cat <<MSG
+destijl: light mode, theme (gaps $RULE_PT pt), toolkit fonts, $WP.
+Log out/in if the panel, wallpaper or terminal doesn't refresh.
+MSG
