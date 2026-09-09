@@ -74,6 +74,11 @@ printf 'true' > "$BG/same-on-all"
 # --- 4. toolkit: Nimbus Sans UI, Hack mono, compact header and density. Icon theme is left alone (§4). ---
 mkdir -p "$CFG/com.system76.CosmicTk/v1"
 cp "$HERE"/cosmic-config/com.system76.CosmicTk/v1/* "$CFG/com.system76.CosmicTk/v1/"
+# --- 4b. panel: Mondrian red, a flat Color, the panel's own key (the theme would give it the window WHITE) ---
+mkdir -p "$CFG/com.system76.CosmicPanel.Panel/v1"
+[ -f "$CFG/com.system76.CosmicPanel.Panel/v1/background" ] && [ ! -f "$PICS/panel-background.before-destijl.ron" ] && \
+  cp "$CFG/com.system76.CosmicPanel.Panel/v1/background" "$PICS/panel-background.before-destijl.ron"
+cp "$HERE"/cosmic-config/com.system76.CosmicPanel.Panel/v1/background "$CFG/com.system76.CosmicPanel.Panel/v1/background"
 
 # --- 5. light mode, always (§7): Mondrian's polarity is BLACK on WHITE. No dark builder is shipped. ---
 mkdir -p "$CFG/com.system76.CosmicTheme.Mode/v1"
@@ -82,8 +87,8 @@ printf 'false' > "$CFG/com.system76.CosmicTheme.Mode/v1/auto_switch"
 
 # --- 6. theme (§1, §1c, §3, §7): gaps are the rule at this output's painting scale ----------------
 TMP=$(mktemp --suffix=.ron)
-sed "s/^\(\s*gaps:\s*\)([0-9]*, [0-9]*),/\1($RULE_PT, $RULE_PT),/" "$HERE/destijl.ron" > "$TMP"
-grep -q "gaps: ($RULE_PT, $RULE_PT)," "$TMP" || { echo "destijl: failed to set gaps"; exit 1; }
+sed "s/^\(\s*gaps:\s*\)([0-9]*, [0-9]*),/\1(0, $RULE_PT),/" "$HERE/destijl.ron" > "$TMP"    # (outer, inner): edge = outer + inner
+grep -q "gaps: (0, $RULE_PT)," "$TMP" || { echo "destijl: failed to set gaps"; exit 1; }
 if command -v cosmic-settings >/dev/null 2>&1; then
   cosmic-settings appearance import "$TMP"
 else

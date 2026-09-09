@@ -77,7 +77,7 @@ the steps are NeXT's, the endpoints are Mondrian's.
 
 | Role  | Hex       | Step  | Use |
 |-------|-----------|-------|-----|
-| WHITE | `#E5E6E8` | 1.000 | window backgrounds, text fields, lists, bevel highlights, titlebar text on key windows |
+| WHITE | `#E5E6E8` | 1.000 | window backgrounds, text fields, lists, bevel highlights, titlebar text on key windows; the COSMIC accent (§7) |
 | LIGHT | `#9C9EA0` | .667  | panels, buttons, non-key titlebars |
 | DARK  | `#535758` | .333  | desktop, bevel shadows, dock tiles, disabled text |
 | BLACK | `#0A0F10` | 0.000 | rules (§3), text, badges |
@@ -91,8 +91,8 @@ state (§8.4):
 | Hue    | Hex       | Chrome |
 |--------|-----------|--------|
 | blue   | `#1B3A6D` | key titlebars and window borders — the painting's blue band is a titlebar; toggles, nav indicators and whatever else the platform paints with its one accent; hyperlinks; browser frame |
-| yellow | `#DFCC82` | selection — selected rows and selected text, BLACK on it (12.0:1); appears only when the user acts |
-| red    | `#D64D24` | the text cursor indicator; the terminal cursor |
+| yellow | `#DFCC82` | selection — selected rows and selected text, BLACK on it (12.0:1); appears only when the user acts. On COSMIC, the window field and title bars (§7) |
+| red    | `#D64D24` | the text cursor indicator; the terminal cursor; the COSMIC panel — a 32 pt band on a 1440 pt screen is 2.2% of it, the painting's own red share |
 
 WHITE on the blue titlebar is 9.0:1. Focus rings stay BLACK.
 
@@ -122,18 +122,22 @@ They appear only when the *meaning* is present. A red button that isn't
 destructive is a defect. Accent and selection are composition hues
 (§1); focus remains BLACK.
 
-### 1c. Exception: toolkit state overlays (COSMIC only)
+### 1c. Exception: toolkit derivations (COSMIC only)
 
-COSMIC derives the hovered and selected states of a container's rows by
-overlaying the container, and no theme value can prevent it. On the LIGHT
-and WHITE containers the result stays within tolerance of the gray line.
-On the blue `#1B3A6D` nav sidebar it does not: the selected row measures
-`#2E4670`, 22.7 off the blue line, because the overlay is not Mondrian's.
-That one value is admitted, in COSMIC chrome only, as an exception to §1,
-and `palette.json` records it. The container itself stays canon; the
-accent is yellow so the selected row's text stays legible on the overlay.
-Nothing else may use it. (`worksafe/cosmic/README_COSMIC.md` has the
-measurements.)
+COSMIC derives some surfaces from the theme's inputs, and no theme value
+can prevent it. Two of those derivations land off the lines and are
+admitted, in COSMIC chrome only, as exceptions to §1; `palette.json`
+records both and `worksafe/cosmic/README_COSMIC.md` has the measurements.
+
+- The selected and hovered row of the blue `#1B3A6D` nav sidebar:
+  `#2E4670`, 22.7 off the blue line. The overlay is not Mondrian's.
+- The row, card and well surface lightened from the yellow `#DFCC82`
+  window field: `#FBE89D`, 47.9 off the yellow line. A tint toward
+  white, which §1 otherwise forbids.
+
+The inputs themselves stay canon, and the accent is WHITE so that text
+painted with it passes the derivation unchanged. Nothing else may use
+these two values.
 
 ## 2. Typography
 
@@ -336,16 +340,21 @@ Reached:
 
 - Light mode, always, auto-switch off; no dark builder exists. Mondrian
   is light mode: the system's polarity is BLACK on WHITE.
-- Window backgrounds WHITE, text BLACK, nav sidebars blue — the painting's blue band is the field on the left
+- Window fields and title bars yellow, text BLACK, nav sidebars blue,
+  the panel red on its own key. Yellow as the large field inverts the
+  painting's proportions on purpose; the author's call, 2026-09-08.
+- Accent WHITE: selection, links, outlines, toggles, selected nav text.
+  9:1 on the blue sidebar; on the yellow field legible by chroma, not
+  lightness (about 1.3:1), which is enough for an outline or a label and
+  is never asked to carry body text. — the painting's blue band is the field on the left
   of a window. Every corner radius 0; no frosting.
-- Accent yellow: selection, selected-row text, links, selection outlines.
-  COSMIC has one accent and selection is what it paints most.
 - Semantic colors (§1b) in the theme's success, warning and destructive
   slots.
 - Tiling gaps are the rule (§3): 2.46% of the painting's displayed width
-  on that output, outer and inner alike; `install.sh` computes it from
-  the wallpaper layout and writes it into the theme (39 pt on 4K @ 150%,
-  28 pt on 1080p).
+  on that output; `install.sh` computes it from the wallpaper layout and
+  writes it into the theme (39 pt on 4K @ 150%, 28 pt on 1080p). COSMIC
+  adds its outer gap to the inner one at a screen edge, so the outer gap
+  is 0 and the inner gap is the rule: one rule everywhere.
 - `active_hint` 0. COSMIC draws its hint on the focused window only,
   which would make the rule carry state.
 - Background BLACK on a tiled output, so every gap is a rule and nothing
@@ -361,13 +370,13 @@ Reached:
 
 Residue:
 
-- Header bars and the panel: this libcosmic paints both with the window
-  background, so they are WHITE. A header bar cannot be blue, every
-  window reads as non-key, and the panel cannot be LIGHT.
+- Header bars: this libcosmic paints them with the window background,
+  so they are yellow with the field. A header bar cannot be blue and
+  every window reads as non-key.
 - Toggles, nav indicators, check marks and focus rings follow the one
-  accent and are yellow, where §1 has blue for the platform accent and
+  accent and are WHITE, where §1 has blue for the platform accent and
   BLACK for focus.
-- The §1c overlay on the blue sidebar.
+- The two §1c derivations: the sidebar overlay and the row surface.
 - Client-side decorations (Electron, GTK) keep their own chrome.
 
 ## 8. Principles

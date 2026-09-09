@@ -11,7 +11,11 @@ pigments allow.
     project_image(PIL.Image)       every pixel; alpha untouched
     python3 build/mondrian_space.py in.png out.png [--lines]
 
---lines projects to the four lines of §1 instead of the hull: the kit's own rule for chrome.
+Modes (--mode=pigment|hue|hull|lines):
+  pigment  nearest of the five pigments, flat: the actual pigments, a poster. Chosen 2026-09-08 (issue 006).
+  hue      hue chooses the line, HSV value chooses the point on it (luminance for grays). Shading kept, no banding, no mixes.
+  hull     warp to the anchors, clip to the hull. Admits mixes, so tints and mud. The first attempt.
+  lines    warp, then nearest of the four §1 lines. Bands across a gradient.
 """
 import json, os, sys
 import numpy as np
@@ -116,24 +120,64 @@ def clip_lines(p):
     return best
 
 
-def project(p, lines=False):
-    q = warp(_rgb(p) if isinstance(p, str) else p)
-    q = clip_lines(q) if lines else clip_hull(q)
-    return np.clip(np.rint(q), 0, 255)
+_LUMA = np.array([0.2126, 0.7152, 0.0722])
 
 
-def project_image(im, lines=False):
+def pigment(p):
+    """Nearest of the five pigments, flat: a poster, no shading."""
+    p = np.atleast_2d(p).astype(float); A = np.stack(list(ANCHORS.values()))
+    d = ((p[:, None, :] - A[None, :, :]) ** 2).sum(-1)
+    return A[d.argmin(1)]
+
+
+def hue_lines(p, chroma_min=28.0):
+    """Hue picks the line, value picks the point on it. A gradient stays on one line, so no banding;
+    nothing is brighter than the pigment at the end of its line."""
+    p = np.atleast_2d(p).astype(float)
+    mx, mn = p.max(1), p.min(1); chroma = mx - mn
+    r, g, b = p.T
+    h = np.zeros(len(p))
+    m = chroma > 0
+    hr = ((g - b) / np.where(chroma == 0, 1, chroma)) % 6
+    hg = (b - r) / np.where(chroma == 0, 1, chroma) + 2
+    hb = (r - g) / np.where(chroma == 0, 1, chroma) + 4
+    h = np.where(mx == r, hr, np.where(mx == g, hg, hb)) * 60          # degrees
+    # nearest pigment by hue: red 0/360, yellow 60, blue 240. green (120) -> yellow, cyan (180) -> blue, magenta (300) -> red
+    dr = np.minimum(np.abs(h - 0), np.abs(h - 360)); dy = np.abs(h - 60); db = np.abs(h - 240)
+    choice = np.argmin(np.stack([dr, dy, db], 1), 1)                   # 0 red, 1 yellow, 2 blue
+    ends = np.stack([R, Y, B])[choice]
+    achroma = chroma < chroma_min
+    ends = np.where(achroma[:, None], W[None, :], ends)                 # low chroma: the gray line
+    # position on the line: HSV value for a hue (pure sRGB red is t=1, half-dark red t=0.5, a tint collapses to
+    # the pigment, since tints toward white are not admitted), luminance for a gray
+    t_hue = mx / 255.0
+    t_gray = np.clip((p @ _LUMA - K @ _LUMA) / (W @ _LUMA - K @ _LUMA), 0, 1)
+    t = np.where(achroma, t_gray, t_hue)
+    return K + t[:, None] * (ends - K)
+
+
+MODES = {'hull': lambda q: clip_hull(warp(q)), 'lines': lambda q: clip_lines(warp(q)),
+         'pigment': pigment, 'hue': hue_lines}
+
+
+def project(p, lines=False, mode=None):
+    q = _rgb(p) if isinstance(p, str) else np.asarray(p, float)
+    mode = mode or ('lines' if lines else 'pigment')
+    return np.clip(np.rint(MODES[mode](q)), 0, 255)
+
+
+def project_image(im, lines=False, mode=None):
     from PIL import Image
     im = im.convert('RGBA'); a = np.asarray(im); rgb = a[..., :3].reshape(-1, 3)
-    out = project(rgb, lines).astype(np.uint8).reshape(a.shape[0], a.shape[1], 3)
+    out = project(rgb, lines, mode).astype(np.uint8).reshape(a.shape[0], a.shape[1], 3)
     return Image.fromarray(np.concatenate([out, a[..., 3:]], -1), 'RGBA')
 
 
 if __name__ == '__main__':
     if len(sys.argv) < 3:
         for h in ('#FF0000', '#FFFF00', '#0000FF', '#000000', '#FFFFFF', '#00FF00', '#00FFFF', '#FF00FF', '#808080', '#FF8000'):
-            q = project(h)[0]; ql = project(h, lines=True)[0]
-            print(f"{h} -> hull #{int(q[0]):02X}{int(q[1]):02X}{int(q[2]):02X}   lines #{int(ql[0]):02X}{int(ql[1]):02X}{int(ql[2]):02X}")
+            print(h, ' '.join(f"{k}=#{int(v[0]):02X}{int(v[1]):02X}{int(v[2]):02X}" for k, v in ((k, project(h, mode=k)[0]) for k in MODES)))
         sys.exit()
     from PIL import Image
-    project_image(Image.open(sys.argv[1]), lines='--lines' in sys.argv).save(sys.argv[2]); print(sys.argv[2])
+    mode = next((a.split('=')[1] for a in sys.argv if a.startswith('--mode=')), 'lines' if '--lines' in sys.argv else 'pigment')
+    project_image(Image.open(sys.argv[1]), mode=mode).save(sys.argv[2]); print(sys.argv[2], mode)

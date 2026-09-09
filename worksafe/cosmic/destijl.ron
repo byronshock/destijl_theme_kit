@@ -55,16 +55,17 @@
         radius_xl: (0.0, 0.0, 0.0, 0.0),
     ),
     neutral_tint:           Some("#9C9EA0FF"),  // derived neutrals take the gray line's own cast, no other hue
-    bg_color:               Some("#E5E6E8FF"),  // WHITE: window and panel surfaces
+    bg_color:               Some("#DFCC82FF"),  // yellow: window backgrounds and header bars (§7). COSMIC derives its row
+                                                //   and card surface by lightening this: #FBE89D, admitted residue (§1c)
     primary_container_bg:   Some("#1B3A6DFF"),  // blue: nav sidebars, the blue field on the left of a window (§7).
                                                 //   Header bars take bg_color in this libcosmic, not this container.
                                                 //   The selected-row overlay on it is the §1c exception, measured
                                                 //   #2E4670 (README_COSMIC.md)
     secondary_container_bg: Some("#E5E6E8FF"),  // WHITE: lists, cards, content wells
     text_tint:              Some("#0A0F10FF"),  // BLACK text. This slot tints a near-black; it cannot set a hue (README_COSMIC.md)
-    accent:      Some("#DFCC82FF"),  // yellow: selection (§1). COSMIC has one accent and selection is what it
-                                     //   paints most, so toggles and nav indicators follow it — residue against
-                                     //   §1's "platform accent blue"; on the blue container blue text would vanish
+    accent:      Some("#E5E6E8FF"),  // WHITE: selection, links, outlines, toggles, selected nav text (§7). Light
+                                     //   enough to pass COSMIC's accent-text derivation unchanged; 9:1 on the blue
+                                     //   sidebar, and legible on the yellow field by chroma, not lightness
     success:     Some("#006B54FF"),  // §1b, white legend
     warning:     Some("#FCD116FF"),  // §1b, black legend
     destructive: Some("#AF1E2DFF"),  // §1b, white legend
@@ -74,9 +75,11 @@
     frosted_panel: false,
     frosted_applets: false,
     frosted_maximized_apps: false,
-    // §3, §7: the tiling gaps are the rule — 2.46% of the painting's displayed width on this output, outer and
-    // inner alike. install.sh rewrites this pair from the wallpaper sidecar (rule_pt); 39 is 3840x2160 at 150%.
-    gaps: (39, 39),
+    // §3, §7: the tiling gaps are the rule — 2.46% of the painting's displayed width on this output. The pair is
+    // (outer, inner); cosmic-comp draws outer + inner at a screen edge and inner alone between windows, so outer
+    // is 0 and inner is the rule: one rule everywhere (measured 2026-09-08). install.sh rewrites the inner value
+    // from the wallpaper sidecar (rule_pt); 39 is 3840x2160 at 150%.
+    gaps: (0, 39),
     // §7: no hint. COSMIC draws it on the focused window only, which would make the rule carry state.
     active_hint: 0,
     window_hint: Some("#0A0F10FF"),

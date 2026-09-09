@@ -51,7 +51,9 @@
   "cosmic_overlays": {
     "nav_selected_hover": "#2E4670",
     "container": "#1B3A6D",
-    "note": "libcosmic state overlay on the blue primary container, measured 2026-09-08 on COSMIC / Pop!_OS 24.04 (Settings, selected nav row). 22.7 off the blue line. Admitted in COSMIC chrome only (DESTIJL_STYLE.md 1c)."
+    "derived_row_surface": "#FBE89D",
+    "field": "#DFCC82",
+    "note": "libcosmic derivations measured 2026-09-08 on COSMIC / Pop!_OS 24.04: the state overlay on the blue nav sidebar (22.7 off the blue line) and the row/card surface lightened from the yellow window field (47.9 off the yellow line). Admitted in COSMIC chrome only (DESTIJL_STYLE.md 1c)."
   },
   "tolerance": 1.0,
   "legend_note": "Legend colors are pure white/black as on a highway sign; admitted only as text or glyphs on a semantic field. Off the lines anywhere else.",
@@ -69,7 +71,8 @@
     "yellow": {
       "hex": "#DFCC82",
       "chrome": [
-        "selection (rows, text)"
+        "selection (rows, text)",
+        "COSMIC window field and title bars"
       ],
       "text_on": "#0A0F10"
     },
