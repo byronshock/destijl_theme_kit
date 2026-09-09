@@ -5,7 +5,7 @@ Implements `DESTIJL_STYLE.md` §7 COSMIC; measured on COSMIC (Pop!_OS 24.04), 38
 
 | File | Apply | What it does |
 |---|---|---|
-| `destijl.ron` | `cosmic-settings appearance import destijl.ron` (install.sh does it, after setting the gaps) or Settings › Desktop › Appearance › Import | ThemeBuilder v2, Light palette. Yellow `#DFCC82` window fields and title bars, blue `#1B3A6D` nav sidebars, BLACK text, WHITE `#E5E6E8` accent (selection, links, outlines, toggles), FHWA semantic colors, every corner radius 0, no frosting, no window hint, tiling gaps = the rule. Every accent-picker swatch is a point on a DeStijl line. |
+| `destijl.ron` | `cosmic-settings appearance import destijl.ron` (install.sh does it, after setting the gaps) or Settings › Desktop › Appearance › Import | ThemeBuilder v2, Light palette. WHITE `#E5E6E8` window fields and title bars, blue `#1B3A6D` nav sidebars, BLACK text, yellow `#DFCC82` accent (selection, links, outlines, toggles), FHWA semantic colors, every corner radius 0, no frosting, no window hint, tiling gaps = the rule. Every accent-picker swatch is a point on a DeStijl line. |
 | `destijl-term.ron` | install.sh adds it to COSMIC Terminal's light schemes and selects it (or Terminal › View › Color schemes › Import) | BLACK on WHITE; Mondrian's red, yellow and blue lines in their ANSI slots (normal = dark third, bright = endpoint), SUCCESS green, gray-line magenta and cyan, Mondrian red cursor. |
 | `cosmic-config/com.system76.CosmicPanel.Panel/v1/` | copied by install.sh | `background`: the panel Mondrian red `#D64D24`, a flat `Color` on the panel's own key; the theme would paint it with the window field. BLACK text on it, 4.4:1. `keep_style_on_maximize`: true. |
 | `cosmic-config/com.system76.CosmicPanel.Dock/v1/keep_style_on_maximize` | copied by install.sh | true. COSMIC otherwise drops the dock's transparency behind a maximized window and paints it with the theme background, which put a yellow bar down the left of the screen. The dock's layout keys are not shipped; the floating dock stays as COSMIC has it. |
@@ -54,12 +54,13 @@ rule that appears with focus is carrying state (§3).
 
 | Surface | Value | Line test |
 |---|---|---|
-| window fields, header bars | `#DFCC82` yellow | on |
+| window fields, header bars | `#E5E6E8` WHITE | on |
+| rows and cards, derived from WHITE | `#CCCDCF` | on |
 | panel | `#D64D24` red | on |
 | background (default install): every gap | `#0A0F10` BLACK | on |
 | band, desktop wall (`--mondrian`) | `#535758` DARK | on |
 | nav sidebar | `#1B3A6D` blue | on |
-| accent: nav sidebar selected row text, links, selection outlines, toggles | `#E5E6E8` WHITE | on |
+| accent: nav sidebar selected row text, links, selection outlines, toggles | `#DFCC82` yellow | on |
 | toggle, off | `#787A7C` gray ½ | on |
 | accent swatches | nine points on the lines | on |
 
@@ -68,10 +69,9 @@ rule that appears with focus is carrying state (§3).
 | Where | Value | Off the nearest line by | Why the kit can't reach it |
 |---|---|---|---|
 | nav sidebar, selected and hovered row | `#2E4670` | 22.7 (blue) | libcosmic overlays the container to derive the state; on a blue container the result is a tint. §1c. |
-| rows, cards, content wells | `#FBE89D` | 47.9 (yellow) | libcosmic lightens the window field for its component surface; lightening yellow is a tint toward white. On a WHITE field the same derivation gave `#CCCDCF`, on the line. Accepted with the yellow field, 2026-09-08. §1c. |
-| header bars | `#DFCC82` yellow | on the line, but the wrong role | This libcosmic paints the header bar with the window background, not the primary container, so a header bar cannot be blue and every window reads as non-key. §7's "headerbars blue" is unreachable; the blue field is the nav sidebar instead. |
-| toggles, nav indicators, check marks | WHITE | on the line, but the wrong role | COSMIC has one accent, and selection is what it paints most. §1 gives the platform accent to blue; here it follows selection. On the blue sidebar blue text would vanish. |
-| focus rings | WHITE | — | drawn with the accent; §1 says BLACK. |
+| header bars | `#E5E6E8` WHITE | on the line, but the wrong role | This libcosmic paints the header bar with the window background, not the primary container, so a header bar cannot be blue and every window reads as non-key. §7's "headerbars blue" is unreachable; the blue field is the nav sidebar instead. |
+| toggles, nav indicators, check marks | yellow | on the line, but the wrong role | COSMIC has one accent, and selection is what it paints most. §1 gives the platform accent to blue; here it follows selection. On the blue sidebar blue text would vanish. |
+| focus rings | yellow | — | drawn with the accent; §1 says BLACK. |
 | accent as text (links, selected nav row) | derived from the accent | — | libcosmic lightens a dark accent for text: Mondrian red as accent gave exact `#D64D24` outlines and toggles but `#FFBFAD` links and nav text, 46 off the lines. Yellow is light enough to pass through unchanged, which is one more reason it is the accent. Tried and reverted 2026-09-08. |
 | panel text and tray icons | BLACK on red, 4.4:1 | on the line | applets take their text color from the panel's theme variant, not from its background: a flat `Color` never flips them to light text, and the only route to white on red is the Dark variant with a red Dark builder, which was declined 2026-09-08. |
 | menu text, or any text in a hue | BLACK | — | there is no text-color slot. The "interface text tint" tints a near-black toward a hue and cannot set one: Mondrian red as the tint produced `#1C0300` labels and `#360900` panel text, 24 and 27 off the red line. Tried and reverted 2026-09-08. |
@@ -94,17 +94,16 @@ run on this machine 2026-09-08: 99 icons made, one name not found, six
 absolute paths. The panel reads the icon theme at startup; install.sh
 restarts it.
 
-## WHITE on yellow
+## The yellow day
 
-The WHITE accent on the yellow field is about 1.3:1 in luminance and is
-still readable, because the edge between a saturated yellow and a
-neutral is a hue edge, and the eye resolves hue edges at the sizes the
-accent is used at: an outline, a breadcrumb, a bold nav label. It is
-legible by chroma, not by lightness. That holds because the accent
-never sets body text; the one long run of accent text, the selected
-sidebar row, sits on blue at 9:1. Do not "fix" the accent to a darker
-value: a dark accent goes through libcosmic's accent-text derivation
-and comes out as an off-line tint (see the residue table).
+On 2026-09-08 the window field went yellow with a WHITE accent, and it
+was retired the next morning: with Firefox's yellow toolbars and a
+yellow page ground from the Stylus sheet, the screen was a mustard
+spill. Yellow is nine percent of the painting. Two things learned then
+still hold. A dark accent goes through libcosmic's accent-text
+derivation and comes out as an off-line tint, so the accent stays a
+light value; and a WHITE accent on a yellow field was legible at 1.3:1
+by chroma alone, which is fine for an outline and never for body text.
 
 ## Light mode, always
 

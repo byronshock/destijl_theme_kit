@@ -9,9 +9,10 @@ Firefox 154 (deb) on COSMIC.
 | File | What it does |
 |---|---|
 | `user.js` | prefs, read at every start: enables the stylesheets; Firefox draws its own titlebar so the tab strip can be the blue key titlebar; compact density; no rounded bottom corners; scrollbars always shown; reduced motion; light theme; Nimbus Sans and Hack; and the §0 declutter — sponsored tiles and suggestions, Pocket, trending, promos, "what's new", hover previews, recommendations off. |
-| `chrome/userChrome.css` | the chrome. Tab strip blue `#1B3A6D` with WHITE text when the window is key, LIGHT `#9C9EA0` with BLACK text when it is not (§1, the one surface on this desktop that can show it). Toolbars yellow `#DFCC82`, the window field as on COSMIC (§7). Current tab yellow, joined to the field. Address and search fields WHITE `#E5E6E8`, BLACK text, BLACK 2 px focus outline, yellow selection. Menus and panels WHITE with BLACK text and a yellow hovered row. Sidebar blue with WHITE text. Every radius 0. No hairline separators: a change of tone instead (§3). |
+| `chrome/userChrome.css` | the chrome. Tab strip blue `#1B3A6D` with WHITE text when the window is key, LIGHT `#9C9EA0` with BLACK text when it is not (§1, the one surface on this desktop that can show it). Toolbars yellow `#DFCC82`: the painting's small field under its blue band, the one place yellow is a surface (the windows are WHITE). Current tab yellow, joined to the field. Address and search fields LIGHT `#9C9EA0`, a well on the field, BLACK text, BLACK 2 px focus outline, yellow selection. Menus and panels WHITE with BLACK text and a yellow hovered row. Sidebar blue with WHITE text. Every radius 0. No hairline separators: a change of tone instead (§3). |
 | `chrome/userContent.css` | the in-browser pages that are chrome, not content: new tab, home, blank, private. WHITE ground, BLACK text, blue primary buttons, square. Page content is untouched (§0). |
 | `install.sh` | finds the profile this Firefox install opens (`installs.ini`, else the default in `profiles.ini`), backs up any existing `user.js` and `chrome/` files into the profile, copies these three in. Refuses while Firefox runs, since both are read at startup. |
+| `install.sh --stylus` | the same, plus Stylus, sideloaded like uBlock. Then, in Firefox, Stylus › Manage › Import and choose `elevated/destijl.stylus.json` (`install.sh --style` prints the path). Stylus reads its own JSON cleanly and balks at `*.user.css` files, so the kit ships both: `elevated/destijl.user.css` is the source, `build/stylus_json.py` generates the JSON from it, and `--style-css` is the fallback that serves the user.css on localhost for Stylus's install page. The sheet is the kit's all-sites restyle of web pages: on Windows an all-sites extension is the elevated tier, here it is a per-profile extension and the tier boundary does not bite. After editing the sheet, bump `@version`, regenerate, import again. |
 | `install.sh --ublock` | the same, plus uBlock Origin: downloads the current signed build from addons.mozilla.org into the profile's `extensions/` directory and sets `extensions.autoDisableScopes` to 14 so a profile-directory extension starts enabled instead of asking. §0: advertisements are noise, and the larger half of the kit is removing what was put in the user's way. Off by default; the flag is the user's choice each install. |
 
 ## uBlock Origin
@@ -31,7 +32,7 @@ to undo. Updates come from Firefox's own add-on updater afterwards.
 | tab strip, key window | `#1B3A6D` |
 | tab strip, non-key window | `#9C9EA0`, BLACK text |
 | current tab, toolbars, bookmarks bar | `#DFCC82` |
-| address bar, at rest and focused | `#E5E6E8` |
+| address bar, at rest and focused | `#9C9EA0` |
 | new tab page ground | `#E5E6E8` |
 | new tab page primary button | `#1B3A6D` |
 | toolbar button hover / active | `#988D5C` / `#514E36`, the yellow line's thirds |

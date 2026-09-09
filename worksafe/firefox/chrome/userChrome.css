@@ -3,7 +3,8 @@
    §7 Firefox. Needs toolkit.legacyUserProfileCustomizations.stylesheets = true (user.js sets it).
 
    The tab strip is the titlebar: blue when the window is key, LIGHT when it is not (§1). The toolbars are the
-   window field, yellow, as on COSMIC (§7). Text fields are WHITE. Selection is yellow with BLACK on it. Every
+   painting's small yellow field under its blue band (§5); the windows themselves are WHITE, as on COSMIC (§7).
+   Address and search fields are LIGHT, a well on that field. Selection is yellow with BLACK on it. Every
    corner is square. There is no thinner rule: where Firefox drew a hairline, the tone changes instead. */
 
 :root {
@@ -37,13 +38,13 @@
   --chrome-content-separator-color: transparent !important;
 
   /* text fields */
-  --toolbar-field-background-color: var(--ds-white) !important;
+  --toolbar-field-background-color: var(--ds-light) !important;
   --toolbar-field-color: var(--ds-black) !important;
-  --toolbar-field-focus-background-color: var(--ds-white) !important;
+  --toolbar-field-focus-background-color: var(--ds-light) !important;
   --toolbar-field-focus-color: var(--ds-black) !important;
   --toolbar-field-border-color: transparent !important;
   --toolbar-field-focus-border-color: var(--ds-black) !important;
-  --urlbar-box-bgcolor: var(--ds-white) !important;
+  --urlbar-box-bgcolor: var(--ds-light) !important;
   --urlbar-box-hover-bgcolor: var(--ds-yellow) !important;
   --urlbar-box-active-bgcolor: var(--ds-yellow) !important;
   --urlbar-box-text-color: var(--ds-black) !important;
@@ -108,18 +109,18 @@
   --toolbox-text-color-inactive: var(--ds-black) !important;
   --toolbar-background-color: var(--ds-yellow) !important;
   --toolbar-text-color: var(--ds-black) !important;
-  --toolbar-field-background-color-focus: var(--ds-white) !important;
+  --toolbar-field-background-color-focus: var(--ds-light) !important;
   --toolbar-field-text-color: var(--ds-black) !important;
   --toolbar-field-text-color-focus: var(--ds-black) !important;
   --toolbar-field-border-color-focus: var(--ds-black) !important;
-  --urlbar-background-color: var(--ds-white) !important;
-  --urlbar-background-color-focus: var(--ds-white) !important;
+  --urlbar-background-color: var(--ds-light) !important;
+  --urlbar-background-color-focus: var(--ds-light) !important;
   --urlbar-border-radius: 0 !important;
   --urlbar-inner-border-radius: 0 !important;
-  --urlbar-box-background-color: var(--ds-white) !important;
+  --urlbar-box-background-color: var(--ds-light) !important;
   --urlbar-box-background-color-hover: var(--ds-yellow) !important;
   --urlbar-box-background-color-active: var(--ds-yellow-2) !important;
-  --urlbar-box-background-color-focus: var(--ds-white) !important;
+  --urlbar-box-background-color-focus: var(--ds-light) !important;
   --urlbar-box-text-color: var(--ds-black) !important;
   --urlbar-box-text-color-hover: var(--ds-black) !important;
   --urlbarview-background-color-hover: var(--ds-yellow) !important;
@@ -225,7 +226,7 @@ toolbarseparator { border-color: var(--ds-yellow-2) !important; }
 #urlbar-background, #searchbar, .searchbar-textbox, .findbar-textbox, #urlbar-input-container {
   border-radius: 0 !important; border: 0 !important; box-shadow: none !important;
 }
-#urlbar-background { background-color: var(--ds-white) !important; outline: none !important; }
+#urlbar-background { background-color: var(--ds-light) !important; outline: none !important; }
 #urlbar[focused] > #urlbar-background, #urlbar[breakout][breakout-extend] > #urlbar-background {
   outline: 2px solid var(--ds-black) !important; outline-offset: -2px !important;
 }
@@ -269,7 +270,7 @@ treechildren::-moz-tree-cell-text(selected, focus) { color: var(--ds-yellow) !im
 
 /* --- findbar, notification bars, status ------------------------------------------------------- */
 findbar, .findbar-container { background-color: var(--ds-yellow) !important; color: var(--ds-black) !important; border: 0 !important; }
-.findbar-textbox { background-color: var(--ds-white) !important; color: var(--ds-black) !important; }
+.findbar-textbox { background-color: var(--ds-light) !important; color: var(--ds-black) !important; }
 notification-message, .notificationbox-stack, .infobar { border-radius: 0 !important; }
 #statuspanel-label { background-color: var(--ds-white) !important; color: var(--ds-black) !important; border: 0 !important; border-radius: 0 !important; }
 

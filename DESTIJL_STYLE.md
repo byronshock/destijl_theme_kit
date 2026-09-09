@@ -77,7 +77,7 @@ the steps are NeXT's, the endpoints are Mondrian's.
 
 | Role  | Hex       | Step  | Use |
 |-------|-----------|-------|-----|
-| WHITE | `#E5E6E8` | 1.000 | window backgrounds, text fields, lists, bevel highlights, titlebar text on key windows; the COSMIC accent (§7) |
+| WHITE | `#E5E6E8` | 1.000 | window backgrounds, text fields, lists, bevel highlights, titlebar text on key windows |
 | LIGHT | `#9C9EA0` | .667  | panels, buttons, non-key titlebars |
 | DARK  | `#535758` | .333  | desktop, bevel shadows, dock tiles, disabled text |
 | BLACK | `#0A0F10` | 0.000 | rules (§3), text, badges |
@@ -91,7 +91,7 @@ state (§8.4):
 | Hue    | Hex       | Chrome |
 |--------|-----------|--------|
 | blue   | `#1B3A6D` | key titlebars and window borders — the painting's blue band is a titlebar; toggles, nav indicators and whatever else the platform paints with its one accent; hyperlinks; browser frame |
-| yellow | `#DFCC82` | selection — selected rows and selected text, BLACK on it (12.0:1); appears only when the user acts. On COSMIC, the window field and title bars (§7) |
+| yellow | `#DFCC82` | selection — selected rows and selected text, BLACK on it (12.0:1); appears only when the user acts. The painting's small field: Firefox's toolbars under the blue tab strip (§7), and no more than that — a yellow window field was tried and made the screen a mustard spill |
 | red    | `#D64D24` | the text cursor indicator; the terminal cursor; the COSMIC panel — a 32 pt band on a 1440 pt screen is 2.2% of it, the painting's own red share |
 
 WHITE on the blue titlebar is 9.0:1. Focus rings stay BLACK.
@@ -125,19 +125,15 @@ destructive is a defect. Accent and selection are composition hues
 ### 1c. Exception: toolkit derivations (COSMIC only)
 
 COSMIC derives some surfaces from the theme's inputs, and no theme value
-can prevent it. Two of those derivations land off the lines and are
-admitted, in COSMIC chrome only, as exceptions to §1; `palette.json`
-records both and `worksafe/cosmic/README_COSMIC.md` has the measurements.
-
-- The selected and hovered row of the blue `#1B3A6D` nav sidebar:
-  `#2E4670`, 22.7 off the blue line. The overlay is not Mondrian's.
-- The row, card and well surface lightened from the yellow `#DFCC82`
-  window field: `#FBE89D`, 47.9 off the yellow line. A tint toward
-  white, which §1 otherwise forbids.
-
-The inputs themselves stay canon, and the accent is WHITE so that text
-painted with it passes the derivation unchanged. Nothing else may use
-these two values.
+can prevent it. One derivation lands off the lines and is admitted, in
+COSMIC chrome only, as an exception to §1: the selected and hovered row
+of the blue `#1B3A6D` nav sidebar, `#2E4670`, 22.7 off the blue line,
+because the overlay is not Mondrian's. `palette.json` records it and
+`worksafe/cosmic/README_COSMIC.md` has the measurement. The inputs
+themselves stay canon: the window field is WHITE, whose derived row
+surface `#CCCDCF` is on the gray line (a yellow field derived `#FBE89D`,
+47.9 off, and was retired), and the accent is yellow, light enough to
+pass the accent-text derivation unchanged. Nothing else may use it.
 
 ## 2. Typography
 
@@ -340,13 +336,14 @@ Reached:
 
 - Light mode, always, auto-switch off; no dark builder exists. Mondrian
   is light mode: the system's polarity is BLACK on WHITE.
-- Window fields and title bars yellow, text BLACK, nav sidebars blue,
-  the panel red on its own key. Yellow as the large field inverts the
-  painting's proportions on purpose; the author's call, 2026-09-08.
-- Accent WHITE: selection, links, outlines, toggles, selected nav text.
-  9:1 on the blue sidebar; on the yellow field legible by chroma, not
-  lightness (about 1.3:1), which is enough for an outline or a label and
-  is never asked to carry body text. — the painting's blue band is the field on the left
+- Window fields and title bars WHITE, the painting's large field; text
+  BLACK; nav sidebars blue; the panel red on its own key. A yellow
+  window field was tried for a day (2026-09-08) and retired: with yellow
+  toolbars and yellow pages it made the screen a mustard spill, the
+  painting's proportions inverted.
+- Accent yellow: selection, links, outlines, toggles, selected nav text,
+  appearing when the user acts. Light enough to pass COSMIC's
+  accent-text derivation unchanged; 5.2:1 on the sidebar overlay. — the painting's blue band is the field on the left
   of a window. Every corner radius 0; no frosting.
 - Semantic colors (§1b) in the theme's success, warning and destructive
   slots.
@@ -374,12 +371,12 @@ Reached:
 Residue:
 
 - Header bars: this libcosmic paints them with the window background,
-  so they are yellow with the field. A header bar cannot be blue and
+  so they are WHITE with the field. A header bar cannot be blue and
   every window reads as non-key.
 - Toggles, nav indicators, check marks and focus rings follow the one
-  accent and are WHITE, where §1 has blue for the platform accent and
+  accent and are yellow, where §1 has blue for the platform accent and
   BLACK for focus.
-- The two §1c derivations: the sidebar overlay and the row surface.
+- The §1c derivation: the sidebar overlay.
 - Client-side decorations (Electron, GTK) keep their own chrome.
 
 ### Firefox
@@ -392,10 +389,11 @@ Reached:
 - The tab strip is the titlebar and carries key state the way §1 asks:
   blue with WHITE text when the window is key, LIGHT with BLACK text
   when it is not. The only surface on COSMIC that can show it.
-- Toolbars and the current tab yellow, the window field (§7 COSMIC);
-  address and search fields WHITE with BLACK text and a BLACK focus
-  outline; selection yellow; menus and panels WHITE with a yellow
-  hovered row; sidebar blue with WHITE text. Every radius 0; no
+- Toolbars and the current tab yellow, the painting's small field under
+  its blue band, and the one place yellow is a surface; address and
+  search fields LIGHT on it, a well on a field, with BLACK text and a
+  BLACK focus outline; selection yellow; menus and panels WHITE with a
+  yellow hovered row; sidebar blue with WHITE text. Every radius 0; no
   hairline separators.
 - New tab, home and blank pages WHITE with BLACK text; page content
   untouched.

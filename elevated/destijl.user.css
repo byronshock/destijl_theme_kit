@@ -1,42 +1,54 @@
 /* ==UserStyle==
-@name           DeStijl
-@namespace      byronshock
-@version        0.1.0
-@description    DeStijl for the web: Mondrian's 1922 pigments, Nimbus Sans and Hack, no curves, no thin lines. Tier: elevated (Stylus is an all-sites extension); the worksafe bookmarklet is generated from this file.
+@name           De Stijl
+@namespace      github.com/byronshock/destijl_theme_kit
+@version        0.3.0
+@description    De Stijl for websites: WHITE ground and documents, LIGHT field and wells, blue sidebars and primary buttons, yellow selection, red caret, one BLACK rule, Nimbus Sans and Hack, no curves, no hairlines. Tier: elevated.
 @author         Byron Shock, Ph.D.
-@preprocessor   default
 ==/UserStyle== */
 
-/* Generated from palette.json — DESTIJL_STYLE.md §1 (lines), §1b (semantic), §2 (type),
-   §3 (rules, residue). Lessons carried forward from the earlier kits are marked (L1–L5). */
+/* DESTIJL_STYLE.md §1, §1b, §2, §3, §7 (Firefox and COSMIC surface mapping). Values from palette.json.
+   0.3.0: ground and documents WHITE, the field LIGHT; yellow is selection and the current row. With yellow windows and yellow
+          toolbars a yellow page ground made the screen a mustard spill; the painting's yellow is nine percent (§5).
+   0.2.8: current-item selectors by attribute only; class-name guesses painted every chat red.
+   0.2.7: the current sidebar item WHITE on red.
+   0.2.6: buttons inside a sidebar are transparent on the blue (they were WHITE with yellow text).
+   0.2.5: primary selectors match buttons only — [class*="primary"] had caught message text (text-primary) and painted it WHITE on WHITE.
+   0.2.4: primary buttons yellow on blue, WHITE when hovered.
+   0.2.3: primary-button descendants WHITE (L3); BLACK on blue is deprecated, 1.7:1.
+   0.2.2: sidebar text yellow, highlighted item WHITE on blue-2.
+   0.2.1: Stylus-clean — no preprocessor directive, no complex selectors inside :not(), one selector list per line.
+   Lessons carried forward: L1 transparent stretched click targets; L2 pin -webkit-text-fill-color;
+   L3 every background rule recolors its own text; L4 clear background images off non-media, inline too. */
+
+@-moz-document url-prefix("http"), url-prefix("file") {
 
 :root {
-  --ds-white:  #E5E6E8;   /* fields, documents */
-  --ds-light:  #9C9EA0;   /* surfaces, buttons, wells */
-  --ds-dark:   #535758;    /* disabled, scrollbar thumb */
-  --ds-black:  #0A0F10;   /* rules, text */
-  --ds-blue:   #1B3A6D;   /* links, the platform accent */
-  --ds-yellow: #DFCC82; /* selection, BLACK on it */
-  --ds-red:    #D64D24;    /* caret */
-  --ds-destructive: #AF1E2D;  /* FHWA red; legend #FFFFFF (§1b) */
-  --ds-rule: 28px;             /* §3: one rule, no thinner */
+  --ds-white:    #E5E6E8;
+  --ds-light:    #9C9EA0;
+  --ds-dark:     #535758;
+  --ds-black:    #0A0F10;
+  --ds-yellow:   #DFCC82;
+  --ds-yellow-2: #988D5C;
+  --ds-yellow-1: #514E36;
+  --ds-blue:     #1B3A6D;
+  --ds-blue-2:   #152C4E;
+  --ds-red:      #D64D24;
+  --ds-destructive: #AF1E2D;
+  --ds-rule: 28px;
   --ds-ui:   "Nimbus Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --ds-mono: Hack, "DejaVu Sans Mono", monospace;
 }
 
-/* ---------- geometry: curves deprecated, no thin lines ---------- */
+/* ---------- geometry ---------- */
 *, *::before, *::after {
-  border-radius: 0 !important;          /* §3 curves */
+  border-radius: 0 !important;
   box-shadow: none !important;
   text-shadow: none !important;
 }
-/* Field edges are tone changes, not lines (§3). Borders off; tone below. */
-input, textarea, select, button, fieldset, table, td, th, tr, blockquote,
-nav, header, footer, aside, section, article, details, summary, dialog {
+input, textarea, select, button, fieldset, table, td, th, tr, blockquote, dialog, details, summary, nav, header, footer, aside, section, article, main, figure, [role="dialog"], [role="menu"], [role="listbox"], [role="toolbar"], [role="tablist"], [role="tab"] {
   border-color: transparent !important;
   border-width: 0 !important;
 }
-/* The one line: hr is a rule. */
 hr {
   border: 0 !important;
   height: var(--ds-rule) !important;
@@ -44,87 +56,231 @@ hr {
   margin: var(--ds-rule) 0 !important;
 }
 
-/* ---------- color: the six pigments ---------- */
+/* ---------- ground ---------- */
 html, body {
   background: var(--ds-white) !important;
   color: var(--ds-black) !important;
-  -webkit-text-fill-color: currentcolor !important;   /* L2: pin fill, it overrides color */
+  -webkit-text-fill-color: currentcolor !important;
 }
-/* L3: a descendant rule paints every child; every background rule below recolors its text. */
-*:not(img):not(video):not(canvas):not(svg):not(iframe):not(picture):not(source) {
-  background-image: none !important;    /* L4: cleared on inline and interactive too, not just blocks */
+body *:not(img):not(video):not(canvas):not(svg):not(iframe):not(picture):not(source):not(embed):not(object) {
+  background-image: none !important;
+  background-color: transparent;
   color: var(--ds-black);
   -webkit-text-fill-color: currentcolor;
 }
-body *:not(img):not(video):not(canvas):not(svg):not(iframe):not(picture):not(source) {
-  background-color: transparent;
+svg, svg * {
+  background-image: initial;
+  color: inherit;
+  -webkit-text-fill-color: inherit;
 }
-/* surfaces */
-nav, header, footer, aside, [role="navigation"], [role="banner"], [role="contentinfo"],
-[role="toolbar"], [role="menu"], [role="menubar"], [role="tablist"], [role="dialog"], dialog,
-th, thead, summary, code, kbd, samp, pre {
+
+/* the field: LIGHT */
+header, footer, nav, form, thead, th, blockquote, figcaption, summary, [role="banner"], [role="contentinfo"], [role="navigation"], [role="toolbar"], [role="tablist"], [role="search"] {
   background-color: var(--ds-light) !important;
   color: var(--ds-black) !important;
 }
-/* wells and buttons: LIGHT, BLACK on them; no border, tone does the work */
-input, textarea, select, button, [role="button"], [role="textbox"], [role="combobox"],
-[role="searchbox"], [type="submit"], [type="button"] {
+/* documents: WHITE */
+main, article, section, table, tbody, td, dialog, details, [role="main"], [role="article"], [role="region"], [role="document"], [role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"] {
+  background-color: var(--ds-white) !important;
+  color: var(--ds-black) !important;
+}
+/* wells: LIGHT on a document, WHITE on a field */
+input, textarea, select, pre, code, kbd, samp, [role="textbox"], [role="combobox"], [role="searchbox"] {
   background-color: var(--ds-light) !important;
+  color: var(--ds-black) !important;
+  -webkit-text-fill-color: var(--ds-black) !important;
+}
+form input, form textarea, form select, header input, nav input, footer input, form [role="textbox"], header [role="searchbox"], nav [role="searchbox"], [role="search"] input, th code, blockquote code {
+  background-color: var(--ds-white) !important;
+}
+:disabled, [aria-disabled="true"] {
+  color: var(--ds-dark) !important;
+  -webkit-text-fill-color: var(--ds-dark) !important;
+}
+
+/* sidebars: blue, yellow on it (7.0:1); the highlighted item WHITE on blue-2 (11.2:1) */
+aside[role="navigation"], nav[aria-orientation="vertical"], [role="tree"], .sidebar, #sidebar, .sidenav, #sidenav, [class*="sidebar"], [id*="sidebar"], [class*="sidenav"], [class*="side-nav"] {
+  background-color: var(--ds-blue) !important;
+  color: var(--ds-yellow) !important;
+}
+aside[role="navigation"] *, nav[aria-orientation="vertical"] *, [role="tree"] *, .sidebar *, #sidebar *, .sidenav *, #sidenav *, [class*="sidebar"] *, [id*="sidebar"] *, [class*="sidenav"] *, [class*="side-nav"] * {
+  color: var(--ds-yellow) !important;
+  -webkit-text-fill-color: var(--ds-yellow) !important;
+}
+aside[role="navigation"] a:hover, aside[role="navigation"] [aria-current], aside[role="navigation"] [aria-selected="true"], nav[aria-orientation="vertical"] a:hover, nav[aria-orientation="vertical"] [aria-current], nav[aria-orientation="vertical"] [aria-selected="true"], [role="tree"] [aria-selected="true"], [role="tree"] [role="treeitem"]:hover, .sidebar a:hover, .sidebar [aria-current], .sidebar [aria-selected="true"], #sidebar a:hover, #sidebar [aria-current], #sidebar [aria-selected="true"], .sidenav a:hover, .sidenav [aria-current], #sidenav a:hover, #sidenav [aria-current], [class*="sidebar"] a:hover, [class*="sidebar"] [aria-current], [class*="sidebar"] [aria-selected="true"], [id*="sidebar"] a:hover, [id*="sidebar"] [aria-current], [class*="sidenav"] a:hover, [class*="sidenav"] [aria-current], [class*="side-nav"] a:hover, [class*="side-nav"] [aria-current] {
+  background-color: var(--ds-blue-2) !important;
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+aside[role="navigation"] a:hover *, aside[role="navigation"] [aria-current] *, nav[aria-orientation="vertical"] a:hover *, nav[aria-orientation="vertical"] [aria-current] *, .sidebar a:hover *, .sidebar [aria-current] *, .sidebar [aria-selected="true"] *, #sidebar a:hover *, #sidebar [aria-current] *, [class*="sidebar"] a:hover *, [class*="sidebar"] [aria-current] *, [class*="sidebar"] [aria-selected="true"] *, [id*="sidebar"] a:hover *, [id*="sidebar"] [aria-current] *, [class*="sidenav"] a:hover *, [class*="sidenav"] [aria-current] *, [class*="side-nav"] a:hover *, [class*="side-nav"] [aria-current] * {
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+
+/* ---------- buttons ---------- */
+button, summary, [role="button"], [type="button"], [type="submit"], [type="reset"] {
+  background-color: var(--ds-white) !important;
   color: var(--ds-black) !important;
   -webkit-text-fill-color: var(--ds-black) !important;
   font-family: var(--ds-ui) !important;
 }
-/* L1: stretched transparent click targets stay transparent, or card overlays break */
-button.absolute.inset-0, a.absolute.inset-0, [role="button"].absolute.inset-0 {
-  background-color: transparent !important;
+button:hover, [role="button"]:hover, [type="button"]:hover {
+  background-color: var(--ds-light) !important;
 }
-button:hover, [role="button"]:hover { background-color: var(--ds-white) !important; }
 button:active, [role="button"]:active, [aria-pressed="true"] {
   background-color: var(--ds-dark) !important;
   color: var(--ds-white) !important;
   -webkit-text-fill-color: var(--ds-white) !important;
 }
-button:active *, [aria-pressed="true"] * { color: var(--ds-white) !important; -webkit-text-fill-color: var(--ds-white) !important; }
-:disabled, [aria-disabled="true"] { color: var(--ds-dark) !important; -webkit-text-fill-color: var(--ds-dark) !important; }
+button:active *, [aria-pressed="true"] * {
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+/* buttons on the field: transparent at rest, WHITE when hovered, DARK when pressed; the selected tab is a selection */
+header button, nav button, footer button, header [role="button"], nav [role="button"], [role="toolbar"] button, [role="tablist"] [role="tab"] {
+  background-color: transparent !important;
+}
+header button:hover, nav button:hover, footer button:hover, [role="toolbar"] button:hover, [role="tab"]:hover {
+  background-color: var(--ds-white) !important;
+}
+header button:active, nav button:active, footer button:active, [role="toolbar"] button:active {
+  background-color: var(--ds-dark) !important;
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+[role="tab"][aria-selected="true"] {
+  background-color: var(--ds-yellow) !important;
+  color: var(--ds-black) !important;
+  -webkit-text-fill-color: var(--ds-black) !important;
+}
+[role="tab"][aria-selected="true"] * {
+  color: var(--ds-black) !important;
+  -webkit-text-fill-color: var(--ds-black) !important;
+}
+/* primary: blue, yellow on it (7.0:1); WHITE when hovered, on blue-2 (11.2:1) — as the sidebar */
+[type="submit"], button.primary, .btn-primary, button[class*="primary"], button[class*="Primary"], [role="button"][class*="primary"], [role="button"][class*="Primary"], a[class*="btn-primary"], button[data-primary], button[form] {
+  background-color: var(--ds-blue) !important;
+  color: var(--ds-yellow) !important;
+  -webkit-text-fill-color: var(--ds-yellow) !important;
+}
+[type="submit"] *, button.primary *, .btn-primary *, button[class*="primary"] *, button[class*="Primary"] *, [role="button"][class*="primary"] *, [role="button"][class*="Primary"] *, a[class*="btn-primary"] *, button[data-primary] *, button[form] * {
+  color: var(--ds-yellow) !important;
+  -webkit-text-fill-color: var(--ds-yellow) !important;
+}
+[type="submit"]:hover, button.primary:hover, .btn-primary:hover, button[class*="primary"]:hover, button[class*="Primary"]:hover, [role="button"][class*="primary"]:hover, [role="button"][class*="Primary"]:hover, a[class*="btn-primary"]:hover, button[data-primary]:hover, button[form]:hover {
+  background-color: var(--ds-blue-2) !important;
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+[type="submit"]:hover *, button.primary:hover *, .btn-primary:hover *, button[class*="primary"]:hover *, button[class*="Primary"]:hover *, [role="button"][class*="primary"]:hover *, [role="button"][class*="Primary"]:hover *, a[class*="btn-primary"]:hover *, button[data-primary]:hover *, button[form]:hover * {
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+/* L1 */
+button.absolute.inset-0, a.absolute.inset-0, [role="button"].absolute.inset-0 {
+  background-color: transparent !important;
+}
 
-/* links: the blue line */
+/* buttons inside a sidebar sit on the blue: transparent at rest, yellow text; WHITE on blue-2 when hovered or pressed */
+aside[role="navigation"] button, aside[role="navigation"] [role="button"], aside[role="navigation"] [type="button"], aside[role="navigation"] summary, nav[aria-orientation="vertical"] button, nav[aria-orientation="vertical"] [role="button"], nav[aria-orientation="vertical"] [type="button"], nav[aria-orientation="vertical"] summary, [role="tree"] button, [role="tree"] [role="button"], [role="tree"] [type="button"], [role="tree"] summary, .sidebar button, .sidebar [role="button"], .sidebar [type="button"], .sidebar summary, #sidebar button, #sidebar [role="button"], #sidebar [type="button"], #sidebar summary, .sidenav button, .sidenav [role="button"], .sidenav [type="button"], .sidenav summary, #sidenav button, #sidenav [role="button"], #sidenav [type="button"], #sidenav summary, [class*="sidebar"] button, [class*="sidebar"] [role="button"], [class*="sidebar"] [type="button"], [class*="sidebar"] summary, [id*="sidebar"] button, [id*="sidebar"] [role="button"], [id*="sidebar"] [type="button"], [id*="sidebar"] summary, [class*="sidenav"] button, [class*="sidenav"] [role="button"], [class*="sidenav"] [type="button"], [class*="sidenav"] summary, [class*="side-nav"] button, [class*="side-nav"] [role="button"], [class*="side-nav"] [type="button"], [class*="side-nav"] summary {
+  background-color: transparent !important;
+  color: var(--ds-yellow) !important;
+  -webkit-text-fill-color: var(--ds-yellow) !important;
+}
+aside[role="navigation"] button:hover, aside[role="navigation"] button:active, aside[role="navigation"] button[aria-pressed="true"], aside[role="navigation"] button[aria-current], aside[role="navigation"] [role="button"]:hover, aside[role="navigation"] [role="button"]:active, aside[role="navigation"] [role="button"][aria-pressed="true"], aside[role="navigation"] [role="button"][aria-current], aside[role="navigation"] [type="button"]:hover, aside[role="navigation"] [type="button"]:active, aside[role="navigation"] [type="button"][aria-pressed="true"], aside[role="navigation"] [type="button"][aria-current], aside[role="navigation"] summary:hover, aside[role="navigation"] summary:active, aside[role="navigation"] summary[aria-pressed="true"], aside[role="navigation"] summary[aria-current], nav[aria-orientation="vertical"] button:hover, nav[aria-orientation="vertical"] button:active, nav[aria-orientation="vertical"] button[aria-pressed="true"], nav[aria-orientation="vertical"] button[aria-current], nav[aria-orientation="vertical"] [role="button"]:hover, nav[aria-orientation="vertical"] [role="button"]:active, nav[aria-orientation="vertical"] [role="button"][aria-pressed="true"], nav[aria-orientation="vertical"] [role="button"][aria-current], nav[aria-orientation="vertical"] [type="button"]:hover, nav[aria-orientation="vertical"] [type="button"]:active, nav[aria-orientation="vertical"] [type="button"][aria-pressed="true"], nav[aria-orientation="vertical"] [type="button"][aria-current], nav[aria-orientation="vertical"] summary:hover, nav[aria-orientation="vertical"] summary:active, nav[aria-orientation="vertical"] summary[aria-pressed="true"], nav[aria-orientation="vertical"] summary[aria-current], [role="tree"] button:hover, [role="tree"] button:active, [role="tree"] button[aria-pressed="true"], [role="tree"] button[aria-current], [role="tree"] [role="button"]:hover, [role="tree"] [role="button"]:active, [role="tree"] [role="button"][aria-pressed="true"], [role="tree"] [role="button"][aria-current], [role="tree"] [type="button"]:hover, [role="tree"] [type="button"]:active, [role="tree"] [type="button"][aria-pressed="true"], [role="tree"] [type="button"][aria-current], [role="tree"] summary:hover, [role="tree"] summary:active, [role="tree"] summary[aria-pressed="true"], [role="tree"] summary[aria-current], .sidebar button:hover, .sidebar button:active, .sidebar button[aria-pressed="true"], .sidebar button[aria-current], .sidebar [role="button"]:hover, .sidebar [role="button"]:active, .sidebar [role="button"][aria-pressed="true"], .sidebar [role="button"][aria-current], .sidebar [type="button"]:hover, .sidebar [type="button"]:active, .sidebar [type="button"][aria-pressed="true"], .sidebar [type="button"][aria-current], .sidebar summary:hover, .sidebar summary:active, .sidebar summary[aria-pressed="true"], .sidebar summary[aria-current], #sidebar button:hover, #sidebar button:active, #sidebar button[aria-pressed="true"], #sidebar button[aria-current], #sidebar [role="button"]:hover, #sidebar [role="button"]:active, #sidebar [role="button"][aria-pressed="true"], #sidebar [role="button"][aria-current], #sidebar [type="button"]:hover, #sidebar [type="button"]:active, #sidebar [type="button"][aria-pressed="true"], #sidebar [type="button"][aria-current], #sidebar summary:hover, #sidebar summary:active, #sidebar summary[aria-pressed="true"], #sidebar summary[aria-current], .sidenav button:hover, .sidenav button:active, .sidenav button[aria-pressed="true"], .sidenav button[aria-current], .sidenav [role="button"]:hover, .sidenav [role="button"]:active, .sidenav [role="button"][aria-pressed="true"], .sidenav [role="button"][aria-current], .sidenav [type="button"]:hover, .sidenav [type="button"]:active, .sidenav [type="button"][aria-pressed="true"], .sidenav [type="button"][aria-current], .sidenav summary:hover, .sidenav summary:active, .sidenav summary[aria-pressed="true"], .sidenav summary[aria-current], #sidenav button:hover, #sidenav button:active, #sidenav button[aria-pressed="true"], #sidenav button[aria-current], #sidenav [role="button"]:hover, #sidenav [role="button"]:active, #sidenav [role="button"][aria-pressed="true"], #sidenav [role="button"][aria-current], #sidenav [type="button"]:hover, #sidenav [type="button"]:active, #sidenav [type="button"][aria-pressed="true"], #sidenav [type="button"][aria-current], #sidenav summary:hover, #sidenav summary:active, #sidenav summary[aria-pressed="true"], #sidenav summary[aria-current], [class*="sidebar"] button:hover, [class*="sidebar"] button:active, [class*="sidebar"] button[aria-pressed="true"], [class*="sidebar"] button[aria-current], [class*="sidebar"] [role="button"]:hover, [class*="sidebar"] [role="button"]:active, [class*="sidebar"] [role="button"][aria-pressed="true"], [class*="sidebar"] [role="button"][aria-current], [class*="sidebar"] [type="button"]:hover, [class*="sidebar"] [type="button"]:active, [class*="sidebar"] [type="button"][aria-pressed="true"], [class*="sidebar"] [type="button"][aria-current], [class*="sidebar"] summary:hover, [class*="sidebar"] summary:active, [class*="sidebar"] summary[aria-pressed="true"], [class*="sidebar"] summary[aria-current], [id*="sidebar"] button:hover, [id*="sidebar"] button:active, [id*="sidebar"] button[aria-pressed="true"], [id*="sidebar"] button[aria-current], [id*="sidebar"] [role="button"]:hover, [id*="sidebar"] [role="button"]:active, [id*="sidebar"] [role="button"][aria-pressed="true"], [id*="sidebar"] [role="button"][aria-current], [id*="sidebar"] [type="button"]:hover, [id*="sidebar"] [type="button"]:active, [id*="sidebar"] [type="button"][aria-pressed="true"], [id*="sidebar"] [type="button"][aria-current], [id*="sidebar"] summary:hover, [id*="sidebar"] summary:active, [id*="sidebar"] summary[aria-pressed="true"], [id*="sidebar"] summary[aria-current], [class*="sidenav"] button:hover, [class*="sidenav"] button:active, [class*="sidenav"] button[aria-pressed="true"], [class*="sidenav"] button[aria-current], [class*="sidenav"] [role="button"]:hover, [class*="sidenav"] [role="button"]:active, [class*="sidenav"] [role="button"][aria-pressed="true"], [class*="sidenav"] [role="button"][aria-current], [class*="sidenav"] [type="button"]:hover, [class*="sidenav"] [type="button"]:active, [class*="sidenav"] [type="button"][aria-pressed="true"], [class*="sidenav"] [type="button"][aria-current], [class*="sidenav"] summary:hover, [class*="sidenav"] summary:active, [class*="sidenav"] summary[aria-pressed="true"], [class*="sidenav"] summary[aria-current], [class*="side-nav"] button:hover, [class*="side-nav"] button:active, [class*="side-nav"] button[aria-pressed="true"], [class*="side-nav"] button[aria-current], [class*="side-nav"] [role="button"]:hover, [class*="side-nav"] [role="button"]:active, [class*="side-nav"] [role="button"][aria-pressed="true"], [class*="side-nav"] [role="button"][aria-current], [class*="side-nav"] [type="button"]:hover, [class*="side-nav"] [type="button"]:active, [class*="side-nav"] [type="button"][aria-pressed="true"], [class*="side-nav"] [type="button"][aria-current], [class*="side-nav"] summary:hover, [class*="side-nav"] summary:active, [class*="side-nav"] summary[aria-pressed="true"], [class*="side-nav"] summary[aria-current] {
+  background-color: var(--ds-blue-2) !important;
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+aside[role="navigation"] button:hover *, aside[role="navigation"] button:active *, aside[role="navigation"] button[aria-current] *, aside[role="navigation"] [role="button"]:hover *, aside[role="navigation"] [role="button"]:active *, aside[role="navigation"] [role="button"][aria-current] *, aside[role="navigation"] [type="button"]:hover *, aside[role="navigation"] [type="button"]:active *, aside[role="navigation"] [type="button"][aria-current] *, aside[role="navigation"] summary:hover *, aside[role="navigation"] summary:active *, aside[role="navigation"] summary[aria-current] *, nav[aria-orientation="vertical"] button:hover *, nav[aria-orientation="vertical"] button:active *, nav[aria-orientation="vertical"] button[aria-current] *, nav[aria-orientation="vertical"] [role="button"]:hover *, nav[aria-orientation="vertical"] [role="button"]:active *, nav[aria-orientation="vertical"] [role="button"][aria-current] *, nav[aria-orientation="vertical"] [type="button"]:hover *, nav[aria-orientation="vertical"] [type="button"]:active *, nav[aria-orientation="vertical"] [type="button"][aria-current] *, nav[aria-orientation="vertical"] summary:hover *, nav[aria-orientation="vertical"] summary:active *, nav[aria-orientation="vertical"] summary[aria-current] *, [role="tree"] button:hover *, [role="tree"] button:active *, [role="tree"] button[aria-current] *, [role="tree"] [role="button"]:hover *, [role="tree"] [role="button"]:active *, [role="tree"] [role="button"][aria-current] *, [role="tree"] [type="button"]:hover *, [role="tree"] [type="button"]:active *, [role="tree"] [type="button"][aria-current] *, [role="tree"] summary:hover *, [role="tree"] summary:active *, [role="tree"] summary[aria-current] *, .sidebar button:hover *, .sidebar button:active *, .sidebar button[aria-current] *, .sidebar [role="button"]:hover *, .sidebar [role="button"]:active *, .sidebar [role="button"][aria-current] *, .sidebar [type="button"]:hover *, .sidebar [type="button"]:active *, .sidebar [type="button"][aria-current] *, .sidebar summary:hover *, .sidebar summary:active *, .sidebar summary[aria-current] *, #sidebar button:hover *, #sidebar button:active *, #sidebar button[aria-current] *, #sidebar [role="button"]:hover *, #sidebar [role="button"]:active *, #sidebar [role="button"][aria-current] *, #sidebar [type="button"]:hover *, #sidebar [type="button"]:active *, #sidebar [type="button"][aria-current] *, #sidebar summary:hover *, #sidebar summary:active *, #sidebar summary[aria-current] *, .sidenav button:hover *, .sidenav button:active *, .sidenav button[aria-current] *, .sidenav [role="button"]:hover *, .sidenav [role="button"]:active *, .sidenav [role="button"][aria-current] *, .sidenav [type="button"]:hover *, .sidenav [type="button"]:active *, .sidenav [type="button"][aria-current] *, .sidenav summary:hover *, .sidenav summary:active *, .sidenav summary[aria-current] *, #sidenav button:hover *, #sidenav button:active *, #sidenav button[aria-current] *, #sidenav [role="button"]:hover *, #sidenav [role="button"]:active *, #sidenav [role="button"][aria-current] *, #sidenav [type="button"]:hover *, #sidenav [type="button"]:active *, #sidenav [type="button"][aria-current] *, #sidenav summary:hover *, #sidenav summary:active *, #sidenav summary[aria-current] *, [class*="sidebar"] button:hover *, [class*="sidebar"] button:active *, [class*="sidebar"] button[aria-current] *, [class*="sidebar"] [role="button"]:hover *, [class*="sidebar"] [role="button"]:active *, [class*="sidebar"] [role="button"][aria-current] *, [class*="sidebar"] [type="button"]:hover *, [class*="sidebar"] [type="button"]:active *, [class*="sidebar"] [type="button"][aria-current] *, [class*="sidebar"] summary:hover *, [class*="sidebar"] summary:active *, [class*="sidebar"] summary[aria-current] *, [id*="sidebar"] button:hover *, [id*="sidebar"] button:active *, [id*="sidebar"] button[aria-current] *, [id*="sidebar"] [role="button"]:hover *, [id*="sidebar"] [role="button"]:active *, [id*="sidebar"] [role="button"][aria-current] *, [id*="sidebar"] [type="button"]:hover *, [id*="sidebar"] [type="button"]:active *, [id*="sidebar"] [type="button"][aria-current] *, [id*="sidebar"] summary:hover *, [id*="sidebar"] summary:active *, [id*="sidebar"] summary[aria-current] *, [class*="sidenav"] button:hover *, [class*="sidenav"] button:active *, [class*="sidenav"] button[aria-current] *, [class*="sidenav"] [role="button"]:hover *, [class*="sidenav"] [role="button"]:active *, [class*="sidenav"] [role="button"][aria-current] *, [class*="sidenav"] [type="button"]:hover *, [class*="sidenav"] [type="button"]:active *, [class*="sidenav"] [type="button"][aria-current] *, [class*="sidenav"] summary:hover *, [class*="sidenav"] summary:active *, [class*="sidenav"] summary[aria-current] *, [class*="side-nav"] button:hover *, [class*="side-nav"] button:active *, [class*="side-nav"] button[aria-current] *, [class*="side-nav"] [role="button"]:hover *, [class*="side-nav"] [role="button"]:active *, [class*="side-nav"] [role="button"][aria-current] *, [class*="side-nav"] [type="button"]:hover *, [class*="side-nav"] [type="button"]:active *, [class*="side-nav"] [type="button"][aria-current] *, [class*="side-nav"] summary:hover *, [class*="side-nav"] summary:active *, [class*="side-nav"] summary[aria-current] * {
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+
+/* the current item in a sidebar: WHITE on red (3.4:1 — a label, not body text). Attribute states only:
+   class-name guesses (.active, [class*="selected"]) matched every row on sites that put state names in utility classes. */
+aside[role="navigation"] [aria-current], aside[role="navigation"] [aria-selected="true"], aside[role="navigation"] [data-active="true"], aside[role="navigation"] [data-selected="true"], aside[role="navigation"] [data-state="active"], nav[aria-orientation="vertical"] [aria-current], nav[aria-orientation="vertical"] [aria-selected="true"], nav[aria-orientation="vertical"] [data-active="true"], nav[aria-orientation="vertical"] [data-selected="true"], nav[aria-orientation="vertical"] [data-state="active"], [role="tree"] [aria-current], [role="tree"] [aria-selected="true"], [role="tree"] [data-active="true"], [role="tree"] [data-selected="true"], [role="tree"] [data-state="active"], .sidebar [aria-current], .sidebar [aria-selected="true"], .sidebar [data-active="true"], .sidebar [data-selected="true"], .sidebar [data-state="active"], #sidebar [aria-current], #sidebar [aria-selected="true"], #sidebar [data-active="true"], #sidebar [data-selected="true"], #sidebar [data-state="active"], .sidenav [aria-current], .sidenav [aria-selected="true"], .sidenav [data-active="true"], .sidenav [data-selected="true"], .sidenav [data-state="active"], #sidenav [aria-current], #sidenav [aria-selected="true"], #sidenav [data-active="true"], #sidenav [data-selected="true"], #sidenav [data-state="active"], [class*="sidebar"] [aria-current], [class*="sidebar"] [aria-selected="true"], [class*="sidebar"] [data-active="true"], [class*="sidebar"] [data-selected="true"], [class*="sidebar"] [data-state="active"], [id*="sidebar"] [aria-current], [id*="sidebar"] [aria-selected="true"], [id*="sidebar"] [data-active="true"], [id*="sidebar"] [data-selected="true"], [id*="sidebar"] [data-state="active"], [class*="sidenav"] [aria-current], [class*="sidenav"] [aria-selected="true"], [class*="sidenav"] [data-active="true"], [class*="sidenav"] [data-selected="true"], [class*="sidenav"] [data-state="active"], [class*="side-nav"] [aria-current], [class*="side-nav"] [aria-selected="true"], [class*="side-nav"] [data-active="true"], [class*="side-nav"] [data-selected="true"], [class*="side-nav"] [data-state="active"] {
+  background-color: var(--ds-red) !important;
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+aside[role="navigation"] [aria-current] *, aside[role="navigation"] [aria-selected="true"] *, aside[role="navigation"] [data-active="true"] *, aside[role="navigation"] [data-selected="true"] *, aside[role="navigation"] [data-state="active"] *, nav[aria-orientation="vertical"] [aria-current] *, nav[aria-orientation="vertical"] [aria-selected="true"] *, nav[aria-orientation="vertical"] [data-active="true"] *, nav[aria-orientation="vertical"] [data-selected="true"] *, nav[aria-orientation="vertical"] [data-state="active"] *, [role="tree"] [aria-current] *, [role="tree"] [aria-selected="true"] *, [role="tree"] [data-active="true"] *, [role="tree"] [data-selected="true"] *, [role="tree"] [data-state="active"] *, .sidebar [aria-current] *, .sidebar [aria-selected="true"] *, .sidebar [data-active="true"] *, .sidebar [data-selected="true"] *, .sidebar [data-state="active"] *, #sidebar [aria-current] *, #sidebar [aria-selected="true"] *, #sidebar [data-active="true"] *, #sidebar [data-selected="true"] *, #sidebar [data-state="active"] *, .sidenav [aria-current] *, .sidenav [aria-selected="true"] *, .sidenav [data-active="true"] *, .sidenav [data-selected="true"] *, .sidenav [data-state="active"] *, #sidenav [aria-current] *, #sidenav [aria-selected="true"] *, #sidenav [data-active="true"] *, #sidenav [data-selected="true"] *, #sidenav [data-state="active"] *, [class*="sidebar"] [aria-current] *, [class*="sidebar"] [aria-selected="true"] *, [class*="sidebar"] [data-active="true"] *, [class*="sidebar"] [data-selected="true"] *, [class*="sidebar"] [data-state="active"] *, [id*="sidebar"] [aria-current] *, [id*="sidebar"] [aria-selected="true"] *, [id*="sidebar"] [data-active="true"] *, [id*="sidebar"] [data-selected="true"] *, [id*="sidebar"] [data-state="active"] *, [class*="sidenav"] [aria-current] *, [class*="sidenav"] [aria-selected="true"] *, [class*="sidenav"] [data-active="true"] *, [class*="sidenav"] [data-selected="true"] *, [class*="sidenav"] [data-state="active"] *, [class*="side-nav"] [aria-current] *, [class*="side-nav"] [aria-selected="true"] *, [class*="side-nav"] [data-active="true"] *, [class*="side-nav"] [data-selected="true"] *, [class*="side-nav"] [data-state="active"] * {
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
+}
+
+/* ---------- links, selection, caret, focus, semantic ---------- */
 a, a *, [role="link"] {
   color: var(--ds-blue) !important;
   -webkit-text-fill-color: var(--ds-blue) !important;
   text-decoration-color: var(--ds-blue) !important;
 }
-/* selection: yellow, BLACK on it (12:1) — recolor descendants (L3) */
-::selection { background: var(--ds-yellow) !important; color: var(--ds-black) !important; -webkit-text-fill-color: var(--ds-black) !important; }
-mark, [aria-selected="true"], [aria-current], option:checked, li[aria-selected="true"] * , [aria-selected="true"] * {
+a:hover, a:hover * {
+  color: var(--ds-blue-2) !important;
+  -webkit-text-fill-color: var(--ds-blue-2) !important;
+}
+::selection {
+  background: var(--ds-yellow) !important;
+  color: var(--ds-black) !important;
+  -webkit-text-fill-color: var(--ds-black) !important;
+}
+mark, option:checked, [aria-current], [role="menuitem"]:hover, [role="option"]:hover, [role="menu"] li:hover, [role="listbox"] li:hover, tbody tr:hover > td, li[aria-selected="true"], tr[aria-selected="true"], div[aria-selected="true"], [role="option"][aria-selected="true"], [role="row"][aria-selected="true"], [role="treeitem"][aria-selected="true"] {
   background-color: var(--ds-yellow) !important;
   color: var(--ds-black) !important;
   -webkit-text-fill-color: var(--ds-black) !important;
 }
-/* caret: red */
-input, textarea, [contenteditable="true"] { caret-color: var(--ds-red) !important; }
-/* focus: a 3 px BLACK outline. The one deliberate line thinner than the rule —
-   an accessibility exception to §3; the user needs it. */
-:focus-visible { outline: 3px solid var(--ds-black) !important; outline-offset: 0 !important; }
-/* semantic: only where the meaning is present. FHWA red, pure-white legend (§1b). */
+mark *, [aria-current] *, [role="menuitem"]:hover *, [role="option"]:hover *, li[aria-selected="true"] *, tr[aria-selected="true"] *, [role="option"][aria-selected="true"] *, [role="row"][aria-selected="true"] * {
+  color: var(--ds-black) !important;
+  -webkit-text-fill-color: var(--ds-black) !important;
+}
+input, textarea, [contenteditable="true"] {
+  caret-color: var(--ds-red) !important;
+}
+/* focus: 2 px BLACK, the accessibility exception to §3 */
+:focus-visible {
+  outline: 2px solid var(--ds-black) !important;
+  outline-offset: 0 !important;
+}
+/* semantic, only where stated: FHWA red, pure-white legend (§1b) */
 [aria-invalid="true"], [role="alert"][data-severity="error"] {
   background-color: var(--ds-destructive) !important;
   color: #FFFFFF !important;
   -webkit-text-fill-color: #FFFFFF !important;
 }
 
-/* ---------- scrollbars: square, tone only ---------- */
-* { scrollbar-color: var(--ds-dark) var(--ds-light); scrollbar-width: auto; }
-::-webkit-scrollbar { width: 14px; height: 14px; background: var(--ds-light); }
-::-webkit-scrollbar-thumb { background: var(--ds-dark); border: 0; }
-::-webkit-scrollbar-corner { background: var(--ds-light); }
+/* ---------- scrollbars ---------- */
+* {
+  scrollbar-color: var(--ds-dark) var(--ds-light);
+}
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+  background: var(--ds-light);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ds-dark);
+  border: 0;
+}
+::-webkit-scrollbar-corner {
+  background: var(--ds-light);
+}
 
-/* ---------- type: two fonts ---------- */
-html, body, body *:not(code):not(pre):not(kbd):not(samp):not(tt)
-  :not(i):not([class*="icon"]):not([class*="fa-"]):not([class*="material"]):not([class*="glyph"]):not(svg):not(svg *) {
+/* ---------- type ---------- */
+html, body, body * {
   font-family: var(--ds-ui) !important;
 }
-code, pre, kbd, samp, tt, code *, pre *, .monospace, [class*="mono"], textarea[wrap="off"] {
+code, pre, kbd, samp, tt, code *, pre *, .monospace, [class*="mono"] {
   font-family: var(--ds-mono) !important;
 }
-/* images are content: untouched */
-img, video, canvas, picture { filter: none !important; opacity: 1 !important; }
+/* icon fonts keep their face */
+i, [class*="icon"], [class*="fa-"], [class*="material"], [class*="glyph"], svg, svg * {
+  font-family: inherit !important;
+}
+
+/* ---------- content is content ---------- */
+img, video, canvas, picture, svg {
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+}

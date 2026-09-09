@@ -55,17 +55,17 @@
         radius_xl: (0.0, 0.0, 0.0, 0.0),
     ),
     neutral_tint:           Some("#9C9EA0FF"),  // derived neutrals take the gray line's own cast, no other hue
-    bg_color:               Some("#DFCC82FF"),  // yellow: window backgrounds and header bars (§7). COSMIC derives its row
-                                                //   and card surface by lightening this: #FBE89D, admitted residue (§1c)
+    bg_color:               Some("#E5E6E8FF"),  // WHITE: window backgrounds and header bars, the painting's large field (§5).
+                                                //   COSMIC derives its row and card surface from this: #CCCDCF, on the line
     primary_container_bg:   Some("#1B3A6DFF"),  // blue: nav sidebars, the blue field on the left of a window (§7).
                                                 //   Header bars take bg_color in this libcosmic, not this container.
                                                 //   The selected-row overlay on it is the §1c exception, measured
                                                 //   #2E4670 (README_COSMIC.md)
     secondary_container_bg: Some("#E5E6E8FF"),  // WHITE: lists, cards, content wells
     text_tint:              Some("#0A0F10FF"),  // BLACK text. This slot tints a near-black; it cannot set a hue (README_COSMIC.md)
-    accent:      Some("#E5E6E8FF"),  // WHITE: selection, links, outlines, toggles, selected nav text (§7). Light
-                                     //   enough to pass COSMIC's accent-text derivation unchanged; 9:1 on the blue
-                                     //   sidebar, and legible on the yellow field by chroma, not lightness
+    accent:      Some("#DFCC82FF"),  // yellow: selection, links, outlines, toggles, selected nav text (§1). The small
+                                     //   field, appearing when the user acts. Light enough to pass COSMIC's accent-text
+                                     //   derivation unchanged; 5.2:1 on the blue sidebar overlay
     success:     Some("#006B54FF"),  // §1b, white legend
     warning:     Some("#FCD116FF"),  // §1b, black legend
     destructive: Some("#AF1E2DFF"),  // §1b, white legend
