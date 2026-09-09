@@ -1,11 +1,10 @@
 # De Stijl design system
 
-Four grays and De Stijl's palette, rendered on modern displays with
+Four grays and Piet Mondrian's palette, rendered on modern displays with
 anti-aliased type, resolution-independent geometry, and 8-bit tonal
 icons. Every color the kit authors lies on
 one of four lines from Mondrian's black to his white, red, blue and
-yellow (§1). This file
-is the authority for DeStijl.
+yellow (§1). This file is the authority for De Stijl.
 
 ## 0. The strong statement
 
