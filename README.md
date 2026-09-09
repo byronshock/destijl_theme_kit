@@ -18,7 +18,6 @@ worksafe/                 per-user, no elevation: destijl.theme, theme.reg,
 worksafe/cosmic/          COSMIC (Pop!_OS): destijl.ron theme, destijl-term.ron,
                           toolkit config, install.sh; see README_COSMIC.md
 elevated/                 all-sites: destijl.user.css (Stylus)
-samples/                  frame-size sample cards (28 px chosen)
 issues/                   001 declutter.reg, 005 per-monitor install,
                           006 Mondrian-space icon tinting
 ```
@@ -60,8 +59,8 @@ Two licenses, split by what the file is:
 
 - **Code** (`build/`, `elevated/`, `worksafe/`): GNU General Public License
   v3.0 or later. See `LICENSE`.
-- **Design and assets** (`DESTIJL_STYLE.md`, `palette.json`, `samples/`,
-  `wallpaper/`, `issues/`, this README): Creative Commons
+- **Design and assets** (`DESTIJL_STYLE.md`, `palette.json`, `wallpaper/`,
+  `issues/`, `cosmic_screenshot.png`, this README): Creative Commons
   Attribution-ShareAlike 4.0 International. See `LICENSE-CC-BY-SA`.
 
 Both are copyleft: derivatives must be shared under the same terms. Color
