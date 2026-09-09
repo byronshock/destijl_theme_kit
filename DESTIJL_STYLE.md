@@ -402,6 +402,8 @@ Reached:
 - Prefs: compact density, scrollbars always shown, reduced motion, light
   theme, Nimbus Sans and Hack, and the §0 declutter: sponsored tiles,
   suggestions, Pocket, trending, promotions and "what's new" off.
+- `--ublock`: uBlock Origin into the profile, on request. Advertising
+  is noise (§4b); the larger half of the kit is removal (§0).
 
 Residue:
 

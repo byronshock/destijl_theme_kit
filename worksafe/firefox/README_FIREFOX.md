@@ -12,6 +12,17 @@ Firefox 154 (deb) on COSMIC.
 | `chrome/userChrome.css` | the chrome. Tab strip blue `#1B3A6D` with WHITE text when the window is key, LIGHT `#9C9EA0` with BLACK text when it is not (§1, the one surface on this desktop that can show it). Toolbars yellow `#DFCC82`, the window field as on COSMIC (§7). Current tab yellow, joined to the field. Address and search fields WHITE `#E5E6E8`, BLACK text, BLACK 2 px focus outline, yellow selection. Menus and panels WHITE with BLACK text and a yellow hovered row. Sidebar blue with WHITE text. Every radius 0. No hairline separators: a change of tone instead (§3). |
 | `chrome/userContent.css` | the in-browser pages that are chrome, not content: new tab, home, blank, private. WHITE ground, BLACK text, blue primary buttons, square. Page content is untouched (§0). |
 | `install.sh` | finds the profile this Firefox install opens (`installs.ini`, else the default in `profiles.ini`), backs up any existing `user.js` and `chrome/` files into the profile, copies these three in. Refuses while Firefox runs, since both are read at startup. |
+| `install.sh --ublock` | the same, plus uBlock Origin: downloads the current signed build from addons.mozilla.org into the profile's `extensions/` directory and sets `extensions.autoDisableScopes` to 14 so a profile-directory extension starts enabled instead of asking. §0: advertisements are noise, and the larger half of the kit is removing what was put in the user's way. Off by default; the flag is the user's choice each install. |
+
+## uBlock Origin
+
+`--ublock` fetches `uBlock0@raymondhill.net.xpi` from Mozilla's add-on
+site, signed, into the profile's own extensions directory: no elevation,
+nothing outside the profile. Firefox normally starts a sideloaded
+extension disabled and asks once; the prefs change narrows that to "the
+profile directory is trusted" (scope 1 of 15) and leaves the user, system
+and application scopes as they were. Remove the `.xpi` and the pref line
+to undo. Updates come from Firefox's own add-on updater afterwards.
 
 ## Reached, measured
 
