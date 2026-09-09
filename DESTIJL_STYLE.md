@@ -1,4 +1,4 @@
-# DeStijl design system
+# De Stijl design system
 
 Four grays and De Stijl's palette, rendered on modern displays with
 anti-aliased type, resolution-independent geometry, and 8-bit tonal
