@@ -7,8 +7,6 @@ one of four lines from Mondrian's black to his white, red, blue and
 yellow (§1). This file
 is the authority for DeStijl.
 
-Forked from `NEXTY_STYLE.md`.
-
 ## 0. The strong statement
 
 **The point is to save users from Windows**, and from any platform
@@ -74,7 +72,8 @@ on_line(p) = min over segments (BLACK→END) of
 
 ### The four grays
 
-Four values on the gray line at NeXT's steps (0, .333, .667, 1.000):
+Four values on the gray line at NeXT's steps, the NeXTSTEP AppKit gray
+constants NSBlack 0, NSDarkGray .333, NSLightGray .667, NSWhite 1.000:
 the steps are NeXT's, the endpoints are Mondrian's.
 
 | Role  | Hex       | Step  | Use |

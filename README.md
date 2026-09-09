@@ -7,7 +7,6 @@ the four lines in `palette.json` by `build/lines.py`.
 ```
 DESTIJL_STYLE.md          authority file
 palette.json              lines, grays, semantic (FHWA), chrome hues, rule geometry
-NEXTY_STYLE.orig.md       the nexty file this was forked from, untouched, for diffing
 build/lines.py            line test:  python3 build/lines.py '#9C9EA0' '#FF0000'
 build/match_wallpaper.py  regenerates the matched full-res master from the two sources
 build/wallpaper.py        desktop compositor:  python3 build/wallpaper.py 1920x1080 100
@@ -65,5 +64,3 @@ Provenance of the source images:
 
 The matched master derived from them (`wallpaper/mondrian_1922_wallpaper.*`)
 is offered under CC BY-SA 4.0 like the rest of the design assets.
-`NEXTY_STYLE.orig.md` is the unmodified upstream file this kit was forked
-from and keeps whatever license it carried.
