@@ -51,16 +51,19 @@ Both are copyleft: derivatives must be shared under the same terms. Color
 values themselves are not copyrightable; the license covers the documents,
 images, and code that express them.
 
-Provenance of the source images, which are not ours to relicense:
+Provenance of the source images:
 
 - Mondrian, *Composition with Blue, Red, Yellow, and Black* (1922) is in
   the public domain.
-- `wallpaper/mia_4001106_800.jpg` is the Minneapolis Institute of Art
-  reference photograph (object 4001106), used here for its color
-  measurements.
-- `wallpaper/rawpixel_3219952.jpg` is the rawpixel scan (image 3219952)
-  that supplies the pixels for the matched master.
+- `wallpaper/mia_4001106_800.jpg`: Minneapolis Institute of Art, object
+  1595, rendition `mia_4001106.jpg`. Rights type Public Domain (CC PDM);
+  Mia permits copying, modifying, and distributing, including commercially,
+  without permission. Used here for its color measurements.
+- `wallpaper/rawpixel_3219952.jpg`: rawpixel image 3219952, released under
+  CC0 1.0 (<https://creativecommons.org/publicdomain/zero/1.0/>). Supplies
+  the pixels for the matched master.
 
-Those two files remain under the terms of their respective publishers.
+The matched master derived from them (`wallpaper/mondrian_1922_wallpaper.*`)
+is offered under CC BY-SA 4.0 like the rest of the design assets.
 `NEXTY_STYLE.orig.md` is the unmodified upstream file this kit was forked
 from and keeps whatever license it carried.
