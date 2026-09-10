@@ -1,14 +1,16 @@
 /* ==UserStyle==
 @name           De Stijl
 @namespace      github.com/byronshock/destijl_theme_kit
-@version        0.3.0
-@description    De Stijl for websites: WHITE ground and documents, LIGHT field and wells, blue sidebars and primary buttons, yellow selection, red caret, one BLACK rule, Nimbus Sans and Hack, no curves, no hairlines. Tier: elevated.
+@version        0.3.1
+@description    De Stijl for websites: yellow field, WHITE documents and wells, blue sidebars and primary buttons, yellow selection, red caret, one BLACK rule, Nimbus Sans and Hack, no curves, no hairlines. Tier: elevated.
 @author         Byron Shock, Ph.D.
 ==/UserStyle== */
 
 /* DESTIJL_STYLE.md §1, §1b, §2, §3, §7 (Firefox and COSMIC surface mapping). Values from palette.json.
-   0.3.0: ground and documents WHITE, the field LIGHT; yellow is selection and the current row. With yellow windows and yellow
-          toolbars a yellow page ground made the screen a mustard spill; the painting's yellow is nine percent (§5).
+   0.3.1: font rules lose !important so icon-font classes win (tofu fix).
+   0.3.0: site containers transparent globally (:where, low specificity); paragraph-level text BLACK; UI font on text elements only (icon glyphs were tofu). Gmail section folded in.
+   0.2.10: Gmail section — its theme overlays made transparent, inline-styled chips kept.
+   0.2.9: wells in a field include combobox/searchbox and exclude submit buttons; footer role=button on the field.
    0.2.8: current-item selectors by attribute only; class-name guesses painted every chat red.
    0.2.7: the current sidebar item WHITE on red.
    0.2.6: buttons inside a sidebar are transparent on the blue (they were WHITE with yellow text).
@@ -58,7 +60,7 @@ hr {
 
 /* ---------- ground ---------- */
 html, body {
-  background: var(--ds-white) !important;
+  background: var(--ds-yellow) !important;
   color: var(--ds-black) !important;
   -webkit-text-fill-color: currentcolor !important;
 }
@@ -73,10 +75,24 @@ svg, svg * {
   color: inherit;
   -webkit-text-fill-color: inherit;
 }
+/* Sites' own surfaces — dark modes, theme overlays, card grounds — are generic containers with
+   class backgrounds. They go transparent with !important; anything with a role is a field the
+   sheet paints below, and anything with an inline background is information (chips, labels,
+   calendar colors) and is left alone. :where() keeps this at specificity (0,0,1) so every
+   field, sidebar and button rule outranks it. */
+body :where(div:not([role]):not([style*="background"]), span:not([role]):not([style*="background"]), section:not([role]):not([style*="background"]), ul:not([role]):not([style*="background"]), ol:not([role]):not([style*="background"]), li:not([role]):not([style*="background"]), table:not([style*="background"]), tr:not([style*="background"]), td:not([style*="background"]), th:not([style*="background"])) {
+  background-color: transparent !important;
+}
+/* paragraph-level text is BLACK on the fields and documents painted below, so a site's dark-mode
+   text color cannot survive on a light ground; code keeps its own colors */
+p, h1, h2, h3, h4, h5, h6, li, dt, dd, td, th, label, legend, figcaption, summary, blockquote, caption {
+  color: var(--ds-black) !important;
+  -webkit-text-fill-color: var(--ds-black) !important;
+}
 
-/* the field: LIGHT */
+/* the field: yellow */
 header, footer, nav, form, thead, th, blockquote, figcaption, summary, [role="banner"], [role="contentinfo"], [role="navigation"], [role="toolbar"], [role="tablist"], [role="search"] {
-  background-color: var(--ds-light) !important;
+  background-color: var(--ds-yellow) !important;
   color: var(--ds-black) !important;
 }
 /* documents: WHITE */
@@ -90,7 +106,7 @@ input, textarea, select, pre, code, kbd, samp, [role="textbox"], [role="combobox
   color: var(--ds-black) !important;
   -webkit-text-fill-color: var(--ds-black) !important;
 }
-form input, form textarea, form select, header input, nav input, footer input, form [role="textbox"], header [role="searchbox"], nav [role="searchbox"], [role="search"] input, th code, blockquote code {
+form input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]), form textarea, form select, form [role="textbox"], form [role="combobox"], form [role="searchbox"], header input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]), header textarea, header select, header [role="textbox"], header [role="combobox"], header [role="searchbox"], nav input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]), nav textarea, nav select, nav [role="textbox"], nav [role="combobox"], nav [role="searchbox"], footer input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]), footer textarea, footer select, footer [role="textbox"], footer [role="combobox"], footer [role="searchbox"], [role="search"] input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]), [role="search"] textarea, [role="search"] select, [role="search"] [role="textbox"], [role="search"] [role="combobox"], [role="search"] [role="searchbox"], [role="banner"] input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]), [role="banner"] textarea, [role="banner"] select, [role="banner"] [role="textbox"], [role="banner"] [role="combobox"], [role="banner"] [role="searchbox"], [role="toolbar"] input:not([type="submit"]):not([type="button"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]), [role="toolbar"] textarea, [role="toolbar"] select, [role="toolbar"] [role="textbox"], [role="toolbar"] [role="combobox"], [role="toolbar"] [role="searchbox"], th code, blockquote code {
   background-color: var(--ds-white) !important;
 }
 :disabled, [aria-disabled="true"] {
@@ -122,7 +138,6 @@ button, summary, [role="button"], [type="button"], [type="submit"], [type="reset
   background-color: var(--ds-white) !important;
   color: var(--ds-black) !important;
   -webkit-text-fill-color: var(--ds-black) !important;
-  font-family: var(--ds-ui) !important;
 }
 button:hover, [role="button"]:hover, [type="button"]:hover {
   background-color: var(--ds-light) !important;
@@ -136,26 +151,21 @@ button:active *, [aria-pressed="true"] * {
   color: var(--ds-white) !important;
   -webkit-text-fill-color: var(--ds-white) !important;
 }
-/* buttons on the field: transparent at rest, WHITE when hovered, DARK when pressed; the selected tab is a selection */
-header button, nav button, footer button, header [role="button"], nav [role="button"], [role="toolbar"] button, [role="tablist"] [role="tab"] {
+/* buttons on the field: transparent at rest, the yellow line's thirds when hovered and pressed */
+header button, nav button, footer button, header [role="button"], nav [role="button"], footer [role="button"], [role="toolbar"] button, [role="toolbar"] [role="button"], [role="tablist"] [role="tab"] {
   background-color: transparent !important;
 }
-header button:hover, nav button:hover, footer button:hover, [role="toolbar"] button:hover, [role="tab"]:hover {
-  background-color: var(--ds-white) !important;
+header button:hover, nav button:hover, footer button:hover, header [role="button"]:hover, nav [role="button"]:hover, footer [role="button"]:hover, [role="toolbar"] button:hover, [role="toolbar"] [role="button"]:hover, [role="tab"]:hover {
+  background-color: var(--ds-yellow-2) !important;
 }
-header button:active, nav button:active, footer button:active, [role="toolbar"] button:active {
-  background-color: var(--ds-dark) !important;
+header button:active, nav button:active, footer button:active, [role="toolbar"] button:active, [role="tab"][aria-selected="true"] {
+  background-color: var(--ds-yellow-1) !important;
   color: var(--ds-white) !important;
   -webkit-text-fill-color: var(--ds-white) !important;
 }
-[role="tab"][aria-selected="true"] {
-  background-color: var(--ds-yellow) !important;
-  color: var(--ds-black) !important;
-  -webkit-text-fill-color: var(--ds-black) !important;
-}
 [role="tab"][aria-selected="true"] * {
-  color: var(--ds-black) !important;
-  -webkit-text-fill-color: var(--ds-black) !important;
+  color: var(--ds-white) !important;
+  -webkit-text-fill-color: var(--ds-white) !important;
 }
 /* primary: blue, yellow on it (7.0:1); WHITE when hovered, on blue-2 (11.2:1) — as the sidebar */
 [type="submit"], button.primary, .btn-primary, button[class*="primary"], button[class*="Primary"], [role="button"][class*="primary"], [role="button"][class*="Primary"], a[class*="btn-primary"], button[data-primary], button[form] {
@@ -266,15 +276,14 @@ input, textarea, [contenteditable="true"] {
 }
 
 /* ---------- type ---------- */
-html, body, body * {
-  font-family: var(--ds-ui) !important;
+/* the two faces, WITHOUT !important. The sheet is injected last, so it wins ties against a site's
+   own body font, but any element a site gives a font by class — which is how icon fonts are
+   applied — keeps it. With !important, every icon glyph in a button or link rendered as tofu. */
+html, body, p, h1, h2, h3, h4, h5, h6, li, dt, dd, td, th, label, legend, figcaption, summary, blockquote, caption, a, button, input, select, textarea, option, [role="button"], [role="link"], [role="tab"], [role="menuitem"], [role="option"] {
+  font-family: var(--ds-ui);
 }
 code, pre, kbd, samp, tt, code *, pre *, .monospace, [class*="mono"] {
-  font-family: var(--ds-mono) !important;
-}
-/* icon fonts keep their face */
-i, [class*="icon"], [class*="fa-"], [class*="material"], [class*="glyph"], svg, svg * {
-  font-family: inherit !important;
+  font-family: var(--ds-mono);
 }
 
 /* ---------- content is content ---------- */
