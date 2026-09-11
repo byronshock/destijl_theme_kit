@@ -21,6 +21,7 @@ worksafe/cosmic/          COSMIC (Pop!_OS): destijl.ron theme, destijl-term.ron,
                           toolkit config, install.sh; see README_COSMIC.md
 worksafe/firefox/         Firefox: user.js, chrome/userChrome.css, userContent.css,
                           install.sh; see README_FIREFOX.md
+worksafe/claude-code/     Claude Code theme destijl.json; see README_CLAUDE.md
 elevated/                 all-sites: destijl.user.css (the source) and
                           destijl.stylus.json (what Stylus imports; generated)
 issues/                   001 declutter.reg, 005 per-monitor install,
@@ -32,6 +33,7 @@ COSMIC install: `sh worksafe/cosmic/install.sh` (per-user, no sudo). The
 background is BLACK so the tiling gaps are rules; `--mondrian` puts the
 painting there instead.
 Firefox install: close Firefox, `sh worksafe/firefox/install.sh`, start it.
+Claude Code: copy `worksafe/claude-code/destijl.json` to `~/.claude/themes/`, then `/theme`.
 Add `--ublock` to install uBlock Origin into the profile as well, `--stylus`
 for Stylus; then import `elevated/destijl.stylus.json` from Stylus › Manage.
 

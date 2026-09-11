@@ -409,6 +409,21 @@ Residue:
   theme's pigment version.
 - GTK dialogs (file picker) are GTK's.
 
+### Claude
+
+Reached: Claude Code, the CLI and the desktop app's Code tab, through a
+custom theme (`worksafe/claude-code/destijl.json`): text BLACK, Claude
+blue, inactive DARK, permission and warning on the yellow line's dark
+thirds, success and error on §1b, selection and added words yellow,
+removed words red, message wells LIGHT. Every token a hex value on the
+lines, so the terminal's palette does not enter into it. claude.ai in
+Firefox is reached by the all-sites sheet.
+
+Residue: the desktop app's own shell. Its appearance setting offers
+light, dark and high contrast and nothing else, it loads no stylesheet,
+and modifying its bundle is on the far side of the tier line. Light,
+and the WHITE field around it, is as close as it gets.
+
 ## 8. Principles
 
 1. Chrome is the pigment colors Mondrian actually used in this very
