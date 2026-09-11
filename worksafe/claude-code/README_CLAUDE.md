@@ -4,7 +4,7 @@ Three surfaces, one reached.
 
 | Surface | Status |
 |---|---|
-| **Claude Code** (the CLI, and the Code tab of the desktop app) | reached: `destijl.json`, a custom theme on the `light-ansi` base with every token set to a hex value on the lines, so it does not depend on the terminal's ANSI palette. Install: copy to `~/.claude/themes/destijl.json`, then `/theme` → destijl. |
+| **Claude Code** (the CLI, and the Code tab of the desktop app) | reached: `destijl.json`, a custom theme on the `light-ansi` base with every token set to a hex value on the lines, so it does not depend on the terminal's ANSI palette. Install: copy to `~/.claude/themes/destijl.json`, then `/theme` → destijl in the CLI. In the desktop app `/theme` is not available; set `"theme": "custom:destijl"` in `~/.claude/settings.json` instead (the slug is the theme's name, lowercased) and reopen the Code tab. Claude Code watches the themes directory, so the file is live; the setting is read at start. |
 | **claude.ai in Firefox** | reached by the all-sites sheet, `elevated/destijl.user.css`, through Stylus. |
 | **The desktop app's own shell** (title bar, tabs, sidebar) | not reachable. Checked 2026-09-10 on Linux: Settings › Appearance offers Light, Dark and High contrast and nothing else; the app loads no extensions or stylesheets. The four `customCSS` strings in its bundle belong to a sign-in library's widget options, not to the app. Editing the bundle to inject CSS is unsupported and broken by every update: not built. Set Appearance to Light, whose light grays clash least with the WHITE field. |
 

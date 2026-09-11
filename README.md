@@ -33,7 +33,8 @@ COSMIC install: `sh worksafe/cosmic/install.sh` (per-user, no sudo). The
 background is BLACK so the tiling gaps are rules; `--mondrian` puts the
 painting there instead.
 Firefox install: close Firefox, `sh worksafe/firefox/install.sh`, start it.
-Claude Code: copy `worksafe/claude-code/destijl.json` to `~/.claude/themes/`, then `/theme`.
+Claude Code: copy `worksafe/claude-code/destijl.json` to `~/.claude/themes/`, then `/theme`,
+or `"theme": "custom:destijl"` in `~/.claude/settings.json` where `/theme` is unavailable.
 Add `--ublock` to install uBlock Origin into the profile as well, `--stylus`
 for Stylus; then import `elevated/destijl.stylus.json` from Stylus › Manage.
 
