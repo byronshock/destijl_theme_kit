@@ -444,6 +444,15 @@ Residue:
 - The §1c derivation: the sidebar overlay.
 - Client-side decorations (Electron, GTK) keep their own chrome.
 
+`cosmic-settings appearance export|import` prints two ERRORs on stderr —
+`1:1: Expected identifier` and `failed to get key 'frosted_maximized_apps'`,
+both at `theme_manager.rs:62` — and exits 0 regardless. They are about
+cosmic-settings' own config state, not the file being imported: an *export*,
+which reads no theme file at all, prints the identical pair, and a theme that
+supplies the key gets them anyway. Do not suppress them in `install.sh`; a real
+import failure would go with them. (Measured 2026-09-19 on Pop!_OS COSMIC;
+recorded in Remainder's `PLATFORM.md` too, which is the parallel file.)
+
 ### Firefox
 
 The browser is a surface of its own: it draws its own chrome, and Firefox
