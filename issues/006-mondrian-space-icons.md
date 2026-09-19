@@ -90,12 +90,18 @@ need a decision before the generator ships:
 - The hull admits tints toward white (a red-white mix is inside it),
   which §1 forbids for chrome. Icons are not chrome; §4b decides.
 
-## Style-guide consequence
+## Style-guide consequence — written 2026-09-19
 
 §4b currently says an application keeps its icon "hue included" and the
 kit "does not snap it to the four lines". Projection into Mondrian space
 is a third thing: the brand's hues re-expressed in the composition's
 pigments, identity kept. If this ships, §4b needs a sentence saying so.
+
+**It shipped 2026-09-08 and the sentence went unwritten until 2026-09-19.**
+For eleven days §4b described a kit that does not repaint application icons
+while `install.sh` repainted them on every run. The bullet is now in §4b.
+Found from the other side: Remainder's `AUTHORITY.md` §4 cited the gap as a
+contradiction it declined to inherit.
 
 ## Built (2026-09-08)
 

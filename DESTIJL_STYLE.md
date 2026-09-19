@@ -292,6 +292,19 @@ Color that sells is noise.
   not repaint it gray, does not snap it to the four lines (§1), and
   does not redraw it. The brand is the application's; the line rule
   governs what the kit authors.
+- **Projection into Mondrian space is a third thing, and it is what the
+  kit ships** (issue 006). It is neither keeping the sRGB art nor
+  graying it: the brand's own hues are re-expressed in the composition's
+  five pigments and the identity survives — Chrome's disc is still four
+  wedges, and its red is Mondrian's red. `build/icon_theme.py` resolves
+  each application's real icon through the platform's theme chain and
+  projects every pixel to the nearest pigment (`mondrian_space.py`
+  `--mode=pigment`, chosen 2026-09-08 over three other readings);
+  `worksafe/cosmic/install.sh` runs it at install time. The generator
+  authors nothing — an icon the chain cannot find is skipped, not
+  invented — and the output is the user's own brands in the user's own
+  paint: made on their machine, never committed, and undone by selecting
+  another icon theme.
 - Chrome around the brand; the brand never bleeds into the chrome.
 - Disabled tint and semantic emblems on an application icon follow
   §1b and §4a unchanged.
