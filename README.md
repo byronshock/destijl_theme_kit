@@ -7,7 +7,8 @@ the four lines in `palette.json` by `build/lines.py`.
 ```
 DESTIJL_STYLE.md          authority file
 palette.json              lines, grays, semantic (FHWA), chrome hues, rule geometry
-build/lines.py            line test:  python3 build/lines.py '#9C9EA0' '#FF0000'
+build/lines.py            chrome, on the lines (§1):  python3 build/lines.py '#9C9EA0'
+                          content, away from the points (§0a):  ... --apart '#8683BD'
 build/match_wallpaper.py  regenerates the matched full-res master from the two sources
 build/wallpaper.py        desktop compositor:  python3 build/wallpaper.py 1920x1080 100
 build/mondrian_space.py   projects sRGB into the space of the five pigments (issue 006)

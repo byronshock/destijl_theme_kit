@@ -23,7 +23,8 @@ and nothing else, and hue in chrome is composition, never state (§8.4).
 Three further things may have color:
 
 1. *Content* — a photo in a window, a syntax-colored buffer, a chart.
-   The frame around it never takes a hue.
+   The frame around it never takes a hue, and the content's own palette
+   is chosen *against* the chrome rather than from it (§0a).
 2. *Semantic state* — exactly three: **success green, warning yellow,
    destructive red** (§1b), in US highway sign colors. A green check, a
    yellow triangle, a red destructive button. Not decoration, not
@@ -34,6 +35,70 @@ Three further things may have color:
 
 This is the one rule that makes the system what it is. Everything else
 is measurement.
+
+### 0a. Content is chosen against the chrome
+
+Content may take any color. That is permission, not indifference:
+*which* colors it takes is a decision, and the decision is made against
+the chrome around it.
+
+A chart's ramp, a diagram's categories, a buffer's syntax colors are
+information, and information is read by its contrast with what
+surrounds it. Painted in the chrome's own values it stops announcing
+itself and starts reading as more furniture; the eye files it with the
+titlebar. Information is *permitted* to sit near the palette's points.
+It pops when it doesn't.
+
+So the content palette is picked by distance from the chrome's, and the
+distance is measured rather than judged (§8.8).
+
+The chrome is sixteen distinct points: thirteen on the four lines (§1),
+black being shared by all four, and the three semantic values (§1b).
+Those sixteen sit 34.5 apart at their closest pair, and that sets the
+bar. Content that stays **35 or more** from every point is as distinct
+from the chrome as the chrome's own values are from each other. Under
+about 20 it reads as the same color and has joined the furniture.
+
+One exemption, and only one. A ramp drawn on a pale ground begins at
+the ground: its palest steps are near-neutral and sit a few units from
+WHITE by construction. They carry no hue that could be mistaken for a
+chrome hue, so they are not measured. A step is hue-bearing, and must
+clear the bar, once its chroma reaches **27** — the chroma of the
+faintest hue the kit itself names, yellow ⅓ (§1). The test applies the
+exemption:
+
+```
+python3 build/lines.py --apart '#FCFBFD' '#E2E2EF' '#B6B6D8' '#8683BD' '#61409B' '#3F007D'
+```
+
+Worked example, 2026-09-19: six steps sampled from each candidate ramp,
+measured over the hue-bearing steps.
+
+| Ramp    | Nearest approach | Where |
+|---------|------------------|-------|
+| Blues   | 21.6 | `#08306B` against Mondrian blue — the same navy |
+| BuPu    | 26.9 | `#CCDDEC` against WHITE |
+| Purples | 45.3 | `#8683BD` against LIGHT |
+
+Blues had to move whatever else was true: its dark end *was* the
+titlebar. Purples clears the bar with room to spare, keeps the pale end
+it had, and stays one hue so the light-to-dark ordering still does the
+reading. BuPu fails twice over — it is a two-hue ramp, which loses the
+ordering, and at 26.9 it measures worse than it looks. Distance chose;
+the eye only confirmed.
+
+**Chrome-aware applications are preferred**: those that can be told what
+surrounds them and pick their content palette against it. A plotting
+library that reads this palette in order to *avoid* it is doing the
+right thing; one that reads it in order to *match* it is painting
+information into the furniture. Where an application cannot be told,
+the palette is chosen here and handed to it, with the measurement
+recorded next to the choice so the next person regenerating the figure
+knows the hue was picked against the chrome and not because it looked
+nice.
+
+The principle outlives this kit. A figure's palette is chosen against
+whatever chrome surrounds it, De Stijl or otherwise.
 
 ## 1. Palette
 
@@ -447,3 +512,6 @@ and the WHITE field around it, is as close as it gets.
 12. The pipeline generates its own demo assets.
 13. The worksafe / elevated tier boundary and every rule in
     `CONTRIBUTING.md` are binding.
+14. Content is chosen against the chrome, by measured distance from the
+    palette's points, never from them (§0a). Chrome-aware applications
+    are preferred.
