@@ -12,8 +12,6 @@ user_pref("browser.compactmode.show", true);
 user_pref("widget.gtk.rounded-bottom-corners.enabled", false);   // §3: curves are deprecated
 user_pref("widget.gtk.overlay-scrollbars.enabled", false);       // §7: scrollbars always shown
 user_pref("ui.prefersReducedMotion", 1);                         // §0: motion is in the user's way
-user_pref("browser.theme.toolbar-theme", 1);                     // light (§7: the system's polarity is BLACK on WHITE)
-user_pref("browser.theme.content-theme", 1);
 user_pref("layout.css.prefers-color-scheme.content-override", 1);
 user_pref("ui.systemUsesDarkTheme", 0);
 
@@ -22,6 +20,13 @@ user_pref("font.default.x-western", "sans-serif");
 user_pref("font.name.sans-serif.x-western", "Nimbus Sans");
 user_pref("font.name.serif.x-western", "Nimbus Roman");
 user_pref("font.name.monospace.x-western", "Hack");
+
+// Checked against the shipped defaults of Firefox 155.0.1 (deb) on 2026-09-19, by reading
+// defaults/preferences/firefox.js and greprefs.js out of omni.ja. Seven prefs this file used to set no
+// longer exist in 155 and were removed: extensions.pocket.enabled (Pocket was withdrawn),
+// browser.theme.toolbar-theme and its content-theme pair, browser.messaging-system.whatsNewPanel.enabled,
+// browser.tabs.firefox-view and its newIcon pair, browser.promo.focus.enabled. A pref for a feature that
+// is gone is not harmless -- it is a line that looks like it is doing something.
 
 // §0: the larger half — recommendations, sponsorship, nags, promotions
 user_pref("browser.newtabpage.activity-stream.showSponsored", false);
@@ -36,17 +41,21 @@ user_pref("browser.urlbar.suggest.quicksuggest.nonsponsored", false);
 user_pref("browser.urlbar.suggest.trending", false);
 user_pref("browser.urlbar.trending.featureGate", false);
 user_pref("browser.urlbar.suggest.recentsearches", false);
-user_pref("extensions.pocket.enabled", false);
 user_pref("browser.aboutwelcome.enabled", false);
 user_pref("browser.shell.checkDefaultBrowser", false);
 user_pref("browser.startup.homepage_override.mstone", "ignore");
-user_pref("browser.messaging-system.whatsNewPanel.enabled", false);
 user_pref("browser.vpn_promo.enabled", false);
-user_pref("browser.promo.focus.enabled", false);
 user_pref("browser.promo.pin.enabled", false);
 user_pref("browser.tabs.hoverPreview.enabled", false);
-user_pref("browser.tabs.firefox-view", false);
-user_pref("browser.tabs.firefox-view-newIcon", false);
 user_pref("browser.discovery.enabled", false);
 user_pref("extensions.getAddons.showPane", false);
 user_pref("extensions.htmlaboutaddons.recommendations.enabled", false);
+
+// On by default in Firefox 155, and the same §0 argument as everything above: machine-learning features
+// and a promotion pane nobody asked for. Checked against greprefs.js on 2026-09-19.
+user_pref("browser.ml.chat.enabled", false);                  // a chatbot in the sidebar
+user_pref("browser.tabs.groups.smart.enabled", false);        // machine-suggested tab groups
+user_pref("browser.tabs.groups.smart.userEnabled", false);
+user_pref("browser.urlbar.suggest.weather", false);
+user_pref("browser.preferences.moreFromMozilla", false);      // a promotion pane inside Settings
+user_pref("browser.topsites.contile.enabled", false);         // sponsored tiles, at their source

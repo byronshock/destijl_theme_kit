@@ -490,6 +490,84 @@ Reached:
 - `--ublock`: uBlock Origin into the profile, on request. Advertising
   is noise (§4b); the larger half of the kit is removal (§0).
 
+Platform facts, theme-independent, and kept parallel with `PLATFORM.md` in
+the Remainder kit. Measured on Firefox 155.0.1 (deb) on COSMIC, 2026-09-19.
+No colour claims belong here; a pref name does.
+
+- **A user sheet outranks the layers.** Firefox defines its own chrome
+  tokens inside `@layer` blocks, where layer order normally decides. It
+  does not bite: `userChrome.css` loads in the *user* origin, and a
+  user-origin `!important` outranks every author-origin declaration,
+  layered or not.
+- **The chrome resolves through a design-token system**, not a handful of
+  theme colours: a primitive ramp plus roughly 280 named tokens above it,
+  and **the names are renamed most releases**. A renamed token is how a
+  strip silently falls back to a built-in colour, so read the current
+  ones off the installed build rather than from memory:
+
+  ```
+  unzip -p /usr/lib/firefox/omni.ja \
+    chrome/toolkit/skin/classic/global/design-system/tokens-shared.css
+  unzip -p /usr/lib/firefox/browser/omni.ja \
+    chrome/browser/skin/classic/browser/urlbar/urlbar.tokens.css
+  ```
+
+  `python3` cannot open these: Firefox ships `omni.ja` optimised, with
+  data ahead of the central directory, which `zipfile` rejects as a bad
+  magic number and `unzip` reads with a warning.
+- **A component token cannot be set from `:root`.** Each `moz-*` web
+  component ships its own `*.tokens.css` declaring on `:root, :host`, and
+  the `:host` half lands on the custom element. A value inherited from
+  `:root` loses to one declared at the element whatever origin it came
+  from — importance does not cross inheritance — so even a user-origin
+  `!important` on `:root` loses. Set such a token on the element itself.
+  Only components with a real shadow root are affected.
+
+  **The same rule bites outside shadow DOM, on ordinary inherited
+  properties.** Firefox declares `font-family` on its popups and
+  `font-weight` on its menu items, so either set on `:root` — with
+  `!important`, from the user origin — never reaches them. Anything
+  inherited that a theme cares about has to be declared on the element
+  that will render it.
+- **Some surfaces are derived by alpha-mixing**, `color-mix(in srgb,
+  currentColor N%, transparent)` and a `--color-*-alpha-*` family.
+  Anything painted that way is a blend rather than a value a theme set.
+- `browser.nova.enabled` (default **false** in 155) is a parallel set of
+  token values behind a pref, and it **renumbers the primitive grey
+  ramp**: the same slot name carries a different lightness under it.
+- `browser.theme.native-theme` is 155's "use system colours" switch. With
+  it on, `-moz-native-theme` matches and the chrome takes GTK's colours
+  for everything a theme has not named.
+- **A native control ignores a background.** A button, select, input or
+  textarea with the default `appearance` is painted by the widget theme,
+  and `background-color` on it does nothing at all. `appearance: none`
+  first — except on checkbox, radio, range and colour, where it erases the
+  control rather than restyling it.
+- **To reach the chrome from a script, use Marionette.** `--marionette`
+  opens Firefox's own automation socket (port 2828, length-prefixed
+  JSON); its CHROME context runs privileged JS against `browser.xhtml`,
+  which is the only way to open a XUL popup where the compositor will not
+  let a script synthesise a click. Firefox 155 gates that context behind
+  the extra flag `-remote-allow-system-access`. It works headless.
+- **A headless chrome screenshot does not composite a popup**, even one
+  whose `state` reads `open`, because XUL panels are separate widgets.
+  `getComputedStyle` reads back what the cascade produced and does not
+  care, so it is the better instrument for "what did this surface get".
+- **A brand-new profile shows the terms notice**, which dims the whole
+  window — chrome included — at 75% black until it is answered. A first
+  screenshot of a fresh profile measures every surface at a quarter of its
+  value. `termsofuse.bypassNotification` gets past it, for a test profile
+  and not for a user's.
+- **The profile root moves with the packaging**: `~/.mozilla/firefox`
+  (deb), `~/snap/firefox/common/.mozilla/firefox`,
+  `~/.var/app/org.mozilla.firefox/.mozilla/firefox`. Inside it,
+  `installs.ini` names the profile *this install* opens, which is not
+  always the one `profiles.ini` marks `Default=1`.
+- **The running process is named `firefox-bin`**, not `firefox`: on the
+  deb build the main process's `argv[0]` is `firefox` while its `comm` is
+  `firefox-bin`, so `pgrep -x firefox` reports nothing while Firefox is
+  running. This kit's installer checks both.
+
 Residue:
 
 - A running window's dock icon is the one the window supplies, not the
