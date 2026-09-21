@@ -704,6 +704,16 @@ Residue:
   Studio Code / Sign in to use GitHub Copilot") before the workbench, in a
   window of its own; with `chat.disableAIFeatures` and
   `workbench.startupEditor` set it did not appear.
+- **Extension webviews receive the theme as `--vscode-*` custom properties**
+  and map them onto their own tokens: the Qwen Code companion 0.24.2's webview
+  maps `--accent` to `list.hoverBackground`, `--muted` to
+  `sideBarSectionHeader.background`, `--secondary` to `input.background`,
+  `--card` to `editorWidget.background`, `--background` to
+  `sideBar.background`, and its utility classes set the background alone, so
+  the text inherits `foreground`. An id whose platform default is a faint tint
+  is read by webviews as a tint under the base foreground, whatever its own
+  foreground id says (measured 2026-09-21 in the Remainder kit: BLACK on a
+  dark hover ground).
 - **A Flatpak VS Code has a private `/tmp`**: a `--user-data-dir` under `/tmp`
   is created inside the sandbox, empty. A test profile goes under `$HOME`.
   Chromium reorders argv (switches, then operands); VS Code reads
