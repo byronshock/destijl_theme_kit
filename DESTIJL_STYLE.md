@@ -392,6 +392,44 @@ Reached:
   experience, Settings suggestions, lock-screen facts, notification
   defaults. The most useful file in the build.
 
+The format, found while building the Remainder kit's Windows surface
+(2026-09-20) and true of this kit's `.theme` and `.reg` files too:
+
+- **Colour arrives in five notations and only one of them is hex**,
+  which is the fact an installer and its checker both have to carry. A
+  bare decimal triple (`Background=15 9 12`) in a `.theme`; the same
+  value quoted (`"Background"="15 9 12"`) in a `.reg`; an **ABGR**
+  `DWORD` with the alpha in the high byte under DWM and
+  `Explorer\Accent` — Microsoft's own default accent `#0078D7` is
+  stored `dword:00d77800`; an **AARRGGBB** value in the `.theme`'s
+  `[VisualStyles] ColorizationColor`, the one place the byte order is
+  not reversed; and a REG_BINARY run of RGBA quads in `AccentPalette`.
+  Flags, masks and delays share the `DWORD` and REG_BINARY forms, so
+  nothing can tell a colour from a flag by looking at the value — only
+  by knowing the key. (`#0078D7` is Microsoft's, quoted as the worked
+  example of a byte order; no value of this kit's is in this list.)
+- **`AccentPalette` is eight RGBA quads**: indices 0–6 a light-to-dark
+  ramp and index 7 a separate emphasis slot unrelated to it. Index 3 is
+  the accent Settings displays and the value `AccentColor` mirrors; the
+  darker indices are what the menu and Start surfaces read. *Inferred
+  from Microsoft's shipped default palette, where `#0078D7` sits at
+  index 3 and index 7 is an orange; not confirmed on a machine.*
+- **Applying a `.theme` rewrites the DWM accent keys**, so a `.reg`
+  that sets them has to be merged *after* the theme and not before.
+  *Inferred from the format — `[VisualStyles] ColorizationColor` is
+  part of what a theme carries — and not confirmed on a machine.*
+- **A `.reg` or `.theme` without a byte-order mark is read as ANSI.**
+  Non-ASCII in a comment imports as mojibake and non-ASCII in a value
+  is corrupted, so a file meant to be double-clicked is safest written
+  ASCII, CRLF, no BOM. This kit's own `destijl.theme` and `theme.reg`
+  carry `§` and `—` in their comments with no BOM — 11 and 7 lines,
+  measured 2026-09-21 — which this finding says arrive as mojibake.
+  Comments only; no value depends on them.
+- **`reg import` restores values but does not remove them.** It writes
+  back what an export saved and has no way to express "this key did not
+  exist", so a backup taken with `reg export` does not fully undo an
+  install that created keys from nothing.
+
 Residue:
 
 - Control corner radii; Terminal and Chrome tab shapes.
@@ -403,6 +441,14 @@ Residue:
 
 Elevated adds: HKLM `FontSubstitutes` (Nimbus in chrome), shell32
 icons, all-sites extensions.
+
+**Not verified on a machine.** Everything in this entry is inherited
+research; neither kit has had a Windows 11 machine to put it on. The
+items marked *inferred* above are the weakest of it, and
+`UserPreferencesMask`'s `90 12 03 80 10 00 00 00` — the conventional
+"adjust for best performance" mask — is weaker still: convention rather
+than documentation. Confirming any of it is a correction to this entry
+and to the Remainder kit's `PLATFORM.md`, which is parallel to it.
 
 ### COSMIC (Pop!_OS)
 
