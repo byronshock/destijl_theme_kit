@@ -490,8 +490,12 @@ Reached:
   `active_hint` dp wide, in the gap from the window's edge outward — the
   window does not move or shrink, and at `active_hint` = the inner gap the
   band fills the gap and touches the neighbours. Painted at the exact value,
-  no blending: 8 dp → 12 px, 22 dp → 33 px. A hint makes the gap carry focus
-  to exactly the extent of its width.
+  no blending: 8 dp → 12 px, 22 dp → 33 px; 11 dp → 16.5, and the half pixel
+  lands on one side or the other (16 px on two sides, 17 on the other two).
+  The band's outer corners are rounded to a radius equal to its thickness,
+  and the theme's `corner_radii` — all 0 in both kits — do not reach it; the
+  inner corners are square and the window is not clipped. A hint makes the
+  gap carry focus to exactly the extent of its width.
 - Background BLACK on a tiled output, so every gap is a rule and nothing
   else: COSMIC sets wallpaper per output, not per workspace, and on one
   output the rule wins. The Mondrian (§5) is composed alongside for a
