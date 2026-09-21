@@ -574,6 +574,82 @@ Residue:
   theme's pigment version.
 - GTK dialogs (file picker) are GTK's.
 
+### VS Code
+
+A colour theme is an extension: a folder with a `package.json` naming
+`contributes.themes` and the theme JSON it points at. A folder copied into
+the extensions directory is picked up — the scanner lists it and writes its
+own `extensions.json` — so no `.vsix` and no CLI is needed. Measured on 1.137.0
+(Flatpak `com.visualstudio.code`), 2026-09-20; the Remainder kit's
+`PLATFORM.md` carries the same findings.
+
+Reached:
+
+- Every workbench colour — 977 ids on 1.137 — plus the syntax colouring and
+  the semantic token colours; the sixteen terminal slots; the caret and the
+  terminal cursor. A theme names what it names and the registry's own light
+  default fills the rest, so an unset id is the platform's colour, not
+  "unstyled". The whole registry is readable off the installed build:
+  `resources/app/out/vs/workbench/workbench.desktop.main.js`, where the
+  minified `registerColor` is `se("id",{light:…,dark:…},…)`, the terminal
+  slots are a table, and the git extension contributes its own.
+- `settings.json` (JSON with comments; watched, so an edit applies to a
+  running instance): the theme, `editor.fontFamily`,
+  `terminal.integrated.fontFamily`, `window.titleBarStyle` (`custom` by
+  default on Linux, which makes the title bar the theme's to paint by key
+  state), the caret, `editor.renderLineHighlight`, `editor.guides.indentation`,
+  `workbench.tree.renderIndentGuides`, `workbench.iconTheme` (`vs-minimal` is
+  monochrome and takes `icon.foreground`), and the declutter —
+  `workbench.startupEditor`, `workbench.tips.enabled`,
+  `workbench.welcomePage.walkthroughs.openOnInstall`,
+  `workbench.editor.empty.hint`, `extensions.ignoreRecommendations`,
+  `update.showReleaseNotes`, `workbench.enableExperiments`,
+  `workbench.settings.enableNaturalLanguageSearch`, `telemetry.telemetryLevel`,
+  `telemetry.feedback.enabled`, `chat.disableAIFeatures`,
+  `workbench.reduceMotion`. Editor options are registered by bare name
+  (`"smoothScrolling"`), so a search of the bundle for the full id misses
+  them.
+- `terminal.integrated.minimumContrastRatio` defaults to 4.5, a WCAG ratio the
+  terminal enforces by *repainting* any slot under it; a scheme arrives on
+  screen altered unless it is set to 1.
+- Where each packaging keeps things: `~/.vscode/extensions` and
+  `~/.config/Code/User/settings.json` (deb, rpm, tar);
+  `~/.var/app/com.visualstudio.code/data/vscode/extensions` and
+  `…/config/Code/User/settings.json` (Flatpak); `~/.vscode-insiders` and
+  `~/.config/Code - Insiders`; `~/.vscode-oss` and `~/.config/VSCodium`;
+  `~/.var/app/com.vscodium.codium/data/codium` and `…/config/VSCodium`.
+
+Residue:
+
+- **A theme sets no font weight.** Labels render at 400; only `.pane-header`
+  (11px) and a few badges render 700; the status bar is 12px in a 22px strip.
+  Whatever the kit's bold pairs are, this surface cannot bold them.
+- **The workbench face is not a setting**: `system-ui, Ubuntu, Droid Sans,
+  sans-serif`, resolved through the desktop's font setting and otherwise
+  fontconfig's `sans-serif` alias. Only the editor, the terminal and a few
+  views take a face from a key.
+- **`editor.selectionForeground` is honoured only under a high-contrast theme
+  type**; in a light or dark theme the editor selection is a fill behind text
+  that keeps its colour, and so is `selection.background` outside the editor.
+  The terminal (xterm.js) honours `terminal.selectionForeground` regardless.
+- Borders are 1 px and not widenable; radii are not themeable. Every
+  `*.border` id can be made transparent (`#00000000`).
+- Two ids take a colour read only for its alpha
+  (`editorUnnecessaryCode.opacity`, `minimap.foregroundOpacity`).
+- A profile with no settings opens an onboarding window ("Welcome to Visual
+  Studio Code / Sign in to use GitHub Copilot") before the workbench, in a
+  window of its own; with `chat.disableAIFeatures` and
+  `workbench.startupEditor` set it did not appear.
+- **A Flatpak VS Code has a private `/tmp`**: a `--user-data-dir` under `/tmp`
+  is created inside the sandbox, empty. A test profile goes under `$HOME`.
+  Chromium reorders argv (switches, then operands); VS Code reads
+  `--user-data-dir DIR` correctly either way.
+- On COSMIC the compositor draws a 2 px outline around every window at 150%,
+  in a value derived from the desktop theme; a window's own theme does not
+  reach it.
+
+Elevated adds: nothing. Modifying the bundle is the far side of the tier line.
+
 ### Claude
 
 Reached: Claude Code, the CLI and the desktop app's Code tab, through a
