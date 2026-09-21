@@ -726,6 +726,77 @@ Residue:
 
 Elevated adds: nothing. Modifying the bundle is the far side of the tier line.
 
+### Qt (qt5ct, qt6ct, and the KDE colour scheme)
+
+A Qt application takes its colours from a palette — `QPalette`, 21 roles on
+Qt 5.12 to 6.5, 22 from 6.6 (`Accent`), in three groups — and a style paints
+every control from it. On Linux the palette arrives through a platform theme
+plugin named by `QT_QPA_PLATFORMTHEME`; the two a user can configure without
+elevation are qt5ct and qt6ct, and qt6ct's plugin answers to both names, which
+`start-cosmic` relies on (it prefers `cosmic`, CuteCosmic, and otherwise sets
+`qt5ct` when either plugin is on disk). Measured on qt5ct 1.5 / Qt 5.15.13 and
+qt6ct 0.9 / Qt 6.4.2 on COSMIC, 2026-09-21; the Remainder kit's `PLATFORM.md`
+carries the same findings and the Fusion derivations in full.
+
+Reached:
+
+- The whole palette, per user: `~/.config/qt{5,6}ct/qt{5,6}ct.conf`
+  (`[Appearance] style`, `custom_palette`, `color_scheme_path`, `icon_theme`,
+  `standard_dialogs`; `[Fonts] general`, `fixed`; `[Interface] gui_effects`)
+  and a scheme in `~/.config/qt{5,6}ct/colors/`: `[ColorScheme]` with
+  `active_colors`, `disabled_colors`, `inactive_colors`, comma-separated
+  `#AARRGGBB` in `QPalette::ColorRole` order. qt5ct 1.5 takes exactly 21
+  entries and silently ignores any other count; qt6ct 0.9 takes 21 or more
+  and pads Accent from Highlight on Qt 6.6+, so a 22-entry file serves every
+  Qt 6. Both plugins watch their config and re-apply it to running
+  applications. `style` defaults to Fusion; `custom_palette=true` is required.
+- The type: `QFont::toString()` strings, and the 10-field Qt 5 form is read by
+  Qt 6 too (legacy weight 50 becomes 400). Motion: `gui_effects=@Invalid()`,
+  the empty list, turns every animation and fade off.
+- The same values as a KDE colour scheme — `[Colors:View|Window|Button|
+  Selection|Tooltip|Complementary|Header]` with `BackgroundNormal`,
+  `ForegroundNormal|Inactive|Active|Link|Visited|Negative|Neutral|Positive`,
+  `DecorationFocus|Hover`, decimal triples; `[ColorEffects:*]`; `[General]
+  ColorScheme`; `[WM]` — merged into `~/.config/kdeglobals`, which
+  applications read, and copied to `~/.local/share/color-schemes/`, which
+  Plasma lists. A Flatpak on the KDE runtime has no qt5ct plugin in its
+  sandbox and paints Qt's stock palette (`#EFEFEF`, `#FFFFFF`) unless
+  `QT_QPA_PLATFORMTHEME=kde` is set inside it — then it reads kdeglobals,
+  which COSMIC already exposes to every Flatpak. Per application (`flatpak
+  override --user --env`); COSMIC's daemon strips the same variable from the
+  global override at every login.
+
+Residue:
+
+- **Fusion derives its chrome from the palette** in Qt's 16-bit HSV
+  arithmetic rather than painting it: every outline is Window darkened 40%;
+  a button face is Button lightened by up to (180 − grey)/6 percent,
+  desaturated to three quarters, and drawn as a gradient from 124% to 102%
+  of that; a menu is Base lightened 8%; the tab pane is the button colour
+  lightened 4%; the focus frame is Highlight darkened 25%; and so on — some
+  twenty derived values, identical in 5.15.13 and 6.4.2, confirmed on screen.
+  A theme chooses its inputs against the derivation, and a light Base makes
+  every menu nearly white. Plus blends the palette cannot reach: white at
+  30/255 inside every control, the focus rectangle at 80/255, a group box's
+  translucent interior.
+- The caret is drawn in `Text`; no role reaches it. Line widths and the 2 px
+  radii are the style's. Glyphs render with subpixel antialiasing: blue and
+  orange fringes on every stem. The title bar on COSMIC is the compositor's.
+- **COSMIC exports a Qt palette of its own** when `apply_theme_global` is on
+  — off in libcosmic's default, on in Pop!_OS's system default. Its daemon
+  writes `CosmicLight.conf`/`CosmicDark.conf`, the `.colors` pair, kdeglobals
+  and the GTK export at start, on every theme change and mode switch, and
+  sets the Flatpak filesystem overrides. It keeps a marker,
+  `cosmic_qt_version` (2), in the qt5ct/qt6ct confs: at that version it only
+  rewrites a scheme path containing "Cosmic", so a foreign path survives —
+  measured across a theme re-import, keys re-ordered and nothing else
+  changed. kdeglobals has no guard and was rewritten whole. Turning the
+  setting off removes the marker and the scheme path, whoever wrote it, and
+  the GTK export with them. Its export is a derivation of the COSMIC theme:
+  measured here, 4 of its 21 active roles were values the theme names.
+
+Elevated adds: nothing.
+
 ### Claude
 
 Reached: Claude Code, the CLI and the desktop app's Code tab, through a
