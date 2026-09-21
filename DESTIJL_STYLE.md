@@ -401,13 +401,20 @@ The format, found while building the Remainder kit's Windows surface
   value quoted (`"Background"="15 9 12"`) in a `.reg`; an **ABGR**
   `DWORD` with the alpha in the high byte under DWM and
   `Explorer\Accent` — Microsoft's own default accent `#0078D7` is
-  stored `dword:00d77800`; an **AARRGGBB** value in the `.theme`'s
-  `[VisualStyles] ColorizationColor`, the one place the byte order is
-  not reversed; and a REG_BINARY run of RGBA quads in `AccentPalette`.
-  Flags, masks and delays share the `DWORD` and REG_BINARY forms, so
-  nothing can tell a colour from a flag by looking at the value — only
-  by knowing the key. (`#0078D7` is Microsoft's, quoted as the worked
-  example of a byte order; no value of this kit's is in this list.)
+  stored `dword:00d77800`; an **AARRGGBB** value for `ColorizationColor`
+  — in the `.theme`'s `[VisualStyles]` and in the DWM
+  `ColorizationColor` / `ColorizationAfterglow` DWORDs alike, the order
+  the documented default `0xC40078D7` shows and the order this kit's
+  `theme.reg` has always written; and a REG_BINARY run of RGBA quads in
+  `AccentPalette`. So two DWORDs under the one DWM key carry two byte
+  orders, and flags, masks and delays share the `DWORD` and REG_BINARY
+  forms besides — nothing can tell a colour from a flag, or one order
+  from the other, by looking at the value; only by knowing the key.
+  (`#0078D7` is Microsoft's, quoted as the worked example of a byte
+  order; no value of this kit's is in this list.) The Remainder kit
+  wrote its `Colorization*` pair ABGR until 2026-09-21 and its checker
+  passed them, having read the notation the same wrong way; this
+  entry's comment in `theme.reg` is what caught it.
 - **`AccentPalette` is eight RGBA quads**: indices 0–6 a light-to-dark
   ramp and index 7 a separate emphasis slot unrelated to it. Index 3 is
   the accent Settings displays and the value `AccentColor` mirrors; the
