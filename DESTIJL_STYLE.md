@@ -491,7 +491,9 @@ Reached:
   window does not move or shrink, and at `active_hint` = the inner gap the
   band fills the gap and touches the neighbours. Painted at the exact value,
   no blending: 8 dp → 12 px, 22 dp → 33 px; 11 dp → 16.5, and the half pixel
-  lands on one side or the other (16 px on two sides, 17 on the other two).
+  lands on one side or the other (16 px on two sides, 17 on the other two);
+  1 dp → 1 px on the sides and 2 on the top and bottom, 2 → 3, 3 → 5, 4 → 6 —
+  a multiple of 4 dp is whole at every quarter-step scale.
   The band's outer corners are rounded to a radius equal to its thickness,
   and the theme's `corner_radii` — all 0 in both kits — do not reach it; the
   inner corners are square and the window is not clipped. A hint makes the
