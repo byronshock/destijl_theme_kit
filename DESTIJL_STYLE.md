@@ -485,6 +485,13 @@ Reached:
   is 0 and the inner gap is the rule: one rule everywhere.
 - `active_hint` 0. COSMIC draws its hint on the focused window only,
   which would make the rule carry state.
+- **What `active_hint` draws**, measured 2026-09-21 on the Remainder kit's
+  COSMIC (150%): a band of `window_hint` around the focused window only,
+  `active_hint` dp wide, in the gap from the window's edge outward — the
+  window does not move or shrink, and at `active_hint` = the inner gap the
+  band fills the gap and touches the neighbours. Painted at the exact value,
+  no blending: 8 dp → 12 px, 22 dp → 33 px. A hint makes the gap carry focus
+  to exactly the extent of its width.
 - Background BLACK on a tiled output, so every gap is a rule and nothing
   else: COSMIC sets wallpaper per output, not per workspace, and on one
   output the rule wins. The Mondrian (§5) is composed alongside for a
